@@ -6,7 +6,7 @@
         entrypoints = ["https"]
         [frontends.term.routes]
             [frontends.term.routes.route]
-            rule = "Host:term.home,term.home.m3"
+            rule = "Host:term.home.m3"
 
 [backends]
     [backends.term]

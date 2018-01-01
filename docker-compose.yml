@@ -11,10 +11,10 @@ services:
     container_name: m3os
     hostname: m3os
     ports:
-      - "80:80"
-      - "443:443"
+      # - "80:80"
+      # - "443:443"
       - "1080:1080"
-      - "8080:8080"
+      # - "8080:8080"
       # - "8443:8443"
       - "18080:18080"
       # - "28080:28080"
@@ -54,7 +54,7 @@ services:
       - "traefik.docker.network=web"
       - "traefik.entrypoints=http"
       - "traefik.frontend.passHostHeader=true"
-      - "traefik.frontend.rule=Host:dui.home"
+      - "traefik.frontend.rule=Host:dui.home.m3"
       - "traefik.port=5000"
 
 volumes:

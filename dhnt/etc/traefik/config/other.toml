@@ -6,7 +6,7 @@
         entrypoints = ["https"]
         [frontends.catchall.routes]
             [frontends.catchall.routes.route]
-            rule = "HostRegexp:{catchall:.*}.k8s.local.m3"
+            rule = "HostRegexp:{catchall:.*}-k8s.local.m3"
             priority = 1
 
 [backends]

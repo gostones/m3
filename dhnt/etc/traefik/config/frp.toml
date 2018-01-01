@@ -6,7 +6,7 @@
         entrypoints = ["https"]
         [frontends.frp.routes]
             [frontends.frp.routes.route]
-            rule = "Host:frp.home"
+            rule = "Host:frp.home.m3"
 
 [backends]
     [backends.frp]
