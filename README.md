@@ -28,3 +28,13 @@ https://github.com/elazarl/goproxy
 Mirr is released under MIT license
 
 Author: Qiang Li <liqiang@gmail.com>
+
+<!--
+https://docs.ipfs.io/reference/api/http/
+
+curl "http://localhost:5001/api/v0/swarm/addrs/local?id=<value>"
+curl http://127.0.0.1:5001/api/v0/swarm/peers
+
+curl "http://localhost:5001/api/v0/p2p/stream/dial?arg=<Peer>&arg=<Protocol>&arg=<BindAddress>"
+
+-->

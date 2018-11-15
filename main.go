@@ -13,12 +13,12 @@ func main() {
 	flag.Parse()
 
 	//export http_proxy=http://localhost:18080
-	be := []string{"localhost:50081", "localhost:50082"}
+	be := []string{} //"localhost:50081", "localhost:50082"}
 	go loadbalance(*port, be)
 
 	//
-	go forward("localhost:50081", "localhost:10080")
-	go forward("localhost:50082", "localhost:10080")
+	// go forward("localhost:50081", "localhost:10080")
+	// go forward("localhost:50082", "localhost:10080")
 
 	//
 	httpproxy(*pport)
