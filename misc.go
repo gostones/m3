@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// BackoffDuration is
 func BackoffDuration() func(error) {
 	b := &backoff.Backoff{
 		Min:    100 * time.Millisecond,
@@ -27,6 +28,7 @@ func BackoffDuration() func(error) {
 	}
 }
 
+// FreePort is
 func FreePort() int {
 	l, err := net.Listen("tcp", "127.0.0.1:")
 	if err != nil {

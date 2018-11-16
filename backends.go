@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// Backends is
 type Backends struct {
 	Length    int
 	current   int
@@ -15,6 +16,7 @@ type Backends struct {
 	sync.Mutex
 }
 
+// NewBackends is
 func NewBackends() *Backends {
 	nb := NewNeighborhood()
 	addresses := nb.GetPeers()
@@ -29,37 +31,41 @@ func NewBackends() *Backends {
 	}
 }
 
-func (self *Backends) NextAddress() (addess string) {
-	self.Lock()
+// NextAddress is
+func (r *Backends) NextAddress() (addess string) {
+	r.Lock()
 
-	index := self.current
+	index := r.current
 
-	self.current = self.current + 1
-	if self.current > self.Length-1 {
-		self.current = 0
+	r.current = r.current + 1
+	if r.current > r.Length-1 {
+		r.current = 0
 	}
 
-	self.Unlock()
-	return self.Addresses[index]
+	r.Unlock()
+	return r.Addresses[index]
 }
 
-func (self *Backends) Add(addresses ...string) {
-	self.Lock()
+// Add is
+func (r *Backends) Add(addresses ...string) {
+	r.Lock()
 
 	for _, item := range addresses {
-		self.Addresses = append(self.Addresses, item)
+		r.Addresses = append(r.Addresses, item)
 	}
-	self.Length = len(self.Addresses)
+	r.Length = len(r.Addresses)
 
-	self.Unlock()
+	r.Unlock()
 }
 
+// Peer is
 type Peer struct {
 	Address   string
 	Rank      int
 	timestamp int64
 }
 
+// Neighborhood is
 type Neighborhood struct {
 	Peers map[string]*Peer
 	min   int
@@ -68,6 +74,7 @@ type Neighborhood struct {
 	sync.Mutex
 }
 
+// NewNeighborhood is
 func NewNeighborhood() *Neighborhood {
 	min := 2
 
@@ -78,6 +85,7 @@ func NewNeighborhood() *Neighborhood {
 	return n
 }
 
+// InitPeers is
 func (r *Neighborhood) InitPeers(cnt int) {
 	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := 0; i < cnt; i++ {
@@ -86,6 +94,7 @@ func (r *Neighborhood) InitPeers(cnt int) {
 	}
 }
 
+// GetPeers is
 func (r *Neighborhood) GetPeers() []string {
 	addresses := make([]string, len(r.Peers))
 
@@ -97,6 +106,7 @@ func (r *Neighborhood) GetPeers() []string {
 	return addresses
 }
 
+// Monitor is
 func (r *Neighborhood) Monitor() {
 	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
 
@@ -117,6 +127,7 @@ func (r *Neighborhood) Monitor() {
 	Every(1).Minutes().Run(job)
 }
 
+// AddPeer is
 func (r *Neighborhood) AddPeer(id string) {
 
 	port := FreePort()
