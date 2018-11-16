@@ -1,10 +1,11 @@
+// https://github.com/voldyman/GoLoadBalance
 package main
 
 import (
-	// "flag"
-	"fmt"
-	"runtime"
-	"time"
+// "flag"
+// "fmt"
+// "runtime"
+// "time"
 )
 
 func loadbalance(port int, be []string) {
@@ -43,22 +44,22 @@ func loadbalance(port int, be []string) {
 // 	startServer(*port, backends)
 // }
 
-func debugRoutine() {
-	for {
-		<-time.After(2 * time.Second)
-		fmt.Println(time.Now(), "NumGoroutine", runtime.NumGoroutine())
-	}
-}
+// func debugRoutine() {
+// 	for {
+// 		<-time.After(2 * time.Second)
+// 		fmt.Println(time.Now(), "NumGoroutine", runtime.NumGoroutine())
+// 	}
+// }
 
-type strings []string
+// type strings []string
 
-func (self *strings) String() string {
-	return fmt.Sprintf("%s", *self)
-}
+// func (self *strings) String() string {
+// 	return fmt.Sprintf("%s", *self)
+// }
 
-func (self *strings) Set(val string) error {
+// func (self *strings) Set(val string) error {
 
-	*self = append(*self, val)
+// 	*self = append(*self, val)
 
-	return nil
-}
+// 	return nil
+// }
