@@ -5,6 +5,7 @@ import (
 	"io"
 	"net"
 	"strconv"
+	"time"
 )
 
 func startServer(listenPort int, backends *Backends) {
@@ -19,15 +20,24 @@ func startServer(listenPort int, backends *Backends) {
 		return
 	}
 
+	// listener.SetDeadline(time.Now().Add(time.Second * 10))
+
+	defer func() {
+		listener.Close()
+		fmt.Println("Listener closed")
+	}()
+
 	for {
 		con, err := listener.Accept()
 		if err != nil {
 			fmt.Println("Error occured accepting a connection", err.Error())
+			continue
 		}
+
+		con.SetDeadline(time.Now().Add(time.Second * 60))
 
 		go handleConnection(con, backends.NextAddress())
 	}
-
 }
 
 func handleConnection(cliConn net.Conn, srvAddr string) {

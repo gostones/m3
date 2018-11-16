@@ -37,3 +37,8 @@ func FreePort() int {
 	defer l.Close()
 	return l.Addr().(*net.TCPAddr).Port
 }
+
+// CurrentTime is
+func CurrentTime() int64 {
+	return time.Now().UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))
+}
