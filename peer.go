@@ -7,12 +7,12 @@ import (
 	"time"
 )
 
-// Peer is
-type Peer struct {
-	Address   string
-	Rank      int // -1, 0, 1 ...
-	timestamp int64
-}
+// // Peer is
+// type Peer struct {
+// 	Address   string
+// 	Rank      int // -1, 0, 1 ...
+// 	timestamp int64
+// }
 
 // Neighborhood is
 type Neighborhood struct {
@@ -44,7 +44,7 @@ func (r *Neighborhood) GetPeers() []string {
 	addresses := make([]string, 0, len(r.Peers))
 	for _, v := range r.Peers {
 		if v.Rank > 0 {
-			addresses = append(addresses, v.Address)
+			addresses = append(addresses, v.Addr)
 		}
 	}
 	fmt.Printf("@@@@ addresses: %v\n", addresses)
@@ -92,7 +92,7 @@ func (r *Neighborhood) addPeer(id string) {
 	fmt.Printf("@@@@ Added peer: %v addr: %v\n", id, addr)
 
 	r.Peers[id] = &Peer{
-		Address:   addr,
+		Addr:      addr,
 		Rank:      1,
 		timestamp: CurrentTime(),
 	}
