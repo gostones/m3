@@ -2,9 +2,7 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"sync"
-	"time"
 )
 
 // // Peer is
@@ -53,8 +51,6 @@ func (r *Neighborhood) GetPeers() []string {
 
 // Monitor is
 func (r *Neighborhood) Monitor() {
-	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
-
 	job := func() {
 		// clean up stale connections
 		for k, v := range r.Peers {
@@ -65,11 +61,11 @@ func (r *Neighborhood) Monitor() {
 
 		//
 		for i := 0; i < r.current; i++ {
-			n := rnd.Intn(36)
-			id := fmt.Sprintf("peer_%v", n)
+			// TODO
+			id := config.Node.ID
 			peer, found := r.Peers[id]
 
-			fmt.Printf("@@@@ Rand: %v found: %v\n", n, found)
+			fmt.Printf("@@@@ Peer ID: %v found: %v\n", id, found)
 
 			if found {
 				peer.Rank++
@@ -85,9 +81,11 @@ func (r *Neighborhood) Monitor() {
 // addPeer is
 func (r *Neighborhood) addPeer(id string) {
 	port := FreePort()
-	addr := fmt.Sprintf("localhost:%v", port)
+	addr := fmt.Sprintf("127.0.0.1:%v", port)
+	// target := fmt.Sprintf("localhost:%v", config.ProxyPort)
+	// go forward(addr, target)
 
-	go forward(addr, "localhost:10080")
+	p2pForward(port, id)
 
 	fmt.Printf("@@@@ Added peer: %v addr: %v\n", id, addr)
 

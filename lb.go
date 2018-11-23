@@ -8,12 +8,12 @@ import (
 // "time"
 )
 
-func loadbalance(port int, be []string) {
+func loadbalance(port int) {
 	b := NewBackends()
 
-	for i := 0; i < len(be); i++ {
-		b.Add(be[i])
-	}
+	// for i := 0; i < len(be); i++ {
+	// 	b.Add(be[i])
+	// }
 
 	startServer(port, b)
 }

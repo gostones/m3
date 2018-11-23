@@ -2,24 +2,40 @@ package main
 
 import (
 	"flag"
+	"log"
 )
+
+// Config is application settings
+type Config struct {
+	Port      int
+	ProxyPort int
+	Node      Node
+}
+
+var config = Config{}
 
 func main() {
 	var port = flag.Int("port", 18080, "The port to listen for connections")
-	var pport = flag.Int("proxy", 10080, "The port to listen for connections")
 
 	// var debug = flag.Bool("debug", false, "Enable debug mode")
 
 	flag.Parse()
 
-	//export http_proxy=http://localhost:18080
-	be := []string{} //"localhost:50081", "localhost:50082"}
-	go loadbalance(*port, be)
+	config.Port = *port
+	config.ProxyPort = FreePort()
+
+	node, err := p2pID()
+	if err != nil {
+		panic(err)
+	}
+	config.Node = node
+
+	log.Printf("Configuration port: %v proxy: %v\n", config.Port, config.ProxyPort)
 
 	//
-	// go forward("localhost:50081", "localhost:10080")
-	// go forward("localhost:50082", "localhost:10080")
+	go loadbalance(config.Port)
 
 	//
-	httpproxy(*pport)
+	p2pListen(config.ProxyPort)
+	httpproxy(config.ProxyPort)
 }

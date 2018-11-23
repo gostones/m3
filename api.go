@@ -33,9 +33,9 @@ func p2pListen(appPort int) error {
 }
 
 // ipfs p2p forward /x/kickass/1.0 /ip4/127.0.0.1/tcp/$SOME_PORT /ipfs/$SERVER_ID
-func p2pForward(port int, serverId string) error {
+func p2pForward(port int, serverID string) error {
 	listen := fmt.Sprintf("/ip4/127.0.0.1/tcp/%v", port)
-	target := fmt.Sprintf("/ipfs/%v", serverId)
+	target := fmt.Sprintf("/ipfs/%v", serverID)
 
 	resp, err := client.R().
 		SetMultiValueQueryParams(url.Values{
@@ -113,6 +113,7 @@ func p2pPeers() ([]Peer, error) {
 //     "ProtocolVersion": "<string>"
 // }
 
+// Node is
 type Node struct {
 	ID              string
 	PublicKey       string
