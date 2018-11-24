@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"sync"
 )
 
@@ -14,10 +15,9 @@ import (
 
 // Neighborhood is
 type Neighborhood struct {
-	Peers   map[string]*Peer
-	current int
-	min     int
-	max     int
+	Peers map[string]*Peer
+	min   int
+	max   int
 
 	sync.Mutex
 }
@@ -25,10 +25,9 @@ type Neighborhood struct {
 // NewNeighborhood is
 func NewNeighborhood() *Neighborhood {
 	nb := &Neighborhood{
-		Peers:   make(map[string]*Peer, 15),
-		current: 5,
-		min:     0,
-		max:     8,
+		Peers: make(map[string]*Peer, 15),
+		min:   0,
+		max:   1,
 	}
 	nb.Monitor()
 	return nb
@@ -45,7 +44,7 @@ func (r *Neighborhood) GetPeers() []string {
 			addresses = append(addresses, v.Addr)
 		}
 	}
-	fmt.Printf("@@@@ addresses: %v\n", addresses)
+	log.Printf("@@@@ addresses: %v\n", addresses)
 	return addresses
 }
 
@@ -53,19 +52,38 @@ func (r *Neighborhood) GetPeers() []string {
 func (r *Neighborhood) Monitor() {
 	job := func() {
 		// clean up stale connections
-		for k, v := range r.Peers {
-			if v.Rank == 0 {
-				delete(r.Peers, k)
+		// for k, v := range r.Peers {
+		// 	if v.Rank == 0 {
+		// 		delete(r.Peers, k)
+		// 	}
+		// }
+
+		cur := 0
+		for _, v := range r.Peers {
+			if v.Rank > 0 {
+				cur++
 			}
+		}
+		if cur >= r.max {
+			log.Printf("@@@@ current count: %v max: %v, no new peers will be added\n", cur, r.max)
+			return
 		}
 
 		//
-		for i := 0; i < r.current; i++ {
-			// TODO
-			id := config.Node.ID
+		peers, err := p2pPeers()
+		if err != nil {
+			log.Printf("@@@@ get peers: %v\n", err)
+		}
+
+		cnt := len(peers)
+		log.Printf("@@@@ get peers, count: %v\n", cnt)
+
+		for i := 0; i < cnt; i++ {
+			p := peers[i]
+			id := p.Peer
 			peer, found := r.Peers[id]
 
-			fmt.Printf("@@@@ Peer ID: %v found: %v\n", id, found)
+			log.Printf("@@@@ Peer ID: %v found: %v\n", id, found)
 
 			if found {
 				peer.Rank++
@@ -80,18 +98,28 @@ func (r *Neighborhood) Monitor() {
 
 // addPeer is
 func (r *Neighborhood) addPeer(id string) {
+	r.Lock()
+	defer r.Unlock()
+
 	port := FreePort()
 	addr := fmt.Sprintf("127.0.0.1:%v", port)
 	// target := fmt.Sprintf("localhost:%v", config.ProxyPort)
 	// go forward(addr, target)
 
-	p2pForward(port, id)
+	err := p2pForward(port, id)
+	rank := -1
+	if err == nil {
+		ok := p2pIsValid(port)
 
-	fmt.Printf("@@@@ Added peer: %v addr: %v\n", id, addr)
+		if ok {
+			rank = 1
+		}
+	}
+	log.Printf("@@@@ Add peer: %v addr: %v rank: %v err: %v\n", id, addr, rank, err)
 
 	r.Peers[id] = &Peer{
 		Addr:      addr,
-		Rank:      1,
+		Rank:      rank,
 		timestamp: CurrentTime(),
 	}
 }

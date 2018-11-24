@@ -30,7 +30,7 @@ func startServer(listenPort int, backends *Backends) {
 	for {
 		con, err := listener.Accept()
 		if err != nil {
-			fmt.Println("Error occured accepting a connection", err.Error())
+			fmt.Println("Error occurred accepting a connection", err.Error())
 			continue
 		}
 

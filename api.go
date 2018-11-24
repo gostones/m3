@@ -3,9 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/parnurzeal/gorequest"
 	"gopkg.in/resty.v1"
 	"log"
+	"math/rand"
+	"net/http"
 	"net/url"
+	"time"
 )
 
 var client = resty.New()
@@ -135,4 +139,24 @@ func p2pID() (Node, error) {
 	json.Unmarshal([]byte(resp.Body()), &n)
 
 	return n, err
+}
+
+func p2pIsValid(port int) bool {
+	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
+	tests := []string{
+		"https://www.google.com",
+	}
+	idx := rnd.Intn(len(tests))
+
+	proxy := fmt.Sprintf("http://127.0.0.1:%v", port)
+
+	request := gorequest.New().Proxy(proxy)
+	resp, _, err := request.
+		Head(tests[idx]).
+		Retry(3, 5*time.Second, http.StatusBadRequest, http.StatusInternalServerError).
+		End()
+
+	log.Printf("Proxy: %v response: %v er: %v\n", proxy, resp, err)
+
+	return err == nil
 }
