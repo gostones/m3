@@ -73,6 +73,7 @@ func (r *Neighborhood) Monitor() {
 		peers, err := p2pPeers()
 		if err != nil {
 			log.Printf("@@@@ get peers: %v\n", err)
+			return
 		}
 
 		cnt := len(peers)

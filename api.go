@@ -7,7 +7,6 @@ import (
 	"gopkg.in/resty.v1"
 	"log"
 	"math/rand"
-	"net/http"
 	"net/url"
 	"time"
 )
@@ -15,7 +14,7 @@ import (
 var client = resty.New()
 
 const (
-	protocol_name = "/x/www/1.0"
+	protocolWWW = "/x/www/1.0"
 )
 
 // ipfs p2p listen /x/kickass/1.0 /ip4/127.0.0.1/tcp/$APP_PORT
@@ -24,7 +23,7 @@ func p2pListen(appPort int) error {
 
 	resp, err := client.R().
 		SetMultiValueQueryParams(url.Values{
-			"arg": []string{protocol_name, target},
+			"arg": []string{protocolWWW, target},
 		}).
 		SetHeader("Accept", "application/json").
 		SetAuthToken("").
@@ -43,14 +42,13 @@ func p2pForward(port int, serverID string) error {
 
 	resp, err := client.R().
 		SetMultiValueQueryParams(url.Values{
-			"arg": []string{protocol_name, listen, target},
+			"arg": []string{protocolWWW, listen, target},
 		}).
 		SetHeader("Accept", "application/json").
 		SetAuthToken("").
 		Get("http://localhost:5001/api/v0/p2p/forward")
 
-	log.Printf("Status: %v\n", resp.Status())
-	log.Println(resp)
+	log.Printf("forward  %v %v response: %v err: %v\n", listen, target, resp, err)
 
 	return err
 }
@@ -153,10 +151,10 @@ func p2pIsValid(port int) bool {
 	request := gorequest.New().Proxy(proxy)
 	resp, _, err := request.
 		Head(tests[idx]).
-		Retry(3, 5*time.Second, http.StatusBadRequest, http.StatusInternalServerError).
+		Retry(3, 5*time.Second).
 		End()
 
-	log.Printf("Proxy: %v response: %v er: %v\n", proxy, resp, err)
+	log.Printf("Proxy: %v response: %v err %v\n", proxy, resp, err)
 
 	return err == nil
 }
