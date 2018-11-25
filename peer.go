@@ -16,6 +16,7 @@ import (
 // Neighborhood is
 type Neighborhood struct {
 	Peers map[string]*Peer
+	MyID  string
 	min   int
 	max   int
 
@@ -26,10 +27,12 @@ type Neighborhood struct {
 func NewNeighborhood() *Neighborhood {
 	nb := &Neighborhood{
 		Peers: make(map[string]*Peer, 15),
+		MyID:  config.My.ID,
 		min:   0,
 		max:   1,
 	}
-	nb.Monitor()
+	nb.AddPeer(config.My.ID)
+	// nb.Monitor()
 	return nb
 }
 
@@ -89,7 +92,7 @@ func (r *Neighborhood) Monitor() {
 			if found {
 				peer.Rank++
 			} else {
-				r.addPeer(id)
+				r.AddPeer(id)
 			}
 		}
 	}
@@ -97,26 +100,32 @@ func (r *Neighborhood) Monitor() {
 	Every(1).Minutes().Run(job)
 }
 
-// addPeer is
-func (r *Neighborhood) addPeer(id string) {
+// AddPeer is
+func (r *Neighborhood) AddPeer(id string) {
 	r.Lock()
 	defer r.Unlock()
 
 	port := FreePort()
 	addr := fmt.Sprintf("127.0.0.1:%v", port)
-	// target := fmt.Sprintf("localhost:%v", config.ProxyPort)
-	// go forward(addr, target)
 
-	err := p2pForward(port, id)
+	var err error
+	self := (id == r.MyID)
+	if self {
+		target := fmt.Sprintf("127.0.0.1:%v", config.ProxyPort)
+		go forward(addr, target)
+	} else {
+		err = p2pForward(port, id)
+	}
 	rank := -1
 	if err == nil {
 		ok := p2pIsValid(port)
-
 		if ok {
 			rank = 1
+		} else if !self {
+			p2pForwardClose(port, id) // no www support
 		}
 	}
-	log.Printf("@@@@ Add peer: %v addr: %v rank: %v err: %v\n", id, addr, rank, err)
+	log.Printf("@@@@ Add peer: self: %v ID: %v addr: %v rank: %v err: %v\n", self, id, addr, rank, err)
 
 	r.Peers[id] = &Peer{
 		Addr:      addr,

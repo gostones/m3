@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/jpillora/backoff"
 	"net"
-	"os"
 	"time"
 )
 
@@ -20,7 +19,7 @@ func BackoffDuration() func(error) {
 	return func(rc error) {
 		secs := b.Duration()
 
-		fmt.Fprintf(os.Stdout, "rc: %v sleeping %v\n", rc, secs)
+		fmt.Printf("rc: %v sleeping %v\n", rc, secs)
 		time.Sleep(secs)
 		if secs.Nanoseconds() >= b.Max.Nanoseconds() {
 			b.Reset()

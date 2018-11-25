@@ -9,7 +9,7 @@ import (
 type Config struct {
 	Port      int
 	ProxyPort int
-	Node      Node
+	My        Node
 }
 
 var config = Config{}
@@ -28,7 +28,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	config.Node = node
+	config.My = node
 
 	log.Printf("Configuration port: %v proxy: %v\n", config.Port, config.ProxyPort)
 

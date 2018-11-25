@@ -3,6 +3,7 @@ module github.com/gostones/mirr
 require (
 	github.com/elazarl/goproxy v0.0.0-20181111060418-2ce16c963a8a
 	github.com/fatih/color v1.7.0
+	github.com/gostones/lib v0.0.0-20181125223556-f15be2643075
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect

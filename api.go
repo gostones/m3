@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gostones/lib"
 	"github.com/parnurzeal/gorequest"
 	"gopkg.in/resty.v1"
 	"log"
@@ -49,6 +50,25 @@ func p2pForward(port int, serverID string) error {
 		Get("http://localhost:5001/api/v0/p2p/forward")
 
 	log.Printf("forward  %v %v response: %v err: %v\n", listen, target, resp, err)
+
+	return err
+}
+
+func p2pForwardClose(port int, serverID string) error {
+	listen := fmt.Sprintf("/ip4/127.0.0.1/tcp/%v", port)
+	target := fmt.Sprintf("/ipfs/%v", serverID)
+
+	resp, err := client.R().
+		SetQueryParams(map[string]string{
+			"protocol":       protocolWWW,
+			"listen-address": listen,
+			"target-address": target,
+		}).
+		SetHeader("Accept", "application/json").
+		SetAuthToken("").
+		Get("http://localhost:5001/api/v0/p2p/close")
+
+	log.Printf("close forward  %v %v response: %v err: %v\n", listen, target, resp, err)
 
 	return err
 }
@@ -142,19 +162,26 @@ func p2pID() (Node, error) {
 func p2pIsValid(port int) bool {
 	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
 	tests := []string{
-		"https://www.google.com",
+		"https://www.google.com/",
+		"https://aws.amazon.com/",
+		"https://azure.microsoft.com/",
 	}
-	idx := rnd.Intn(len(tests))
-
 	proxy := fmt.Sprintf("http://127.0.0.1:%v", port)
-
 	request := gorequest.New().Proxy(proxy)
-	resp, _, err := request.
-		Head(tests[idx]).
-		Retry(3, 5*time.Second).
-		End()
 
-	log.Printf("Proxy: %v response: %v err %v\n", proxy, resp, err)
+	//
+	err := lib.Retry(func() error {
+		idx := rnd.Intn(len(tests))
+		resp, _, errs := request.
+			Head(tests[idx]).
+			End()
+
+		log.Printf("Proxy: %v response: %v err %v\n", proxy, resp, errs)
+		if len(errs) > 0 {
+			return errs[0]
+		}
+		return nil
+	})
 
 	return err == nil
 }
