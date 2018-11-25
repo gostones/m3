@@ -32,7 +32,7 @@ func NewNeighborhood() *Neighborhood {
 		max:   1,
 	}
 	nb.AddPeer(config.My.ID)
-	// nb.Monitor()
+	nb.Monitor()
 	return nb
 }
 

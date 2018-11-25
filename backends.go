@@ -41,7 +41,10 @@ func (r *Backends) NextAddress() (addess string) {
 	}
 
 	r.Unlock()
-	return r.Addresses[index]
+	if index < len(r.Addresses) {
+		return r.Addresses[index]
+	}
+	return ""
 }
 
 // Add is

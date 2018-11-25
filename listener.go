@@ -28,15 +28,20 @@ func startServer(listenPort int, backends *Backends) {
 	}()
 
 	for {
-		con, err := listener.Accept()
+		conn, err := listener.Accept()
 		if err != nil {
 			fmt.Println("Error occurred accepting a connection", err.Error())
 			continue
 		}
 
-		con.SetDeadline(time.Now().Add(time.Second * 60))
+		conn.SetDeadline(time.Now().Add(time.Second * 60))
 
-		go handleConnection(con, backends.NextAddress())
+		addr := backends.NextAddress()
+		if addr == "" {
+			conn.Close()
+			continue
+		}
+		go handleConnection(conn, addr)
 	}
 }
 
