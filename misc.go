@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/jpillora/backoff"
+	"github.com/multiformats/go-multihash"
 	"net"
+	"net/url"
 	"time"
 )
 
@@ -40,4 +42,21 @@ func FreePort() int {
 // CurrentTime is
 func CurrentTime() int64 {
 	return time.Now().UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))
+}
+
+// IsPeerID checks if the string s is a valid IPFS peer address
+func IsPeerID(s string) bool {
+	_, err := multihash.FromB58String(s)
+	return err == nil
+}
+
+// IsPeerAddress checks if string s is a valid Url with host being a valid peer ID
+func IsPeerAddress(s string) bool {
+	u, err := url.Parse(s)
+	if err != nil {
+		return false
+	}
+	scheme := u.Scheme
+	host := u.Hostname()
+	return (scheme == "http" || scheme == "https") && IsPeerID(host)
 }
