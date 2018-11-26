@@ -29,7 +29,7 @@ func NewNeighborhood() *Neighborhood {
 		Peers: make(map[string]*Peer, 15),
 		MyID:  config.My.ID,
 		min:   0,
-		max:   1,
+		max:   5,
 	}
 	nb.AddPeer(config.My.ID)
 	nb.Monitor()
