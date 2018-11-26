@@ -48,3 +48,11 @@ func TestIsPeerAddress(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestPeerIDHex(t *testing.T) {
+	s := PeerIDHex("QmXG428k4Aa6Fchp7buub2pK4Fa2nbhcTfznL7oVSGWRRZ")
+	fmt.Println(s)
+	if s == "" {
+		t.Fail()
+	}
+}

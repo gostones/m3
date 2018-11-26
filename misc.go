@@ -60,3 +60,12 @@ func IsPeerAddress(s string) bool {
 	host := u.Hostname()
 	return (scheme == "http" || scheme == "https") && IsPeerID(host)
 }
+
+// PeerIDHex returns hex-encoded peer ID
+func PeerIDHex(s string) string {
+	h, err := multihash.FromB58String(s)
+	if err == nil {
+		return h.HexString()
+	}
+	return ""
+}
