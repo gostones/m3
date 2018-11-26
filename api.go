@@ -18,6 +18,34 @@ const (
 	protocolWWW = "/x/www/1.0"
 )
 
+// Peer is
+type Peer struct {
+	Addr    string
+	Peer    string
+	Latency string
+	Muxer   string
+	Streams []struct {
+		Protocol string
+	}
+
+	Rank      int // -1, 0, 1 ...
+	timestamp int64
+}
+
+// Peers is
+type Peers struct {
+	Peers []Peer
+}
+
+// Node is
+type Node struct {
+	ID              string
+	PublicKey       string
+	Addresses       []string
+	AgentVersion    string
+	ProtocolVersion string
+}
+
 // ipfs p2p listen /x/kickass/1.0 /ip4/127.0.0.1/tcp/$APP_PORT
 func p2pListen(appPort int) error {
 	target := fmt.Sprintf("/ip4/127.0.0.1/tcp/%v", appPort)
@@ -90,25 +118,6 @@ func p2pForwardClose(port int, serverID string) error {
 //     ]
 // }
 
-// Peer is
-type Peer struct {
-	Addr    string
-	Peer    string
-	Latency string
-	Muxer   string
-	Streams []struct {
-		Protocol string
-	}
-
-	Rank      int // -1, 0, 1 ...
-	timestamp int64
-}
-
-// Peers is
-type Peers struct {
-	Peers []Peer
-}
-
 func p2pPeers() ([]Peer, error) {
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
@@ -134,15 +143,6 @@ func p2pPeers() ([]Peer, error) {
 //     "AgentVersion": "<string>"
 //     "ProtocolVersion": "<string>"
 // }
-
-// Node is
-type Node struct {
-	ID              string
-	PublicKey       string
-	Addresses       []string
-	AgentVersion    string
-	ProtocolVersion string
-}
 
 func p2pID() (Node, error) {
 	resp, err := client.R().

@@ -31,7 +31,6 @@ func NewNeighborhood() *Neighborhood {
 		min:   0,
 		max:   5,
 	}
-	nb.AddPeer(config.My.ID)
 	nb.Monitor()
 	return nb
 }
@@ -53,6 +52,12 @@ func (r *Neighborhood) GetPeers() []string {
 
 // Monitor is
 func (r *Neighborhood) Monitor() {
+	// self
+	go func() {
+		p := r.checkPeer(r.MyID)
+		r.addPeer(p)
+	}()
+
 	job := func() {
 		// clean up stale connections
 		// for k, v := range r.Peers {
@@ -81,30 +86,47 @@ func (r *Neighborhood) Monitor() {
 
 		cnt := len(peers)
 		log.Printf("@@@@ get peers, count: %v\n", cnt)
+		if cnt <= 0 {
+			return
+		}
 
-		for i := 0; i < cnt; i++ {
-			p := peers[i]
-			id := p.Peer
-			peer, found := r.Peers[id]
+		const concurrency = 32 // max
+		ch := make(chan string, concurrency)
+		go func() {
+			for i := 0; i < cnt; i++ {
+				p := peers[i]
+				id := p.Peer
+				peer, found := r.Peers[id] // TODO?
 
-			log.Printf("@@@@ Peer ID: %v found: %v\n", id, found)
+				log.Printf("@@@@ Peer ID: %v found: %v\n", id, found)
 
-			if found {
-				peer.Rank++
-			} else {
-				r.AddPeer(id)
+				if found {
+					peer.Rank++
+				} else {
+					ch <- id
+				}
 			}
+		}()
+
+		for c := range ch {
+			go func(id string) {
+				p := r.checkPeer(id)
+				r.addPeer(p)
+			}(c)
 		}
 	}
 
 	Every(1).Minutes().Run(job)
 }
 
-// AddPeer is
-func (r *Neighborhood) AddPeer(id string) {
+// addPeer is
+func (r *Neighborhood) addPeer(p Peer) {
 	r.Lock()
 	defer r.Unlock()
+	r.Peers[p.Peer] = &p
+}
 
+func (r *Neighborhood) checkPeer(id string) Peer {
 	port := FreePort()
 	addr := fmt.Sprintf("127.0.0.1:%v", port)
 
@@ -127,7 +149,8 @@ func (r *Neighborhood) AddPeer(id string) {
 	}
 	log.Printf("@@@@ Add peer: self: %v ID: %v addr: %v rank: %v err: %v\n", self, id, addr, rank, err)
 
-	r.Peers[id] = &Peer{
+	return Peer{
+		Peer:      id,
 		Addr:      addr,
 		Rank:      rank,
 		timestamp: CurrentTime(),
