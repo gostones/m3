@@ -26,7 +26,7 @@ func TestIsPeerID(t *testing.T) {
 		t.Fail()
 	}
 
-	b = IsPeerID("QmXG428k4Aa6Fchp7buub2pK4Fa2nbhcTfznL7oVSGWRRZ")
+	b = IsPeerID("1220848ba2cbc954d17fc1758a4dc06ec128b21c6ecc1dcfcbdc284809f4a922ba08")
 	if !b {
 		t.Fail()
 	}
@@ -43,7 +43,7 @@ func TestIsPeerAddress(t *testing.T) {
 		t.Fail()
 	}
 
-	b = IsPeerAddress("http://QmXG428k4Aa6Fchp7buub2pK4Fa2nbhcTfznL7oVSGWRRZ/")
+	b = IsPeerAddress("http://1220848ba2cbc954d17fc1758a4dc06ec128b21c6ecc1dcfcbdc284809f4a922ba08/")
 	if !b {
 		t.Fail()
 	}
@@ -51,8 +51,8 @@ func TestIsPeerAddress(t *testing.T) {
 
 func TestPeerIDHex(t *testing.T) {
 	s := PeerIDHex("QmXG428k4Aa6Fchp7buub2pK4Fa2nbhcTfznL7oVSGWRRZ")
-	fmt.Println(s)
-	if s == "" {
+
+	if s != "1220848ba2cbc954d17fc1758a4dc06ec128b21c6ecc1dcfcbdc284809f4a922ba08" {
 		t.Fail()
 	}
 }

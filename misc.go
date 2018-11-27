@@ -44,9 +44,9 @@ func CurrentTime() int64 {
 	return time.Now().UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))
 }
 
-// IsPeerID checks if the string s is a valid IPFS peer address
+// IsPeerID checks if the string s is a valid hex encoded peer address
 func IsPeerID(s string) bool {
-	_, err := multihash.FromB58String(s)
+	_, err := multihash.FromHexString(s)
 	return err == nil
 }
 
@@ -61,7 +61,7 @@ func IsPeerAddress(s string) bool {
 	return (scheme == "http" || scheme == "https") && IsPeerID(host)
 }
 
-// PeerIDHex returns hex-encoded peer ID
+// PeerIDHex converts B58-encoded multihash peer ID to hex-encoded string
 func PeerIDHex(s string) string {
 	h, err := multihash.FromB58String(s)
 	if err == nil {
