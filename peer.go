@@ -6,12 +6,19 @@ import (
 	"sync"
 )
 
-// // Peer is
-// type Peer struct {
-// 	Address   string
-// 	Rank      int // -1, 0, 1 ...
-// 	timestamp int64
-// }
+// Peer is
+type Peer struct {
+	Addr    string
+	Peer    string
+	Latency string
+	Muxer   string
+	Streams []struct {
+		Protocol string
+	}
+
+	Rank      int // -1, 0, 1 ...
+	timestamp int64
+}
 
 // Neighborhood is
 type Neighborhood struct {
@@ -31,7 +38,9 @@ func NewNeighborhood() *Neighborhood {
 		min:   0,
 		max:   5,
 	}
-	nb.Monitor()
+
+	nb.addSelf()
+	// nb.Monitor()
 	return nb
 }
 
@@ -52,12 +61,6 @@ func (r *Neighborhood) GetPeers() []string {
 
 // Monitor is
 func (r *Neighborhood) Monitor() {
-	// self
-	go func() {
-		p := r.checkPeer(r.MyID)
-		r.addPeer(p)
-	}()
-
 	job := func() {
 		// clean up stale connections
 		// for k, v := range r.Peers {
@@ -117,6 +120,11 @@ func (r *Neighborhood) Monitor() {
 	}
 
 	Every(1).Minutes().Run(job)
+}
+
+func (r *Neighborhood) addSelf() {
+	p := r.checkPeer(r.MyID)
+	r.addPeer(p)
 }
 
 // addPeer is

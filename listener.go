@@ -52,7 +52,7 @@ func handleConnection(cliConn net.Conn, srvAddr string) {
 		return
 	}
 
-	// close the conections when done
+	// close the connections when done
 	defer func() {
 		srvConn.Close()
 		cliConn.Close()

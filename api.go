@@ -18,20 +18,6 @@ const (
 	protocolWWW = "/x/www/1.0"
 )
 
-// Peer is
-type Peer struct {
-	Addr    string
-	Peer    string
-	Latency string
-	Muxer   string
-	Streams []struct {
-		Protocol string
-	}
-
-	Rank      int // -1, 0, 1 ...
-	timestamp int64
-}
-
 // Peers is
 type Peers struct {
 	Peers []Peer
