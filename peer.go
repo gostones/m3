@@ -22,25 +22,26 @@ type Peer struct {
 
 // Neighborhood is
 type Neighborhood struct {
-	Peers map[string]*Peer
-	MyID  string
-	min   int
-	max   int
+	Peers  map[string]*Peer
+	My     *Node
+	config *Config
+	min    int
+	max    int
 
 	sync.Mutex
 }
 
 // NewNeighborhood is
-func NewNeighborhood() *Neighborhood {
+func NewNeighborhood(c *Config) *Neighborhood {
 	nb := &Neighborhood{
-		Peers: make(map[string]*Peer, 15),
-		MyID:  config.My.ID,
-		min:   0,
-		max:   5,
+		Peers:  make(map[string]*Peer, 15),
+		config: c,
+		min:    0,
+		max:    5,
 	}
 
-	nb.addSelf()
-	// nb.Monitor()
+	go nb.addSelf()
+	//go nb.Monitor()
 	return nb
 }
 
@@ -123,8 +124,18 @@ func (r *Neighborhood) Monitor() {
 }
 
 func (r *Neighborhood) addSelf() {
-	p := r.checkPeer(r.MyID)
+	node, err := p2pID()
+	if err != nil {
+		panic(err)
+	}
+	r.My = &node
+	p := r.checkPeer(r.My.ID)
 	r.addPeer(p)
+}
+
+// IsLocal returns true if local
+func (r *Neighborhood) IsLocal(id string) bool {
+	return id == r.My.ID
 }
 
 // addPeer is
@@ -134,14 +145,31 @@ func (r *Neighborhood) addPeer(p Peer) {
 	r.Peers[p.Peer] = &p
 }
 
+// GetPeerHost returns peer proxy host
+func (r *Neighborhood) GetPeerHost(id string) string {
+	r.Lock()
+	defer r.Unlock()
+	if id == r.My.ID {
+		return fmt.Sprintf("localhost:%v", r.config.WebPort)
+	}
+	p, ok := r.Peers[id]
+	if ok {
+		return p.Addr
+	}
+	return ""
+}
+
 func (r *Neighborhood) checkPeer(id string) Peer {
 	port := FreePort()
 	addr := fmt.Sprintf("127.0.0.1:%v", port)
 
 	var err error
-	self := (id == r.MyID)
+	self := (id == r.My.ID)
+
+	log.Printf("@@@@ checkPeer: id: %v self: %v addr: %v\n", id, self, addr)
+
 	if self {
-		target := fmt.Sprintf("127.0.0.1:%v", config.ProxyPort)
+		target := fmt.Sprintf("127.0.0.1:%v", r.config.ProxyPort)
 		go forward(addr, target)
 	} else {
 		err = p2pForward(port, id)

@@ -55,6 +55,8 @@ func p2pForward(port int, serverID string) error {
 	listen := fmt.Sprintf("/ip4/127.0.0.1/tcp/%v", port)
 	target := fmt.Sprintf("/ipfs/%v", serverID)
 
+	log.Printf("p2pForward %v %v\n", listen, target)
+
 	resp, err := client.R().
 		SetMultiValueQueryParams(url.Values{
 			"arg": []string{protocolWWW, listen, target},
@@ -63,7 +65,7 @@ func p2pForward(port int, serverID string) error {
 		SetAuthToken("").
 		Get("http://localhost:5001/api/v0/p2p/forward")
 
-	log.Printf("forward  %v %v response: %v err: %v\n", listen, target, resp, err)
+	log.Printf("p2pForward  %v %v response: %v err: %v\n", listen, target, resp, err)
 
 	return err
 }

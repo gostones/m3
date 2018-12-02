@@ -56,3 +56,11 @@ func TestPeerIDHex(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestPeerIDB58(t *testing.T) {
+	s := PeerIDB58("1220848ba2cbc954d17fc1758a4dc06ec128b21c6ecc1dcfcbdc284809f4a922ba08")
+
+	if s != "QmXG428k4Aa6Fchp7buub2pK4Fa2nbhcTfznL7oVSGWRRZ" {
+		t.Fail()
+	}
+}

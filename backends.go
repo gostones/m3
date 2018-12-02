@@ -15,9 +15,7 @@ type Backends struct {
 }
 
 // NewBackends is
-func NewBackends() *Backends {
-	nb := NewNeighborhood()
-
+func NewBackends(nb *Neighborhood) *Backends {
 	current := 0
 	length := 0
 

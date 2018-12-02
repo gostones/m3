@@ -8,8 +8,8 @@ import (
 // "time"
 )
 
-func loadbalance(port int) {
-	b := NewBackends()
+func loadbalance(port int, nb *Neighborhood) {
+	b := NewBackends(nb)
 
 	// for i := 0; i < len(be); i++ {
 	// 	b.Add(be[i])

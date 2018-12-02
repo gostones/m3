@@ -8,34 +8,33 @@ import (
 // Config is application settings
 type Config struct {
 	Port      int
+	WebPort   int
 	ProxyPort int
-	My        Node
 }
-
-var config = Config{}
 
 func main() {
 	var port = flag.Int("port", 18080, "The port to listen for connections")
+	var web = flag.Int("web", 8080, "The port to listen for www connections")
 
 	// var debug = flag.Bool("debug", false, "Enable debug mode")
 
 	flag.Parse()
 
-	config.Port = *port
-	config.ProxyPort = FreePort()
+	var cfg = &Config{}
+	cfg.Port = *port
+	cfg.WebPort = *web
+	cfg.ProxyPort = FreePort()
 
-	node, err := p2pID()
-	if err != nil {
-		panic(err)
-	}
-	config.My = node
+	log.Printf("Configuration port: %v proxy: %v\n", cfg.Port, cfg.ProxyPort)
 
-	log.Printf("Configuration port: %v proxy: %v\n", config.Port, config.ProxyPort)
+	nb := NewNeighborhood(cfg)
 
 	//
-	go loadbalance(config.Port)
+	log.Printf("p2p port: %v\n", cfg.ProxyPort)
+	p2pListen(cfg.ProxyPort)
 
-	//
-	p2pListen(config.ProxyPort)
-	httpproxy(config.ProxyPort)
+	log.Printf("proxy port: %v\n", cfg.ProxyPort)
+	go httpproxy(cfg.ProxyPort, nb)
+
+	loadbalance(cfg.Port, nb)
 }

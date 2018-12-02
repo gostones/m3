@@ -69,3 +69,12 @@ func PeerIDHex(s string) string {
 	}
 	return ""
 }
+
+// PeerIDB58 converts hex-encoded multihash peer ID to B58-encoded string
+func PeerIDB58(s string) string {
+	h, err := multihash.FromHexString(s)
+	if err == nil {
+		return h.B58String()
+	}
+	return ""
+}
