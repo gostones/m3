@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 )
 
@@ -10,11 +11,25 @@ type Config struct {
 	Port      int
 	WebPort   int
 	ProxyPort int
+	Pals      []string
+}
+
+type peerFlags []string
+
+func (i *peerFlags) String() string {
+	return fmt.Sprintf("%v", *i)
+}
+
+func (i *peerFlags) Set(value string) error {
+	*i = append(*i, value)
+	return nil
 }
 
 func main() {
 	var port = flag.Int("port", 18080, "The port to listen for connections")
 	var web = flag.Int("web", 8080, "The port to listen for www connections")
+	var pals peerFlags
+	flag.Var(&pals, "peer", "Peer friends.")
 
 	// var debug = flag.Bool("debug", false, "Enable debug mode")
 
@@ -24,8 +39,9 @@ func main() {
 	cfg.Port = *port
 	cfg.WebPort = *web
 	cfg.ProxyPort = FreePort()
+	cfg.Pals = pals
 
-	log.Printf("Configuration port: %v proxy: %v\n", cfg.Port, cfg.ProxyPort)
+	log.Printf("Configuration: %v\n", cfg)
 
 	nb := NewNeighborhood(cfg)
 

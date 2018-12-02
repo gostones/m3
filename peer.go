@@ -41,6 +41,7 @@ func NewNeighborhood(c *Config) *Neighborhood {
 	}
 
 	go nb.addSelf()
+	go nb.addPals()
 	//go nb.Monitor()
 	return nb
 }
@@ -63,6 +64,10 @@ func (r *Neighborhood) GetPeers() []string {
 // Monitor is
 func (r *Neighborhood) Monitor() {
 	job := func() {
+		if !r.IsReady() {
+			return
+		}
+
 		// clean up stale connections
 		// for k, v := range r.Peers {
 		// 	if v.Rank == 0 {
@@ -133,6 +138,10 @@ func (r *Neighborhood) addSelf() {
 	r.addPeer(p)
 }
 
+func (r *Neighborhood) IsReady() bool {
+	return r.My != nil
+}
+
 // IsLocal returns true if local
 func (r *Neighborhood) IsLocal(id string) bool {
 	return id == r.My.ID
@@ -143,6 +152,47 @@ func (r *Neighborhood) addPeer(p Peer) {
 	r.Lock()
 	defer r.Unlock()
 	r.Peers[p.Peer] = &p
+}
+
+func (r *Neighborhood) addPals() {
+	job := func() {
+		if !r.IsReady() {
+			return
+		}
+
+		pals := r.config.Pals
+		cnt := len(pals)
+		log.Printf("@@@@ pals count: %v\n", cnt)
+		if cnt <= 0 {
+			return
+		}
+
+		const concurrency = 8 // max
+		ch := make(chan string, concurrency)
+		go func() {
+			for i := 0; i < cnt; i++ {
+				id := pals[i]
+				peer, found := r.Peers[id] // TODO?
+
+				log.Printf("@@@@ Peer ID: %v found: %v\n", id, found)
+
+				if found {
+					peer.Rank++
+				} else {
+					ch <- id
+				}
+			}
+		}()
+
+		for c := range ch {
+			go func(id string) {
+				p := r.checkPeer(id)
+				r.addPeer(p)
+			}(c)
+		}
+	}
+
+	Every(1).Minutes().Run(job)
 }
 
 // GetPeerHost returns peer proxy host
