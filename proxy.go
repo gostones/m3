@@ -6,7 +6,9 @@ import (
 	"github.com/elazarl/goproxy"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
+	"time"
 )
 
 func httpproxy(port int, nb *Neighborhood) {
@@ -14,37 +16,88 @@ func httpproxy(port int, nb *Neighborhood) {
 	proxy.Verbose = true
 
 	//
-	var isPeer = func() goproxy.ReqConditionFunc {
+	var isLocal = func() goproxy.ReqConditionFunc {
 		return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
-			log.Printf("@@@@@ isPeer host: %v\n", req.URL.Host)
 			hostPort := strings.Split(req.URL.Host, ":")
-
-			return IsPeerID(hostPort[0])
+			id := PeerIDB58(hostPort[0])
+			b := id != "" && nb.IsLocal(id)
+			log.Printf("@@@@@ isLocal: %v host: %v\n", b, req.URL.Host)
+			return b
 		}
 	}
-
-	proxy.OnRequest(isPeer()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+	proxy.OnRequest(isLocal()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
 		req.Header.Set("X-IPFS-Proxy", "Mirr")
 
-		hostPort := strings.Split(req.URL.Host, ":")
-		id := PeerIDB58(hostPort[0])
-		b := nb.IsLocal(id)
-		host := nb.GetPeerHost(id)
+		//hostPort := strings.Split(req.URL.Host, ":")
+		//id := PeerIDB58(hostPort[0])
+		//b := nb.IsLocal(id)
+		host := fmt.Sprintf("localhost:%v", nb.config.WebPort) //nb.GetPeerHost(id)
 
-		log.Printf("@@@@@ id: %v local: %v host: %v\n", id, b, host)
-		if host == "" {
-			return req, goproxy.NewResponse(req,
-				goproxy.ContentTypeText, http.StatusServiceUnavailable,
-				"Cannot reach peer: "+id)
-		}
+		// log.Printf("@@@@@ id: %v local: %v host: %v\n", id, b, host)
+		// if host == "" {
+		// 	return req, goproxy.NewResponse(req,
+		// 		goproxy.ContentTypeText, http.StatusServiceUnavailable,
+		// 		"Cannot reach peer: "+id)
+		// }
 		//
 		req.URL.Host = host
 		req.URL.Scheme = "http"
 		req.URL.Host = host
-		log.Printf("@@@@@ request modified: %v\n", req)
+		log.Printf("@@@@@ local request modified: %v\n", req)
 
 		return req, nil
+	})
+
+	//
+	var isPeer = func() goproxy.ReqConditionFunc {
+		return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
+			hostPort := strings.Split(req.URL.Host, ":")
+			id := PeerIDB58(hostPort[0])
+			b := id != "" && !nb.IsLocal(id)
+			log.Printf("@@@@@ isPeer: %v host: %v\n", b, req.URL.Host)
+			return b
+		}
+	}
+	proxy.OnRequest(isPeer()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+		//copy request
+		proxyReq, err := http.NewRequest(req.Method, req.URL.String(), req.Body)
+		if err != nil {
+			return req, goproxy.NewResponse(req,
+				goproxy.ContentTypeText, http.StatusInternalServerError,
+				"failed to clone request")
+		}
+
+		proxyReq.Header = req.Header
+		// for header, values := range req.Header {
+		// 	for _, value := range values {
+		// 		proxyReq.Header.Add(header, value)
+		// 	}
+		// }
+
+		proxyReq.Header.Set("Host", req.Host)
+		proxyReq.Header.Set("X-Forwarded-For", req.RemoteAddr)
+
+		//
+		hostPort := strings.Split(req.URL.Host, ":")
+		id := PeerIDB58(hostPort[0])
+		proxyURL := "http://" + nb.GetPeerHost(id)
+		tr := &http.Transport{Proxy: func(req *http.Request) (*url.URL, error) {
+			return url.Parse(proxyURL)
+		}}
+
+		client := &http.Client{Transport: tr, Timeout: time.Second * 10}
+
+		resp, err := client.Do(proxyReq)
+
+		log.Printf("@@@@@ curl -kv -x %v %v err: %v\n", proxyURL, req.URL, err)
+		if err != nil {
+			return req, goproxy.NewResponse(req,
+				goproxy.ContentTypeText, http.StatusServiceUnavailable,
+				"Cannot reach peer: "+id)
+		}
+
+		return req, resp
 	})
 
 	//

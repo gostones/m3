@@ -140,7 +140,7 @@ func (r *Neighborhood) Monitor() {
 		}
 	}
 
-	Every(30).Seconds().Run(job)
+	Every(15).Seconds().Run(job)
 }
 
 func (r *Neighborhood) addSelf() {

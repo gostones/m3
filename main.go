@@ -38,7 +38,7 @@ func main() {
 	var cfg = &Config{}
 	cfg.Port = *port
 	cfg.WebPort = *web
-	cfg.ProxyPort = FreePort()
+	cfg.ProxyPort = *port //FreePort()
 	cfg.Pals = pals
 
 	//
@@ -56,7 +56,7 @@ func main() {
 	p2pListen(cfg.ProxyPort)
 
 	log.Printf("proxy port: %v\n", cfg.ProxyPort)
-	go httpproxy(cfg.ProxyPort, nb)
+	httpproxy(cfg.ProxyPort, nb)
 
-	loadbalance(cfg.Port, nb)
+	// loadbalance(cfg.Port, nb)
 }
