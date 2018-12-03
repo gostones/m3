@@ -6,6 +6,7 @@ import (
 	"github.com/multiformats/go-multihash"
 	"net"
 	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -77,4 +78,16 @@ func PeerIDB58(s string) string {
 		return h.B58String()
 	}
 	return ""
+}
+
+// ParseInt parses s into int
+func ParseInt(s string, v int) int {
+	if s == "" {
+		return v
+	}
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		i = v
+	}
+	return i
 }

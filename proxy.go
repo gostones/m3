@@ -29,17 +29,13 @@ func httpproxy(port int, nb *Neighborhood) {
 		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
 		req.Header.Set("X-IPFS-Proxy", "Mirr")
 
-		//hostPort := strings.Split(req.URL.Host, ":")
-		//id := PeerIDB58(hostPort[0])
-		//b := nb.IsLocal(id)
-		host := fmt.Sprintf("localhost:%v", nb.config.WebPort) //nb.GetPeerHost(id)
+		hostPort := strings.Split(req.URL.Host, ":")
+		port = nb.config.WebPort
+		if len(hostPort) > 1 {
+			port = ParseInt(hostPort[1], port)
+		}
+		host := fmt.Sprintf("localhost:%v", port)
 
-		// log.Printf("@@@@@ id: %v local: %v host: %v\n", id, b, host)
-		// if host == "" {
-		// 	return req, goproxy.NewResponse(req,
-		// 		goproxy.ContentTypeText, http.StatusServiceUnavailable,
-		// 		"Cannot reach peer: "+id)
-		// }
 		//
 		req.URL.Host = host
 		req.URL.Scheme = "http"
