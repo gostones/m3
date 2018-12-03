@@ -50,16 +50,14 @@ func TestIsPeerAddress(t *testing.T) {
 }
 
 func TestPeerIDHex(t *testing.T) {
-	s := PeerIDHex("QmXG428k4Aa6Fchp7buub2pK4Fa2nbhcTfznL7oVSGWRRZ")
-
-	if s != "1220848ba2cbc954d17fc1758a4dc06ec128b21c6ecc1dcfcbdc284809f4a922ba08" {
+	s := PeerIDHex("QmTFdcQY12fjxv6kELzQA4zXBxiva8xcunrmTYZto8DFUk")
+	if s != "1220490149ec3a5ccf6ac3d8db2ec7c42e8486b7e95c0a324a0eaf22ae50d2fc1011" {
 		t.Fail()
 	}
 }
 
 func TestPeerIDB58(t *testing.T) {
 	s := PeerIDB58("1220848ba2cbc954d17fc1758a4dc06ec128b21c6ecc1dcfcbdc284809f4a922ba08")
-
 	if s != "QmXG428k4Aa6Fchp7buub2pK4Fa2nbhcTfznL7oVSGWRRZ" {
 		t.Fail()
 	}

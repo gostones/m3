@@ -41,6 +41,12 @@ func main() {
 	cfg.ProxyPort = FreePort()
 	cfg.Pals = pals
 
+	//
+	err := p2pCloseAll()
+	if err != nil {
+		panic(err)
+	}
+	//
 	log.Printf("Configuration: %v\n", cfg)
 
 	nb := NewNeighborhood(cfg)

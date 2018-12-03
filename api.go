@@ -89,6 +89,20 @@ func p2pForwardClose(port int, serverID string) error {
 	return err
 }
 
+func p2pCloseAll() error {
+	resp, err := client.R().
+		SetQueryParams(map[string]string{
+			"protocol": protocolWWW,
+		}).
+		SetHeader("Accept", "application/json").
+		SetAuthToken("").
+		Get("http://localhost:5001/api/v0/p2p/close")
+
+	log.Printf("close all response: %v err: %v\n", resp, err)
+
+	return err
+}
+
 //
 // {
 //     "Peers": [

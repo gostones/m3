@@ -40,8 +40,23 @@ func NewNeighborhood(c *Config) *Neighborhood {
 		max:    5,
 	}
 
+	//
+	const concurrency = 8 // max
+	ch := make(chan string, concurrency)
+
+	go func() {
+		for c := range ch {
+			go func(id string) {
+				p := nb.checkPeer(id)
+				if p.Rank > 0 {
+					nb.addPeer(p)
+				}
+			}(c)
+		}
+	}()
+
 	go nb.addSelf()
-	go nb.addPals()
+	go nb.addPals(ch)
 	//go nb.Monitor()
 	return nb
 }
@@ -125,7 +140,7 @@ func (r *Neighborhood) Monitor() {
 		}
 	}
 
-	Every(1).Minutes().Run(job)
+	Every(30).Seconds().Run(job)
 }
 
 func (r *Neighborhood) addSelf() {
@@ -134,10 +149,13 @@ func (r *Neighborhood) addSelf() {
 		panic(err)
 	}
 	r.My = &node
+
+	//
 	p := r.checkPeer(r.My.ID)
 	r.addPeer(p)
 }
 
+// IsReady tests if node is available
 func (r *Neighborhood) IsReady() bool {
 	return r.My != nil
 }
@@ -154,7 +172,8 @@ func (r *Neighborhood) addPeer(p Peer) {
 	r.Peers[p.Peer] = &p
 }
 
-func (r *Neighborhood) addPals() {
+func (r *Neighborhood) addPals(ch chan<- string) {
+
 	job := func() {
 		if !r.IsReady() {
 			return
@@ -167,28 +186,17 @@ func (r *Neighborhood) addPals() {
 			return
 		}
 
-		const concurrency = 8 // max
-		ch := make(chan string, concurrency)
-		go func() {
-			for i := 0; i < cnt; i++ {
-				id := pals[i]
-				peer, found := r.Peers[id] // TODO?
+		for i := 0; i < cnt; i++ {
+			id := pals[i]
+			peer, found := r.Peers[id] // TODO?
 
-				log.Printf("@@@@ Peer ID: %v found: %v\n", id, found)
+			log.Printf("@@@@ Peer ID: %v found: %v\n", id, found)
 
-				if found {
-					peer.Rank++
-				} else {
-					ch <- id
-				}
+			if found {
+				peer.Rank++
+			} else {
+				ch <- id
 			}
-		}()
-
-		for c := range ch {
-			go func(id string) {
-				p := r.checkPeer(id)
-				r.addPeer(p)
-			}(c)
 		}
 	}
 
