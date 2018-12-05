@@ -5,7 +5,9 @@ import (
 	"testing"
 )
 
-func TestP2pIsValid(t *testing.T) {
+func TestIsLive(t *testing.T) {
+	t.Skip()
+
 	var cfg = &Config{}
 	cfg.Port = FreePort()
 	cfg.WebPort = 5001
@@ -23,14 +25,22 @@ func TestP2pIsValid(t *testing.T) {
 
 	t.Logf("addr: %v target: %v", addr, target)
 
-	ok := p2pIsValid(cfg.Port)
+	ok := p2pIsLive(cfg.Port)
+
+	if !ok {
+		t.Fail()
+	}
+
+	ok = p2pIsProxy(cfg.Port)
 
 	if !ok {
 		t.Fail()
 	}
 }
 
-func TestP2pForward(t *testing.T) {
+func TestIsP2pProxy(t *testing.T) {
+	t.Skip()
+
 	id := "QmTFdcQY12fjxv6kELzQA4zXBxiva8xcunrmTYZto8DFUk"
 	//id := "QmXG428k4Aa6Fchp7buub2pK4Fa2nbhcTfznL7oVSGWRRZ"
 	//
@@ -47,14 +57,7 @@ func TestP2pForward(t *testing.T) {
 		t.Fail()
 	}
 
-	// nb := NewNeighborhood(cfg)
-	// addr := fmt.Sprintf("127.0.0.1:%v", cfg.Port)
-	// target := fmt.Sprintf("127.0.0.1:%v", cfg.ProxyPort)
-	// httpproxy(cfg.ProxyPort, nb)
-
-	//t.Logf("addr: %v target: %v", addr, target)
-
-	ok := p2pIsValid(cfg.Port)
+	ok := p2pIsProxy(cfg.Port)
 
 	if !ok {
 		t.Fail()
@@ -62,6 +65,8 @@ func TestP2pForward(t *testing.T) {
 }
 
 func TestP2pCloseAll(t *testing.T) {
+	t.Skip()
+
 	err := p2pCloseAll()
 	if err != nil {
 		t.Fail()

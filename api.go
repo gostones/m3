@@ -161,7 +161,32 @@ func p2pID() (Node, error) {
 	return n, err
 }
 
-func p2pIsValid(port int) bool {
+func p2pIsLive(port int) bool {
+	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
+	tests := []string{
+		"http://home/",
+	}
+	proxy := fmt.Sprintf("http://127.0.0.1:%v", port)
+	request := gorequest.New().Proxy(proxy)
+
+	//
+	err := lib.Retry(func() error {
+		idx := rnd.Intn(len(tests))
+		resp, _, errs := request.
+			Head(tests[idx]).
+			End()
+
+		log.Printf("proxy: %v response: %v err %v\n", proxy, resp, errs)
+		if len(errs) > 0 {
+			return errs[0]
+		}
+		return nil
+	})
+
+	return err == nil
+}
+
+func p2pIsProxy(port int) bool {
 	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
 	tests := []string{
 		"https://www.google.com/",

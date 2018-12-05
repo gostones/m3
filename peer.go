@@ -160,9 +160,51 @@ func (r *Neighborhood) IsReady() bool {
 	return r.My != nil
 }
 
-// IsLocal returns true if local
-func (r *Neighborhood) IsLocal(id string) bool {
-	return id == r.My.ID
+// IsLocal checks if host is local
+func (r *Neighborhood) IsLocal(host string) bool {
+	if host == "home" {
+		return true
+	}
+	//check alias
+	a, err := Alias(host)
+	if err == nil && a != "" {
+		alias, b := r.config.Aliases[a]
+		if b {
+			host = alias
+		}
+	}
+	id := ToPeerID(host)
+	return (id != "" && id == r.My.ID)
+}
+
+// IsPeer returns true if id is peer
+func (r *Neighborhood) IsPeer(host string) bool {
+	if r.IsLocal(host) {
+		return false
+	}
+	//check alias
+	a, err := Alias(host)
+	if err == nil && a != "" {
+		alias, b := r.config.Aliases[a]
+		if b {
+			host = alias
+		}
+	}
+	return IsPeer(host)
+}
+
+// ToPeerID returns peer ID after resolving if required
+func (r *Neighborhood) ToPeerID(host string) string {
+	//check alias
+	a, err := Alias(host)
+	if err == nil && a != "" {
+		alias, b := r.config.Aliases[a]
+		if b {
+			host = alias
+		}
+	}
+	id := ToPeerID(host)
+	return id
 }
 
 // addPeer is
@@ -203,8 +245,8 @@ func (r *Neighborhood) addPals(ch chan<- string) {
 	Every(1).Minutes().Run(job)
 }
 
-// GetPeerHost returns peer proxy host
-func (r *Neighborhood) GetPeerHost(id string) string {
+// GetPeerProxy returns peer proxy host
+func (r *Neighborhood) GetPeerProxy(id string) string {
 	r.Lock()
 	defer r.Unlock()
 	if id == r.My.ID {
@@ -234,7 +276,7 @@ func (r *Neighborhood) checkPeer(id string) Peer {
 	}
 	rank := -1
 	if err == nil {
-		ok := p2pIsValid(port)
+		ok := p2pIsLive(port)
 		if ok {
 			rank = 1
 		} else if !self {
