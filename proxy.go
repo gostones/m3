@@ -6,7 +6,7 @@ import (
 	"github.com/elazarl/goproxy"
 	"log"
 	"net/http"
-	//"net/url"
+	"net/url"
 	"strings"
 	//"time"
 	"github.com/gostones/mirr/tunnel"
@@ -14,6 +14,10 @@ import (
 
 func httpproxy(port int, nb *Neighborhood) {
 	proxy := goproxy.NewProxyHttpServer()
+	proxy.Tr.Proxy = func(req *http.Request) (*url.URL, error) {
+		return url.Parse(nb.config.ProxyURL)
+	}
+	proxy.ConnectDial = proxy.NewConnectDialToProxy(nb.config.ProxyURL)
 	proxy.Verbose = true
 
 	//
