@@ -62,7 +62,7 @@ func main() {
 			cfg.ProxyURL = proxyURL
 		}
 	}
-	cfg.Port = *port
+	cfg.Port = FreePort() //*port
 	cfg.WebPort = *web
 	cfg.ProxyPort = *port //FreePort()
 	cfg.TunPort = 8022
@@ -87,7 +87,9 @@ func main() {
 	// go tunnel.TunServer(cfg.TunPort, "")
 
 	log.Printf("proxy port: %v\n", cfg.ProxyPort)
-	httpproxy(cfg.ProxyPort, nb)
+	go httpproxy(cfg.ProxyPort, nb)
 
+	log.Printf("reverse proxy port: %v\n", cfg.Port)
+	reverseProxy(cfg.Port)
 	// loadbalance(cfg.Port, nb)
 }

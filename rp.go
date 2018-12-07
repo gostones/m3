@@ -39,7 +39,7 @@ func (h baseHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func ReverseProxy(port int) {
+func reverseProxy(port int) {
 	hostProxy = make(map[string]*httputil.ReverseProxy)
 	h := &baseHandle{}
 	http.Handle("/", h)

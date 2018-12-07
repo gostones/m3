@@ -76,7 +76,7 @@ func httpproxy(port int, nb *Neighborhood) {
 		host := fmt.Sprintf("localhost:%v", port)
 
 		//
-		req.Host = host
+		//req.Host = host
 		req.URL.Scheme = "http"
 		req.URL.Host = host
 		log.Printf("@@@@@ local request modified: %v\n", req)
@@ -120,7 +120,7 @@ func httpproxy(port int, nb *Neighborhood) {
 		host := fmt.Sprintf("%v:%v", addr, port)
 
 		//
-		req.Host = host
+		//req.Host = host
 		req.URL.Scheme = "http"
 		req.URL.Host = host
 		log.Printf("@@@@@ peer request modified: %v\n", req)
