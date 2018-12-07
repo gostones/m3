@@ -11,7 +11,7 @@ import (
 
 // Config is application settings
 type Config struct {
-	Port      int
+	//Port      int
 	WebPort   int
 	ProxyPort int
 	ProxyURL  *url.URL
@@ -32,9 +32,9 @@ func (i *peerFlags) Set(value string) error {
 }
 
 func main() {
-	var port = flag.Int("port", 18080, "The port to listen for connections")
-	var web = flag.Int("web", 8080, "The port to listen for www connections")
-	var proxy = flag.String("proxy", "", "http proxy")
+	var port = flag.Int("port", 12345, "The port to listen for proxy connections")
+	var web = flag.Int("web", 54321, "The port to listen for www reverse proxy connections")
+	var proxy = flag.String("proxy", "", "Internet firewall http proxy")
 
 	var peers peerFlags
 	flag.Var(&peers, "peer", "Peer friends.")
@@ -62,14 +62,14 @@ func main() {
 			cfg.ProxyURL = proxyURL
 		}
 	}
-	cfg.Port = FreePort() //*port
+	//cfg.Port = *port
 	cfg.WebPort = *web
-	cfg.ProxyPort = *port //FreePort()
-	cfg.TunPort = 8022
+	cfg.ProxyPort = *port
+	//cfg.TunPort = 8022
 	cfg.Pals = pals
 	cfg.Aliases = aliases
 
-	//
+	// clean up old p2p connections
 	err := p2pCloseAll()
 	if err != nil {
 		panic(err)
@@ -80,16 +80,14 @@ func main() {
 	nb := NewNeighborhood(cfg)
 
 	//
-	log.Printf("p2p port: %v\n", cfg.ProxyPort)
+	log.Printf("proxy/p2p port: %v\n", cfg.ProxyPort)
 	p2pListen(cfg.ProxyPort)
+	httpproxy(cfg.ProxyPort, nb)
 
 	// log.Printf("tunnel port: %v\n", cfg.TunPort)
 	// go tunnel.TunServer(cfg.TunPort, "")
 
-	log.Printf("proxy port: %v\n", cfg.ProxyPort)
-	go httpproxy(cfg.ProxyPort, nb)
-
-	log.Printf("reverse proxy port: %v\n", cfg.Port)
-	reverseProxy(cfg.Port)
+	//log.Printf("web/reverse proxy port: %v\n", cfg.WebPort)
+	//rpServer(cfg.WebPort, "")
 	// loadbalance(cfg.Port, nb)
 }

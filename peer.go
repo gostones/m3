@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"regexp"
 	"sync"
 )
 
@@ -18,6 +19,17 @@ type Peer struct {
 
 	Rank      int // -1, 0, 1 ...
 	timestamp int64
+}
+
+var localHostIpv4 = regexp.MustCompile(`127\.0\.0\.\d+`)
+
+// IsLocalHost checks whether the destination host is explicitly local host
+// taken from goproxy
+func IsLocalHost(host string) bool {
+	return host == "::1" ||
+		host == "0:0:0:0:0:0:0:1" ||
+		localHostIpv4.MatchString(host) ||
+		host == "localhost"
 }
 
 // Neighborhood is
@@ -162,7 +174,7 @@ func (r *Neighborhood) IsReady() bool {
 
 // IsLocal checks if host is local
 func (r *Neighborhood) IsLocal(host string) bool {
-	if host == "home" {
+	if host == "home" || IsLocalHost(host) {
 		return true
 	}
 	//check alias

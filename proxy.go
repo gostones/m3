@@ -53,9 +53,9 @@ func httpproxy(port int, nb *Neighborhood) {
 		return nb.config.ProxyURL, nil
 	}
 	proxy.ConnectDial = nil
-	// if nb.config.ProxyURL != "" {
-	// 	proxy.ConnectDial = proxy.NewConnectDialToProxy(nb.config.ProxyURL)
-	// }
+	if nb.config.ProxyURL != nil {
+		proxy.ConnectDial = proxy.NewConnectDialToProxy(nb.config.ProxyURL.String())
+	}
 	proxy.Verbose = true
 
 	//
@@ -73,12 +73,13 @@ func httpproxy(port int, nb *Neighborhood) {
 		if len(hostport) > 1 {
 			port = ParseInt(hostport[1], port)
 		}
-		host := fmt.Sprintf("localhost:%v", port)
+		//host := fmt.Sprintf("localhost:%v", port)
+		ingress := fmt.Sprintf("localhost.%v", port)
 
 		//
-		//req.Host = host
+		req.Host = ingress
 		req.URL.Scheme = "http"
-		req.URL.Host = host
+		req.URL.Host = "localhost"
 		log.Printf("@@@@@ local request modified: %v\n", req)
 
 		return req, nil
@@ -189,6 +190,16 @@ func httpproxy(port int, nb *Neighborhood) {
 	// 			goproxy.ContentTypeText, http.StatusForbidden,
 	// 			"Don't waste your time!")
 	// 	})
+
+	//proxy.OnRequest().HandleConnect(goproxy.AlwaysMitm)
+	// proxy.OnRequest().DoFunc(func (req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+	// 	log.Printf("@@@@@ www request: %v\n", req)
+
+	// 	if req.URL.Scheme == "https" {
+	// 		req.URL.Scheme = "http"
+	// 	}
+	// 	return req, nil
+	// })
 
 	hostport := fmt.Sprintf(":%v", port)
 	log.Println("Proxy listening on: " + hostport)
