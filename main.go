@@ -3,7 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/gostones/mirr/tunnel"
+	"net/url"
+	//"github.com/gostones/mirr/tunnel"
 	"log"
 	"strings"
 )
@@ -13,7 +14,7 @@ type Config struct {
 	Port      int
 	WebPort   int
 	ProxyPort int
-	ProxyURL  string
+	ProxyURL  *url.URL
 	TunPort   int
 	Pals      []string
 	Aliases   map[string]string
@@ -55,7 +56,12 @@ func main() {
 
 	//
 	var cfg = &Config{}
-	cfg.ProxyURL = *proxy
+	if *proxy != "" {
+		proxyURL, err := url.Parse(*proxy)
+		if err == nil {
+			cfg.ProxyURL = proxyURL
+		}
+	}
 	cfg.Port = *port
 	cfg.WebPort = *web
 	cfg.ProxyPort = *port //FreePort()
@@ -77,8 +83,8 @@ func main() {
 	log.Printf("p2p port: %v\n", cfg.ProxyPort)
 	p2pListen(cfg.ProxyPort)
 
-	log.Printf("tunnel port: %v\n", cfg.TunPort)
-	go tunnel.TunServer(cfg.TunPort, "")
+	// log.Printf("tunnel port: %v\n", cfg.TunPort)
+	// go tunnel.TunServer(cfg.TunPort, "")
 
 	log.Printf("proxy port: %v\n", cfg.ProxyPort)
 	httpproxy(cfg.ProxyPort, nb)

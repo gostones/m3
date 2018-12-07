@@ -39,7 +39,7 @@ func TestIsLive(t *testing.T) {
 }
 
 func TestIsP2pProxy(t *testing.T) {
-	t.Skip()
+	//t.Skip()
 
 	id := "QmTFdcQY12fjxv6kELzQA4zXBxiva8xcunrmTYZto8DFUk"
 	//id := "QmXG428k4Aa6Fchp7buub2pK4Fa2nbhcTfznL7oVSGWRRZ"

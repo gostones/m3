@@ -9,24 +9,59 @@ import (
 	"net/url"
 	"strings"
 	//"time"
-	"github.com/gostones/mirr/tunnel"
+	//"github.com/gostones/mirr/tunnel"
 )
 
 func httpproxy(port int, nb *Neighborhood) {
+	var localReq = func(req *http.Request) bool {
+		hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
+		b := nb.IsLocal(hostport[0])
+		log.Printf("@@@@@ isLocal: %v host: %v\n", b, req.URL.Host)
+		return b
+	}
+	var peerReq = func(req *http.Request) bool {
+		hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
+		b := nb.IsPeer(hostport[0])
+		log.Printf("@@@@@ isPeer: %v host: %v\n", b, req.URL.Host)
+		return b
+	}
+	log.Printf("@@@@@ ProxyURL: %v\n", nb.config.ProxyURL)
+
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.Tr.Proxy = func(req *http.Request) (*url.URL, error) {
-		return url.Parse(nb.config.ProxyURL)
+		if localReq(req) {
+			return nil, nil
+		}
+		if peerReq(req) {
+			hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
+			port := 80
+			if len(hostport) > 1 {
+				port = ParseInt(hostport[1], port)
+			}
+
+			// resolve peer id
+			id := nb.ToPeerID(hostport[0])
+			//addr := ToPeerAddr(id)
+
+			proxy := nb.GetPeerProxy(id)
+			if proxy == "" {
+				return nil, nil
+			}
+			return url.Parse(fmt.Sprintf("http://%v", proxy))
+		}
+
+		return nb.config.ProxyURL, nil
 	}
-	proxy.ConnectDial = proxy.NewConnectDialToProxy(nb.config.ProxyURL)
+	proxy.ConnectDial = nil
+	// if nb.config.ProxyURL != "" {
+	// 	proxy.ConnectDial = proxy.NewConnectDialToProxy(nb.config.ProxyURL)
+	// }
 	proxy.Verbose = true
 
 	//
 	var isLocal = func() goproxy.ReqConditionFunc {
 		return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
-			hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
-			b := nb.IsLocal(hostport[0])
-			log.Printf("@@@@@ isLocal: %v host: %v\n", b, req.URL.Host)
-			return b
+			return localReq(req)
 		}
 	}
 	proxy.OnRequest(isLocal()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
@@ -52,17 +87,26 @@ func httpproxy(port int, nb *Neighborhood) {
 	//
 	var isPeer = func() goproxy.ReqConditionFunc {
 		return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
-			hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
-			b := nb.IsPeer(hostport[0])
-			log.Printf("@@@@@ isPeer: %v host: %v\n", b, req.URL.Host)
-			return b
+			return peerReq(req)
 		}
 	}
 
-	var tunnels = make(map[string]int)
+	//var tunnels = make(map[string]int)
 	proxy.OnRequest(isPeer()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
 		req.Header.Set("X-IPFS-Proxy", "Mirr")
+		//
+
+		// tunURL := fmt.Sprintf("http://%v:%v", addr, nb.config.TunPort)
+		// host := fmt.Sprintf("%v:%v", addr, port)
+		// locPort, ok := tunnels[host]
+		// if !ok {
+		// 	locPort := FreePort()
+		// 	remote := fmt.Sprintf("localhost:%v:localhost:%v", locPort, port)
+		// 	go tunnel.TunClient(proxyURL, tunURL, remote)
+		// 	tunnels[host] = locPort
+		// 	log.Printf("@@@@@ peer remote: %v\n", remote)
+		// }
 
 		hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
 		port := 80
@@ -73,30 +117,12 @@ func httpproxy(port int, nb *Neighborhood) {
 		// resolve peer id
 		id := nb.ToPeerID(hostport[0])
 		addr := ToPeerAddr(id)
-
-		proxy := nb.GetPeerProxy(id)
-		if proxy == "" {
-			return req, goproxy.NewResponse(req,
-				goproxy.ContentTypeText, http.StatusServiceUnavailable,
-				"No proxy to peer: "+id)
-		}
-		proxyURL := fmt.Sprintf("http://%v", proxy)
-		tunURL := fmt.Sprintf("http://%v:%v", addr, nb.config.TunPort)
-
 		host := fmt.Sprintf("%v:%v", addr, port)
-		locPort, ok := tunnels[host]
-		if !ok {
-			locPort := FreePort()
-			remote := fmt.Sprintf("localhost:%v:localhost:%v", locPort, port)
-			go tunnel.TunClient(proxyURL, tunURL, remote)
-			tunnels[host] = locPort
-			log.Printf("@@@@@ peer remote: %v\n", remote)
-		}
 
 		//
 		req.Host = host
 		req.URL.Scheme = "http"
-		req.URL.Host = fmt.Sprintf("localhost:%v", locPort)
+		req.URL.Host = host
 		log.Printf("@@@@@ peer request modified: %v\n", req)
 
 		return req, nil
