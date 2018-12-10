@@ -49,18 +49,33 @@ localhost
 <!-- 
 
 # UI
-http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/overview?namespace=_all
+https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
 
+
+http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
+
+
+###helm
+https://github.com/helm/helm
+
+#coredns Apache 2,993 go
+https://github.com/coredns/coredns
+https://github.com/helm/charts/tree/master/stable/coredns
+
+helm install --name coredns --namespace core stable/coredns \
+	--set isClusterService=false \
+	--set rbac.create=false \
+	--set serviceType=LoadBalancer \
+	--set serviceProtocol=UDP \
+	--set servers[0].port=10053 \
+	--dry-run --debug
+#
+helm install --name coredns --namespace core stable/coredns -f coredns-values.yaml
 
 #traefik MIT 19,017 Go
 https://github.com/containous/traefik
 
 helm install stable/traefik --name traefik --namespace kube-system \
-	--set ssl.insecureSkipVerify=true \
-	--set dashboard.enabled=true \
-	--set dashboard.domain=localhost
-
-helm upgrade traefik stable/traefik \
 	--set ssl.insecureSkipVerify=true \
 	--set dashboard.enabled=true \
 	--set dashboard.domain=localhost
@@ -71,7 +86,7 @@ helm upgrade traefik stable/traefik \
 https://docs.traefik.io/user-guide/kubernetes/
 https://github.com/helm/charts/tree/master/stable/traefik
 
-###cicd:
+###cicd
 
 #gogs MIT 28,188 Go
 https://github.com/gogs/gogs
@@ -161,7 +176,7 @@ helm install --namespace cwe --name dokuwiki stable/dokuwiki \
 	--set service.type=ClusterIP 
 
 kubectl port-forward --namespace cwe svc/dokuwiki-dokuwiki 18081:80
-echo Username: user / Q6le5NSVwT
+echo Username: user 
 echo Password: $(kubectl get secret --namespace cwe dokuwiki-dokuwiki -o jsonpath="{.data.dokuwiki-password}" | base64 --decode)
 
 
