@@ -32,8 +32,8 @@ func (i *peerFlags) Set(value string) error {
 }
 
 func main() {
-	var port = flag.Int("port", 12345, "The port to listen for proxy connections")
-	var web = flag.Int("web", 54321, "The port to listen for www reverse proxy connections")
+	var port = flag.Int("port", 18080, "The port to listen for proxy connections")
+	var web = flag.Int("web", 8080, "The port to listen for www reverse proxy connections")
 	var proxy = flag.String("proxy", "", "Internet firewall http proxy")
 
 	var peers peerFlags
