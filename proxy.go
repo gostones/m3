@@ -5,12 +5,28 @@ import (
 	"fmt"
 	"github.com/elazarl/goproxy"
 	"log"
+	"net"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
 	"strings"
 	//"time"
 	//"github.com/gostones/mirr/tunnel"
 )
+
+func serveReverseProxy(target string, res http.ResponseWriter, req *http.Request) {
+	u, _ := url.Parse(target)
+
+	proxy := httputil.NewSingleHostReverseProxy(u)
+
+	// Update the headers to allow for SSL redirection
+	req.URL.Host = u.Host
+	req.URL.Scheme = u.Scheme
+	req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
+	req.Host = u.Host
+
+	proxy.ServeHTTP(res, req)
+}
 
 func httpproxy(port int, nb *Neighborhood) {
 	var localReq = func(req *http.Request) bool {
@@ -56,6 +72,15 @@ func httpproxy(port int, nb *Neighborhood) {
 	if nb.config.ProxyURL != nil {
 		proxy.ConnectDial = proxy.NewConnectDialToProxy(nb.config.ProxyURL.String())
 	}
+
+	proxy.Tr.Dial = func(network, addr string) (c net.Conn, err error) {
+		c, err = net.Dial(network, addr)
+		if c, ok := c.(*net.TCPConn); err == nil && ok {
+			c.SetKeepAlive(true)
+		}
+		return
+	}
+
 	proxy.Verbose = true
 
 	//
@@ -70,16 +95,16 @@ func httpproxy(port int, nb *Neighborhood) {
 
 		hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
 		port := nb.config.WebPort
-		if len(hostport) > 1 {
-			port = ParseInt(hostport[1], port)
-		}
-		//host := fmt.Sprintf("localhost:%v", port)
-		ingress := fmt.Sprintf("localhost.%v", port)
+		// if len(hostport) > 1 {
+		// 	port = ParseInt(hostport[1], port)
+		// }
+		host := fmt.Sprintf("%v:%v", hostport[0], port)
+		//ingress := fmt.Sprintf("localhost.%v", port)
 
 		//
-		req.Host = ingress
+		req.Host = host
 		req.URL.Scheme = "http"
-		req.URL.Host = "localhost"
+		req.URL.Host = host
 		log.Printf("@@@@@ local request modified: %v\n", req)
 
 		return req, nil
@@ -128,6 +153,15 @@ func httpproxy(port int, nb *Neighborhood) {
 
 		return req, nil
 	})
+
+	// proxy.OnRequest().DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+	// 	ctx.RoundTripper = goproxy.RoundTripperFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (resp *http.Response, err error) {
+	// 		ctx.UserData, resp, err = tr.DetailedRoundTrip(req)
+	// 		return
+	// 	})
+	// 	logger.LogReq(req, ctx)
+	// 	return req, nil
+	// })
 
 	// proxy.OnRequest(isPeer()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 	// 	// resolve peer id

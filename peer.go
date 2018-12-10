@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"regexp"
 	"sync"
 )
 
@@ -19,17 +18,6 @@ type Peer struct {
 
 	Rank      int // -1, 0, 1 ...
 	timestamp int64
-}
-
-var localHostIpv4 = regexp.MustCompile(`127\.0\.0\.\d+`)
-
-// IsLocalHost checks whether the destination host is explicitly local host
-// taken from goproxy
-func IsLocalHost(host string) bool {
-	return host == "::1" ||
-		host == "0:0:0:0:0:0:0:1" ||
-		localHostIpv4.MatchString(host) ||
-		host == "localhost"
 }
 
 // Neighborhood is
@@ -172,9 +160,13 @@ func (r *Neighborhood) IsReady() bool {
 	return r.My != nil
 }
 
-// IsLocal checks if host is local
+// IsLocal checks if host is local home node
 func (r *Neighborhood) IsLocal(host string) bool {
-	if host == "home" || IsLocalHost(host) {
+	if IsLocalHost(host) {
+		return false
+	}
+
+	if IsHome(host) {
 		return true
 	}
 	//check alias
@@ -189,11 +181,12 @@ func (r *Neighborhood) IsLocal(host string) bool {
 	return (id != "" && id == r.My.ID)
 }
 
-// IsPeer returns true if id is peer
+// IsPeer returns true if host is not local and is a valid peer id
 func (r *Neighborhood) IsPeer(host string) bool {
-	if r.IsLocal(host) {
+	if IsLocalHost(host) {
 		return false
 	}
+
 	//check alias
 	a, err := Alias(host)
 	if err == nil && a != "" {
@@ -202,7 +195,13 @@ func (r *Neighborhood) IsPeer(host string) bool {
 			host = alias
 		}
 	}
-	return IsPeer(host)
+
+	id := ToPeerID(host)
+	if id == "" || id == r.My.ID {
+		return false
+	}
+
+	return true
 }
 
 // ToPeerID returns peer ID after resolving if required

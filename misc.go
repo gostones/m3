@@ -5,6 +5,7 @@ import (
 	"github.com/jpillora/backoff"
 	"github.com/multiformats/go-multihash"
 	"net"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -47,15 +48,8 @@ func CurrentTime() int64 {
 
 // IsPeer checks if the string s is a valid hex-encoded peer address or b58-encoded ID
 func IsPeer(s string) bool {
-	_, err := multihash.FromB58String(s)
-	if err == nil {
-		return true
-	}
-	_, err = multihash.FromHexString(s)
-	if err == nil {
-		return true
-	}
-	return false
+	id := ToPeerID(s)
+	return id != ""
 }
 
 // // IsPeerAddress checks if string s is a valid Url with host being a valid peer ID
@@ -146,4 +140,23 @@ func Alias(name string) (string, error) {
 	s := sa[0 : len(sa)-1]
 
 	return strings.Join(s, "."), nil
+}
+
+var localHostIpv4 = regexp.MustCompile(`127\.0\.0\.\d+`)
+
+// IsLocalHost checks whether the destination host is explicitly local host
+// taken from goproxy
+func IsLocalHost(host string) bool {
+	return host == "::1" ||
+		host == "0:0:0:0:0:0:0:1" ||
+		localHostIpv4.MatchString(host) ||
+		host == "localhost"
+}
+
+var localHostHome = regexp.MustCompile(`.*\.?home`)
+
+// IsHome checks whether the destination host is explicitly local home node
+func IsHome(host string) bool {
+	return host == "home" ||
+		localHostHome.MatchString(host)
 }

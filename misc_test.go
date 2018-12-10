@@ -107,3 +107,69 @@ func TestAlias(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestIsLocalHost(t *testing.T) {
+	s := "example.com"
+	b := IsLocalHost(s)
+	if b {
+		t.Fail()
+	}
+
+	s = "home"
+	b = IsLocalHost(s)
+	if b {
+		t.Fail()
+	}
+
+	s = "example.home"
+	b = IsLocalHost(s)
+	if b {
+		t.Fail()
+	}
+
+	//
+	s = "localhost"
+	b = IsLocalHost(s)
+	if !b {
+		t.Fail()
+	}
+
+	s = "127.0.0.1"
+	b = IsLocalHost(s)
+	if !b {
+		t.Fail()
+	}
+}
+
+func TestIsHOme(t *testing.T) {
+	s := "example.com"
+	b := IsHome(s)
+	if b {
+		t.Fail()
+	}
+
+	s = "localhost"
+	b = IsHome(s)
+	if b {
+		t.Fail()
+	}
+
+	s = "127.0.0.1"
+	b = IsHome(s)
+	if b {
+		t.Fail()
+	}
+
+	//
+	s = "home"
+	b = IsHome(s)
+	if !b {
+		t.Fail()
+	}
+
+	s = "any.home"
+	b = IsHome(s)
+	if !b {
+		t.Fail()
+	}
+}
