@@ -32,25 +32,6 @@ func httpproxy(port int, nb *Neighborhood) {
 
 	log.Printf("@@@@@ ProxyURL: %v\n", nb.config.ProxyURL)
 
-	// var localReq = func(req *http.Request) bool {
-	// 	hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
-	// 	b := IsLocalHost(hostport[0])
-	// 	log.Printf("@@@@@ isLocalHost: %v host: %v\n", b, req.URL.Host)
-	// 	return b
-	// }
-	// var homeReq = func(req *http.Request) bool {
-	// 	hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
-	// 	b := nb.IsLocal(hostport[0])
-	// 	log.Printf("@@@@@ isHome: %v host: %v\n", b, req.URL.Host)
-	// 	return b
-	// }
-	// var peerReq = func(req *http.Request) bool {
-	// 	hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
-	// 	b := nb.IsPeer(hostport[0])
-	// 	log.Printf("@@@@@ isPeer: %v host: %v\n", b, req.URL.Host)
-	// 	return b
-	// }
-
 	//
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.Tr.Proxy = func(req *http.Request) (*url.URL, error) {
@@ -196,7 +177,7 @@ func httpproxy(port int, nb *Neighborhood) {
 		host := fmt.Sprintf("%v:%v", addr, port)
 
 		//
-		//req.Host = host
+		req.Host = host
 		req.URL.Scheme = "http"
 		req.URL.Host = host
 		log.Printf("@@@@@ peer request modified: %v\n", req)

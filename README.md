@@ -118,13 +118,14 @@ http://$SERVICE_IP:9000
 https://en.wikipedia.org/wiki/Collaborative_working_environment
 
 
-#mattermost MIT 13,623 Go 
+#mattermost MIT/APGL 13,623 Go 
 helm install --namespace cwe --name mattermost stable/mattermost-team-edition \
   --set mysql.mysqlUser=admin \
-  --set mysql.mysqlPassword=password 
+  --set mysql.mysqlPassword=password \
+  --set config.SiteUrl=http://chat.home/ \
+  --set ingress.enabled=false
 
 kubectl port-forward --namespace cwe $(kubectl get pods --namespace cwe -l "app=mattermost-mattermost-team-edition,release=mattermost" -o jsonpath='{ .items[0].metadata.name }') 8080:8065
-helm install --set host=mattermost.yourdomain.com --set ingress.enabled=true stable/mattermost-team-edition
 
 
 #wordpress GNU 11,707 PHP
