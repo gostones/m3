@@ -15,6 +15,7 @@ type Config struct {
 	WebPort   int
 	ProxyPort int
 	ProxyURL  *url.URL
+	Local     bool
 	TunPort   int
 	Pals      []string
 	Aliases   map[string]string
@@ -32,9 +33,10 @@ func (i *peerFlags) Set(value string) error {
 }
 
 func main() {
-	var port = flag.Int("port", 18080, "The port to listen for proxy connections")
-	var web = flag.Int("web", 8080, "The port to listen for www reverse proxy connections")
-	var proxy = flag.String("proxy", "", "Internet firewall http proxy")
+	var port = flag.Int("port", 18080, "The port for http proxy connection")
+	var web = flag.Int("web", 80, "The port for traefik reverse proxy connection to local k8s")
+	var proxy = flag.String("proxy", "", "Internet firewall http proxy url")
+	var local = flag.Bool("local", false, "Allow localhost access")
 
 	var peers peerFlags
 	flag.Var(&peers, "peer", "Peer friends.")
@@ -62,7 +64,7 @@ func main() {
 			cfg.ProxyURL = proxyURL
 		}
 	}
-	//cfg.Port = *port
+	cfg.Local = *local
 	cfg.WebPort = *web
 	cfg.ProxyPort = *port
 	//cfg.TunPort = 8022

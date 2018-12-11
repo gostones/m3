@@ -7,6 +7,13 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
+  - host: home
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: wordpress-wordpress
+          servicePort: 80
   - host: blog.home
     http:
       paths:

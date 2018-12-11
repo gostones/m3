@@ -89,29 +89,21 @@ func httpproxy(port int, nb *Neighborhood) {
 	}
 
 	proxy.Tr.Dial = func(network, addr string) (c net.Conn, err error) {
-		log.Printf("@@@@@ Dial network: %v addr: %v\n", network, addr)
 		hostport := strings.Split(strings.ToLower(addr), ":")
-		home := nb.IsLocal(hostport[0])
-		if home {
-			addr = fmt.Sprintf("127.0.0.1:%v", hostport[1])
-		} else {
-			peer := nb.IsPeer(hostport[0])
-			if peer {
-				// resolve peer id
-				id := nb.ToPeerID(hostport[0])
+		peer := nb.IsPeer(hostport[0])
+		log.Printf("@@@@@ Dial network: %v addr: %v peer: %v\n", network, addr, peer)
+		if peer {
+			// resolve peer id
+			id := nb.ToPeerID(hostport[0])
 
-				proxy := nb.GetPeerProxy(id)
-				if proxy == "" {
-					c, err = nil, fmt.Errorf("Peer addr not found: %v", hostport)
-					return
-				}
+			proxy := nb.GetPeerProxy(id)
+			if proxy == "" {
+				c, err = nil, fmt.Errorf("Peer addr not found: %v", hostport)
+				return
 			}
 		}
 
 		c, err = net.Dial(network, addr)
-		// if c, ok := c.(*net.TCPConn); err == nil && ok {
-		// 	c.SetKeepAlive(true)
-		// }
 		return
 	}
 
@@ -132,8 +124,11 @@ func httpproxy(port int, nb *Neighborhood) {
 		}
 	}
 	proxy.OnRequest(isLocalHost()).DoFunc(
-		func(r *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-			return r, goproxy.NewResponse(r,
+		func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+			if nb.config.Local {
+				return req, nil
+			}
+			return req, goproxy.NewResponse(req,
 				goproxy.ContentTypeText, http.StatusForbidden,
 				"Don't waste your time!")
 		})
@@ -152,12 +147,10 @@ func httpproxy(port int, nb *Neighborhood) {
 		req.Header.Set("X-IPFS-Proxy", "Mirr")
 
 		hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
-		port := nb.config.WebPort
-		target := fmt.Sprintf("%v:%v", hostport[0], port)
-		host := hostport[0]
+		target := fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
 
 		//
-		req.Host = host
+		req.Host = hostport[0] //discard port
 		req.URL.Scheme = "http"
 		req.URL.Host = target
 		log.Printf("@@@@@ local request modified: %v\n", req)
