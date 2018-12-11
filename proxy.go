@@ -153,16 +153,13 @@ func httpproxy(port int, nb *Neighborhood) {
 
 		hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
 		port := nb.config.WebPort
-		// if len(hostport) > 1 {
-		// 	port = ParseInt(hostport[1], port)
-		// }
-		host := fmt.Sprintf("%v:%v", hostport[0], port)
-		//ingress := fmt.Sprintf("localhost.%v", port)
+		target := fmt.Sprintf("%v:%v", hostport[0], port)
+		host := hostport[0]
 
 		//
 		req.Host = host
 		req.URL.Scheme = "http"
-		req.URL.Host = host
+		req.URL.Host = target
 		log.Printf("@@@@@ local request modified: %v\n", req)
 
 		return req, nil

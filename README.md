@@ -58,19 +58,9 @@ http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-da
 ###helm
 https://github.com/helm/helm
 
-#coredns Apache 2,993 go
-https://github.com/coredns/coredns
-https://github.com/helm/charts/tree/master/stable/coredns
-
-helm install --name coredns --namespace core stable/coredns \
-	--set isClusterService=false \
-	--set rbac.create=false \
-	--set serviceType=LoadBalancer \
-	--set serviceProtocol=UDP \
-	--set servers[0].port=10053 \
-	--dry-run --debug
 #
-helm install --name coredns --namespace core stable/coredns -f coredns-values.yaml
+#helm install --name coredns --namespace core stable/coredns -f coredns-values.yaml
+#
 
 #traefik MIT 19,017 Go
 https://github.com/containous/traefik
@@ -80,11 +70,9 @@ helm install stable/traefik --name traefik --namespace kube-system \
 	--set dashboard.enabled=true \
 	--set dashboard.domain=localhost
 
-
-#kubectl apply -f ./traefik-ui.yaml
-#https://github.com/containous/traefik/blob/master/examples/k8s/ui.yaml
 https://docs.traefik.io/user-guide/kubernetes/
 https://github.com/helm/charts/tree/master/stable/traefik
+
 
 ###cicd
 
@@ -102,8 +90,6 @@ helm install --namespace cicd --name gitlab stable/gitlab-ce \
 	--set serviceType=ClusterIP \
 	--set externalUrl=http://1220490149ec3a5ccf6ac3d8db2ec7c42e8486b7e95c0a324a0eaf22ae50d2fc1011/
 
-
- http://1220490149ec3a5ccf6ac3d8db2ec7c42e8486b7e95c0a324a0eaf22ae50d2fc1011/
 
 Username: root
 Password: <whatever value you entered
@@ -125,11 +111,6 @@ helm install --namespace cicd --name sonarqube stable/sonarqube
 
 export SERVICE_IP=$(kubectl get svc --namespace cicd sonarqube-sonarqube -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 http://$SERVICE_IP:9000
-
-#gocd Apache 4,491 Java
-
-https://github.com/theia-ide/theia
-https://github.com/b3log/wide
 
 
 
@@ -178,6 +159,14 @@ helm install --namespace cwe --name dokuwiki stable/dokuwiki \
 kubectl port-forward --namespace cwe svc/dokuwiki-dokuwiki 18081:80
 echo Username: user 
 echo Password: $(kubectl get secret --namespace cwe dokuwiki-dokuwiki -o jsonpath="{.data.dokuwiki-password}" | base64 --decode)
+
+
+###misc
+#gocd Apache 4,491 Java
+
+https://github.com/theia-ide/theia
+https://github.com/b3log/wide
+
 
 
 -->

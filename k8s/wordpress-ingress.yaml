@@ -1,0 +1,16 @@
+# kubectl -n cwe apply -f wordpress-ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: wordpress-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: blog.home
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: wordpress-wordpress
+          servicePort: 80

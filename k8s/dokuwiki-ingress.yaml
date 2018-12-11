@@ -1,0 +1,16 @@
+# kubectl -n cwe apply -f dokuwiki-ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dokuwiki-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: wiki.home
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: dokuwiki-dokuwiki
+          servicePort: 80

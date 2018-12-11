@@ -7,10 +7,10 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: im.home
+  - host: chat.home
     http:
       paths:
       - path: /
         backend:
           serviceName: mattermost-team-edition
-          servicePort: http
+          servicePort: 8065
