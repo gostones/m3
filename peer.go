@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 	"sync"
 )
 
@@ -160,62 +161,71 @@ func (r *Neighborhood) IsReady() bool {
 	return r.My != nil
 }
 
-// IsLocal checks if host is local home node
-func (r *Neighborhood) IsLocal(host string) bool {
-	if IsLocalHost(host) {
-		return false
-	}
-
-	if IsHome(host) {
-		return true
-	}
-	//check alias
-	a, err := Alias(host)
+func (r *Neighborhood) resolveAlias(s string) string {
+	a, err := Alias(s)
 	if err == nil && a != "" {
 		alias, b := r.config.Aliases[a]
 		if b {
-			host = alias
+			return alias
 		}
 	}
-	id := ToPeerID(host)
-	return (id != "" && id == r.My.ID)
+	return s
 }
 
-// IsPeer returns true if host is not local and is a valid peer id
+// IsHome checks if host is not localhost but a home node
+func (r *Neighborhood) IsHome(host string) bool {
+	host = r.ResolveAddr(host)
+	return IsHome(host)
+}
+
+// IsPeer checks if host is not local host or home and is a valid remote peer
 func (r *Neighborhood) IsPeer(host string) bool {
-	if IsLocalHost(host) {
-		return false
-	}
-
-	//check alias
-	a, err := Alias(host)
-	if err == nil && a != "" {
-		alias, b := r.config.Aliases[a]
-		if b {
-			host = alias
-		}
-	}
-
-	id := ToPeerID(host)
-	if id == "" || id == r.My.ID {
-		return false
-	}
-
-	return true
+	host = r.ResolveAddr(host)
+	return IsPeer(host)
 }
 
-// ToPeerID returns peer ID after resolving if required
-func (r *Neighborhood) ToPeerID(host string) string {
-	//check alias
-	a, err := Alias(host)
-	if err == nil && a != "" {
-		alias, b := r.config.Aliases[a]
-		if b {
-			host = alias
-		}
+// // toPeerID returns peer ID after resolving alias if required
+// func (r *Neighborhood) toPeerID(host string) string {
+// 	host = r.resolveAlias(host)
+// 	id := ToPeerID(host)
+// 	return id
+// }
+
+// ResolveAddr resolves s into canonical address form
+// localhost
+// *.home
+// *.<hex> -- peer node
+// *.<tld> -- world wide web address
+func (r *Neighborhood) ResolveAddr(s string) string {
+	// TODO alias name service
+	s = r.resolveAlias(s)
+
+	//localhost
+	if IsLocalHost(s) {
+		return s
 	}
-	id := ToPeerID(host)
-	return id
+
+	//*.home
+	if IsHome(s) {
+		return s
+	}
+
+	//*.<hex>
+	sa := strings.Split(s, ".")
+	le := len(sa) - 1
+	id := ToPeerID(sa[le])
+	if id != "" {
+		if id == r.My.ID {
+			id = "home"
+		}
+		if le > 0 {
+			return strings.Join(sa[:le], ".") + "." + id
+		}
+		return id
+	}
+
+	//*.<tld> internet address
+	return s
 }
 
 // addPeer is

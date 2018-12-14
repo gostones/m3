@@ -46,9 +46,11 @@ func CurrentTime() int64 {
 	return time.Now().UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))
 }
 
-// IsPeer checks if the string s is a valid hex-encoded peer address or b58-encoded ID
+// IsPeer checks if the string s ends in a valid hex-encoded peer address or b58-encoded ID
 func IsPeer(s string) bool {
-	id := ToPeerID(s)
+	sa := strings.Split(s, ".")
+	le := len(sa) - 1
+	id := ToPeerID(sa[le])
 	return id != ""
 }
 
@@ -142,21 +144,21 @@ func Alias(name string) (string, error) {
 	return strings.Join(s, "."), nil
 }
 
-var localHostIpv4 = regexp.MustCompile(`127\.0\.0\.\d+`)
+var localHostIpv4RE = regexp.MustCompile(`127\.0\.0\.\d+`)
 
-// IsLocalHost checks whether the destination host is explicitly local host
+// IsLocalHost checks whether host is explicitly local host
 // taken from goproxy
 func IsLocalHost(host string) bool {
 	return host == "::1" ||
 		host == "0:0:0:0:0:0:0:1" ||
-		localHostIpv4.MatchString(host) ||
+		localHostIpv4RE.MatchString(host) ||
 		host == "localhost"
 }
 
-var localHostHome = regexp.MustCompile(`.*\.?home`)
+var localHomeRE = regexp.MustCompile(`.*\.?home`)
 
-// IsHome checks whether the destination host is explicitly local home node
+// IsHome checks whether host is explicitly local home node
 func IsHome(host string) bool {
 	return host == "home" ||
-		localHostHome.MatchString(host)
+		localHomeRE.MatchString(host)
 }
