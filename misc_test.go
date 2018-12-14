@@ -57,6 +57,11 @@ func TestToPeerAddr(t *testing.T) {
 	if s != "1220848ba2cbc954d17fc1758a4dc06ec128b21c6ecc1dcfcbdc284809f4a922ba08" {
 		t.Fail()
 	}
+
+	s = ToPeerAddr("QmTFdcQY12fjxv6kELzQA4zXBxiva8xcunrmTYZto8DFUk")
+	if s != "1220490149ec3a5ccf6ac3d8db2ec7c42e8486b7e95c0a324a0eaf22ae50d2fc1011" {
+		t.Fail()
+	}
 }
 
 func TestToPeerID(t *testing.T) {

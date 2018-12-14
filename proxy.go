@@ -38,42 +38,51 @@ func httpproxy(port int, nb *Neighborhood) {
 	proxy.Tr.Proxy = func(req *http.Request) (*url.URL, error) {
 		log.Printf("@@@@@ Proxy: %v\n", req.URL)
 
-		hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
-		var proxyURL *url.URL
+		hostport := strings.Split(req.URL.Host, ":")
+		proxyURL := nb.config.ProxyURL
+
+		if IsLocalHost(hostport[0]) || IsHome(hostport[0]) {
+			return nil, nil
+		}
 
 		if IsPeer(hostport[0]) {
+			return nil, nil
+		}
+
+		return proxyURL, nil
+	}
+
+	// proxy.ConnectDial = nil
+	// if nb.config.ProxyURL != nil {
+	// 	proxy.ConnectDial = proxy.NewConnectDialToProxy(nb.config.ProxyURL.String())
+	// }
+
+	proxy.Tr.Dial = func(network, addr string) (c net.Conn, err error) {
+
+		hostport := strings.Split(addr, ":")
+
+		if IsHome(hostport[0]) {
+			target := fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
+			log.Printf("@@@@@ Dial home network: %v addr: %v home: %v\n", network, addr, target)
+
+			c, err = net.Dial(network, target)
+			return
+		}
+		peer := IsPeer(hostport[0])
+		log.Printf("@@@@@ Dial: %v addr: %v host: %v peer: %v\n", network, addr, hostport[0], peer)
+
+		if peer {
 			tld := TLD(hostport[0])
 			id := ToPeerID(tld)
 			if id == "" {
 				return nil, fmt.Errorf("Peer invalid: %v", hostport[0])
 			}
-			proxy := nb.GetPeerProxy(id)
-			if proxy == "" {
+			target := nb.GetPeerProxy(id)
+			if target == "" {
 				return nil, fmt.Errorf("Peer not reachable: %v", hostport[0])
 			}
 
-			if proxy != "" {
-				proxyURL, _ = url.Parse(fmt.Sprintf("http://%v", proxy))
-			}
-		}
-
-		log.Printf("@@@@@ Proxy request: %v proxy: %v\n", req.URL, proxyURL)
-
-		return proxyURL, nil
-	}
-
-	proxy.ConnectDial = nil
-	if nb.config.ProxyURL != nil {
-		proxy.ConnectDial = proxy.NewConnectDialToProxy(nb.config.ProxyURL.String())
-	}
-
-	proxy.Tr.Dial = func(network, addr string) (c net.Conn, err error) {
-
-		hostport := strings.Split(strings.ToLower(addr), ":")
-
-		if IsHome(hostport[0]) {
-			target := fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
-			log.Printf("@@@@@ Dial home network: %v addr: %v home: %v\n", network, addr, target)
+			log.Printf("@@@@@ Dial peer: %v addr: %v\n", network, target)
 
 			c, err = net.Dial(network, target)
 			return
@@ -89,7 +98,10 @@ func httpproxy(port int, nb *Neighborhood) {
 
 	// non proxy request handling
 	proxy.NonproxyHandler = http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		http.Error(w, "This is a proxy server. Does not respond to non-proxy requests.", 500)
+		//TODO check host is in peer id format
+		target := fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
+		serveReverseProxy(target, w, req)
+		//http.Error(w, "This is a proxy server. Does not respond to non-proxy requests.", 500)
 	})
 
 	proxy.OnRequest().DoFunc(
@@ -101,7 +113,7 @@ func httpproxy(port int, nb *Neighborhood) {
 	// localhost
 	var isLocalHost = func() goproxy.ReqConditionFunc {
 		return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
-			hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
+			hostport := strings.Split(req.URL.Host, ":")
 			b := IsLocalHost(hostport[0])
 			log.Printf("@@@@@ isLocalHost: %v host: %v\n", b, req.URL.Host)
 			return b
@@ -120,7 +132,7 @@ func httpproxy(port int, nb *Neighborhood) {
 	// home node - forward to k8s
 	var isHome = func() goproxy.ReqConditionFunc {
 		return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
-			hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
+			hostport := strings.Split(req.URL.Host, ":")
 			b := nb.IsHome(hostport[0])
 			log.Printf("@@@@@ isHome: %v host: %v\n", b, req.URL.Host)
 			return b
@@ -130,7 +142,7 @@ func httpproxy(port int, nb *Neighborhood) {
 		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
 		req.Header.Set("X-Peer-Proxy", "KGP")
 
-		hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
+		hostport := strings.Split(req.URL.Host, ":")
 		addr := nb.ResolveAddr(hostport[0])
 
 		//target := fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
@@ -147,7 +159,7 @@ func httpproxy(port int, nb *Neighborhood) {
 	// peer node
 	var isPeer = func() goproxy.ReqConditionFunc {
 		return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
-			hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
+			hostport := strings.Split(req.URL.Host, ":")
 			b := nb.IsPeer(hostport[0])
 			log.Printf("@@@@@ isPeer: %v host: %v\n", b, req.URL.Host)
 			return b
@@ -158,7 +170,7 @@ func httpproxy(port int, nb *Neighborhood) {
 		req.Header.Set("X-Peer-Proxy", "KGP")
 
 		// Resolve peer id
-		hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
+		hostport := strings.Split(req.URL.Host, ":")
 		addr := nb.ResolveAddr(hostport[0])
 
 		//
@@ -189,7 +201,7 @@ func httpproxy(port int, nb *Neighborhood) {
 	// 	// 	log.Printf("@@@@@ peer remote: %v\n", remote)
 	// 	// }
 
-	// 	hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
+	// 	hostport := strings.Split(req.URL.Host, ":")
 	// 	port := 80
 	// 	if len(hostport) > 1 {
 	// 		port = ParseInt(hostport[1], port)
@@ -221,7 +233,7 @@ func httpproxy(port int, nb *Neighborhood) {
 
 	// proxy.OnRequest(isPeer()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 	// 	// resolve peer id
-	// 	hostport := strings.Split(strings.ToLower(req.URL.Host), ":")
+	// 	hostport := strings.Split(req.URL.Host, ":")
 	// 	id := nb.ToPeerID(hostport[0])
 	// 	proxy := nb.GetPeerProxy(id)
 	// 	if proxy == "" {
