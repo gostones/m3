@@ -68,7 +68,7 @@ func main() {
 	cfg.WebPort = *web
 	cfg.ProxyPort = *port
 	//cfg.TunPort = 8022
-	cfg.Pals = pals
+	//cfg.Pals = pals
 	cfg.Aliases = aliases
 
 	// clean up old p2p connections

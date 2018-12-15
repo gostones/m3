@@ -32,7 +32,7 @@ type Node struct {
 	ProtocolVersion string
 }
 
-// ipfs p2p listen /x/kickass/1.0 /ip4/127.0.0.1/tcp/$APP_PORT
+// ipfs p2p listen /x/www/1.0 /ip4/127.0.0.1/tcp/$APP_PORT
 func p2pListen(appPort int) error {
 	target := fmt.Sprintf("/ip4/127.0.0.1/tcp/%v", appPort)
 
@@ -50,7 +50,7 @@ func p2pListen(appPort int) error {
 	return err
 }
 
-// ipfs p2p forward /x/kickass/1.0 /ip4/127.0.0.1/tcp/$SOME_PORT /ipfs/$SERVER_ID
+// ipfs p2p forward /x/www/1.0 /ip4/127.0.0.1/tcp/$SOME_PORT /ipfs/$SERVER_ID
 func p2pForward(port int, serverID string) error {
 	listen := fmt.Sprintf("/ip4/127.0.0.1/tcp/%v", port)
 	target := fmt.Sprintf("/ipfs/%v", serverID)

@@ -9,7 +9,7 @@ import (
 
 // Peer is
 type Peer struct {
-	Addr    string
+	Port    int
 	Peer    string
 	Latency string
 	Muxer   string
@@ -50,14 +50,14 @@ func NewNeighborhood(c *Config) *Neighborhood {
 			go func(id string) {
 				p := nb.checkPeer(id)
 				if p.Rank > 0 {
-					nb.addPeer(p)
+					nb.setPeer(p)
 				}
 			}(c)
 		}
 	}()
 
 	go nb.addSelf()
-	go nb.addPals(ch)
+	//go nb.addPals(ch)
 	//go nb.Monitor()
 	return nb
 }
@@ -70,7 +70,8 @@ func (r *Neighborhood) GetPeers() []string {
 	addresses := make([]string, 0, len(r.Peers))
 	for _, v := range r.Peers {
 		if v.Rank > 0 {
-			addresses = append(addresses, v.Addr)
+			addr := fmt.Sprintf("127.0.0.1:%v", v.Port)
+			addresses = append(addresses, addr)
 		}
 	}
 	log.Printf("@@@@ addresses: %v\n", addresses)
@@ -136,7 +137,7 @@ func (r *Neighborhood) Monitor() {
 		for c := range ch {
 			go func(id string) {
 				p := r.checkPeer(id)
-				r.addPeer(p)
+				r.setPeer(p)
 			}(c)
 		}
 	}
@@ -153,7 +154,7 @@ func (r *Neighborhood) addSelf() {
 
 	//
 	p := r.checkPeer(r.My.ID)
-	r.addPeer(p)
+	r.setPeer(p)
 }
 
 // IsReady tests if node is available
@@ -183,13 +184,6 @@ func (r *Neighborhood) IsPeer(host string) bool {
 	host = r.ResolveAddr(host)
 	return IsPeer(host)
 }
-
-// // toPeerID returns peer ID after resolving alias if required
-// func (r *Neighborhood) toPeerID(host string) string {
-// 	host = r.resolveAlias(host)
-// 	id := ToPeerID(host)
-// 	return id
-// }
 
 // ResolveAddr resolves s into canonical address form
 // localhost
@@ -228,11 +222,20 @@ func (r *Neighborhood) ResolveAddr(s string) string {
 	return s
 }
 
-// addPeer is
-func (r *Neighborhood) addPeer(p Peer) {
+func (r *Neighborhood) setPeer(p *Peer) {
 	r.Lock()
 	defer r.Unlock()
-	r.Peers[p.Peer] = &p
+	r.Peers[p.Peer] = p
+}
+
+func (r *Neighborhood) getPeer(id string) *Peer {
+	r.Lock()
+	defer r.Unlock()
+	p, ok := r.Peers[id]
+	if ok {
+		return p
+	}
+	return nil
 }
 
 func (r *Neighborhood) addPals(ch chan<- string) {
@@ -266,21 +269,26 @@ func (r *Neighborhood) addPals(ch chan<- string) {
 	Every(1).Minutes().Run(job)
 }
 
-// GetPeerProxy returns peer proxy host
+// GetPeerProxy returns peer proxy host:port
 func (r *Neighborhood) GetPeerProxy(id string) string {
-	r.Lock()
-	defer r.Unlock()
+	log.Printf("@@@@ GetPeerProxy: id: %v\n", id)
+
 	if id == r.My.ID {
 		return fmt.Sprintf("localhost:%v", r.config.WebPort)
 	}
-	p, ok := r.Peers[id]
-	if ok {
-		return p.Addr
+	p := r.getPeer(id)
+	if p != nil && p.Port > 0 && p.Rank > 0{
+		addr := fmt.Sprintf("127.0.0.1:%v", p.Port)
+		return addr
 	}
-	return ""
+	//add it
+	p = r.addPeer(id)
+	addr := fmt.Sprintf("127.0.0.1:%v", p.Port)
+
+	return addr
 }
 
-func (r *Neighborhood) checkPeer(id string) Peer {
+func (r *Neighborhood) checkPeer(id string) *Peer {
 	port := FreePort()
 	addr := fmt.Sprintf("127.0.0.1:%v", port)
 
@@ -304,12 +312,52 @@ func (r *Neighborhood) checkPeer(id string) Peer {
 			p2pForwardClose(port, id) // no www support
 		}
 	}
-	log.Printf("@@@@ Add peer: self: %v ID: %v addr: %v rank: %v err: %v\n", self, id, addr, rank, err)
+	log.Printf("@@@@ check peer: self: %v ID: %v addr: %v rank: %v err: %v\n", self, id, addr, rank, err)
 
-	return Peer{
+	return &Peer{
 		Peer:      id,
-		Addr:      addr,
+		Port:      port,
 		Rank:      rank,
 		timestamp: CurrentTime(),
 	}
+}
+
+func (r *Neighborhood) addPeer(id string) *Peer {
+	if id == r.My.ID {
+		//TODO
+		panic("attempt to add self as peer: " + id)
+	}
+
+	// close old connection
+	p := r.getPeer(id)
+	if p != nil && p.Port > 0 {
+		p2pForwardClose(p.Port, id)
+	}
+
+	port := FreePort()
+	var err error
+	log.Printf("@@@@ addPeer: id: %v port: %v\n", id, port)
+
+	err = p2pForward(port, id)
+
+	rank := -1
+	if err == nil {
+		ok := p2pIsLive(port)
+		if ok {
+			rank = 1
+		}
+	}
+	log.Printf("@@@@ addPeer id: %v port: %v rank: %v err: %v\n", id, port, rank, err)
+
+	p = &Peer{
+		Peer:      id,
+		Port:      port,
+		Rank:      rank,
+		timestamp: CurrentTime(),
+	}
+
+	// add
+	r.setPeer(p)
+
+	return p
 }

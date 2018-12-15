@@ -57,7 +57,7 @@ func httpproxy(port int, nb *Neighborhood) {
 	// 	proxy.ConnectDial = proxy.NewConnectDialToProxy(nb.config.ProxyURL.String())
 	// }
 
-	proxy.Tr.Dial = func(network, addr string) (c net.Conn, err error) {
+	proxy.Tr.Dial = func(network, addr string) (net.Conn, error) {
 
 		hostport := strings.Split(addr, ":")
 
@@ -65,8 +65,7 @@ func httpproxy(port int, nb *Neighborhood) {
 			target := fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
 			log.Printf("@@@@@ Dial home network: %v addr: %v home: %v\n", network, addr, target)
 
-			c, err = net.Dial(network, target)
-			return
+			return net.Dial(network, target)
 		}
 		peer := IsPeer(hostport[0])
 		log.Printf("@@@@@ Dial: %v addr: %v host: %v peer: %v\n", network, addr, hostport[0], peer)
@@ -84,14 +83,16 @@ func httpproxy(port int, nb *Neighborhood) {
 
 			log.Printf("@@@@@ Dial peer: %v addr: %v\n", network, target)
 
-			c, err = net.Dial(network, target)
-			return
+			dial := proxy.NewConnectDialToProxy(target)
+			if dial != nil {
+				return dial(network, addr)
+			}
+			return nil, fmt.Errorf("Peer proxy error: %v", target)
 		}
 
 		log.Printf("@@@@@ Dial network: %v addr: %v\n", network, addr)
 
-		c, err = net.Dial(network, addr)
-		return
+		return net.Dial(network, addr)
 	}
 
 	proxy.Verbose = true
@@ -99,9 +100,9 @@ func httpproxy(port int, nb *Neighborhood) {
 	// non proxy request handling
 	proxy.NonproxyHandler = http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		//TODO check host is in peer id format
-		target := fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
-		serveReverseProxy(target, w, req)
-		//http.Error(w, "This is a proxy server. Does not respond to non-proxy requests.", 500)
+		//target := fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
+		//serveReverseProxy(target, w, req)
+		http.Error(w, "This is a proxy server. Does not respond to non-proxy requests.", 500)
 	})
 
 	proxy.OnRequest().DoFunc(
@@ -140,7 +141,7 @@ func httpproxy(port int, nb *Neighborhood) {
 	}
 	proxy.OnRequest(isHome()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
-		req.Header.Set("X-Peer-Proxy", "KGP")
+		req.Header.Set("X-Peer-ID", nb.My.ID)
 
 		hostport := strings.Split(req.URL.Host, ":")
 		addr := nb.ResolveAddr(hostport[0])
@@ -151,7 +152,7 @@ func httpproxy(port int, nb *Neighborhood) {
 		req.Host = addr
 		//req.URL.Scheme = "http"
 		req.URL.Host = addr
-		log.Printf("@@@@@ Home request modified: %v\n", req)
+		log.Printf("@@@@@ Home request modified addr: %v req: %v\n", addr, req)
 
 		return req, nil
 	})
@@ -167,7 +168,7 @@ func httpproxy(port int, nb *Neighborhood) {
 	}
 	proxy.OnRequest(isPeer()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
-		req.Header.Set("X-Peer-Proxy", "KGP")
+		req.Header.Set("X-Peer-ID", nb.My.ID)
 
 		// Resolve peer id
 		hostport := strings.Split(req.URL.Host, ":")
@@ -177,7 +178,7 @@ func httpproxy(port int, nb *Neighborhood) {
 		req.Host = addr
 		//req.URL.Scheme = "http"
 		req.URL.Host = addr
-		log.Printf("@@@@@ Peer request modified: %v\n", req)
+		log.Printf("@@@@@ Peer request modified addr: %v req: %v\n", addr, req)
 
 		return req, nil
 	})
