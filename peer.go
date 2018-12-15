@@ -277,7 +277,7 @@ func (r *Neighborhood) GetPeerProxy(id string) string {
 		return fmt.Sprintf("localhost:%v", r.config.WebPort)
 	}
 	p := r.getPeer(id)
-	if p != nil && p.Port > 0 && p.Rank > 0{
+	if p != nil && p.Port > 0 && p.Rank > 0 {
 		addr := fmt.Sprintf("127.0.0.1:%v", p.Port)
 		return addr
 	}

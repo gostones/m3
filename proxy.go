@@ -140,8 +140,7 @@ func httpproxy(port int, nb *Neighborhood) {
 		}
 	}
 	proxy.OnRequest(isHome()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
-		req.Header.Set("X-Peer-ID", nb.My.ID)
+		//req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
 
 		hostport := strings.Split(req.URL.Host, ":")
 		addr := nb.ResolveAddr(hostport[0])
