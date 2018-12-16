@@ -8,7 +8,8 @@ import (
 	"net"
 	"net/http"
 	//"net/http/httputil"
-	"github.com/vulcand/oxy/forward"
+	//"github.com/vulcand/oxy/forward"
+	"crypto/tls"
 	"net/url"
 	"strings"
 	//"time"
@@ -38,7 +39,7 @@ func httpproxy(port int, nb *Neighborhood) {
 	//
 	proxy := goproxy.NewProxyHttpServer()
 
-	proxy.Tr.Proxy = func(req *http.Request) (*url.URL, error) {
+	p := func(req *http.Request) (*url.URL, error) {
 		log.Printf("@@@@@ Proxy: %v\n", req.URL)
 
 		hostport := strings.Split(req.URL.Host, ":")
@@ -55,13 +56,7 @@ func httpproxy(port int, nb *Neighborhood) {
 		return proxyURL, nil
 	}
 
-	// proxy.ConnectDial = nil
-	// if nb.config.ProxyURL != nil {
-	// 	proxy.ConnectDial = proxy.NewConnectDialToProxy(nb.config.ProxyURL.String())
-	// }
-
-	proxy.Tr.Dial = func(network, addr string) (net.Conn, error) {
-
+	dial := func(network, addr string) (net.Conn, error) {
 		hostport := strings.Split(addr, ":")
 
 		if IsHome(hostport[0]) {
@@ -70,10 +65,10 @@ func httpproxy(port int, nb *Neighborhood) {
 
 			return net.Dial(network, target)
 		}
-		peer := IsPeer(hostport[0])
-		log.Printf("@@@@@ Dial: %v addr: %v host: %v peer: %v\n", network, addr, hostport[0], peer)
 
-		if peer {
+		if IsPeer(hostport[0]) {
+			log.Printf("@@@@@ Dial peer: %v addr: %v\n", network, addr)
+
 			tld := TLD(hostport[0])
 			id := ToPeerID(tld)
 			if id == "" {
@@ -98,22 +93,27 @@ func httpproxy(port int, nb *Neighborhood) {
 		return net.Dial(network, addr)
 	}
 
+	proxy.Tr = &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		Dial:            dial,
+		DialTLS:         nil,
+		Proxy:           p,
+	}
+
 	proxy.Verbose = true
 
 	// non proxy request handling
-
-	fwdHandler, _ := forward.New()
-	fwdURL, _ := url.Parse(fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort))
 	proxy.NonproxyHandler = http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		log.Printf("@@@@@ NonproxyHandler req: %v\n", req)
 
-		req.URL = fwdURL
-		fwdHandler.ServeHTTP(w, req)
+		// fwdHandler, _ := forward.New()
+		// fwdHost := fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
+		// req.URL.Host = fwdHost
+		// req.Host = fwdHost
+		// fwdHandler.ServeHTTP(w, req)
 
 		//TODO check host is in peer id format
-		//target := fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
-		//serveReverseProxy(target, w, req)
-		//http.Error(w, "This is a proxy server. Does not respond to non-proxy requests.", 500)
+		http.Error(w, "This is a proxy server. Does not respond to non-proxy requests.", 500)
 	})
 
 	proxy.OnRequest().DoFunc(

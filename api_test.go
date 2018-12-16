@@ -36,7 +36,7 @@ func TestIsLive(t *testing.T) {
 	addr := fmt.Sprintf("127.0.0.1:%v", port)
 	target := fmt.Sprintf("127.0.0.1:%v", cfg.ProxyPort)
 	go httpproxy(cfg.ProxyPort, nb)
-	go forward(addr, target)
+	go Forward(addr, target)
 	go webserver(cfg.WebPort)
 	t.Logf("addr: %v target: %v", addr, target)
 
