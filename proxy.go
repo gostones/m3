@@ -83,7 +83,7 @@ func httpproxy(port int, nb *Neighborhood) {
 
 			log.Printf("@@@@@ Dial peer: %v addr: %v\n", network, target)
 
-			dial := proxy.NewConnectDialToProxy(target)
+			dial := proxy.NewConnectDialToProxy(fmt.Sprintf("http://%v",target))
 			if dial != nil {
 				return dial(network, addr)
 			}
