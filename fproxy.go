@@ -13,7 +13,7 @@ import (
 	"crypto/tls"
 	"encoding/base64"
 	"fmt"
-	"go.uber.org/zap"
+	//"go.uber.org/zap"
 	"io"
 	"log"
 	"net"
@@ -24,13 +24,13 @@ import (
 	"strings"
 	"time"
 
-	"go.uber.org/zap/zapcore"
+	//"go.uber.org/zap/zapcore"
 	"golang.org/x/crypto/acme/autocert"
 )
 
 // Proxy is a HTTPS forward proxy.
 type Proxy struct {
-	Logger              *zap.Logger
+	//Logger              *zap.Logger
 	AuthUser            string
 	AuthPass            string
 	ForwardingHTTPProxy *httputil.ReverseProxy
@@ -42,12 +42,12 @@ type Proxy struct {
 }
 
 func (p *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	p.Logger.Info("Incoming request", zap.String("host", r.Host))
+	//p.Logger.Info("Incoming request", zap.String("host", r.Host))
 
 	if p.AuthUser != "" && p.AuthPass != "" {
 		user, pass, ok := parseBasicProxyAuth(r.Header.Get("Proxy-Authorization"))
 		if !ok || user != p.AuthUser || pass != p.AuthPass {
-			p.Logger.Warn("Authorization attempt with invalid credentials")
+			//p.Logger.Warn("Authorization attempt with invalid credentials")
 			http.Error(w, http.StatusText(http.StatusProxyAuthRequired), http.StatusProxyAuthRequired)
 			return
 		}
@@ -61,46 +61,46 @@ func (p *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *Proxy) handleHTTP(w http.ResponseWriter, r *http.Request) {
-	p.Logger.Debug("Got HTTP request", zap.String("host", r.Host))
+	//p.Logger.Debug("Got HTTP request", zap.String("host", r.Host))
 	p.ForwardingHTTPProxy.ServeHTTP(w, r)
 }
 
 func (p *Proxy) handleTunneling(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodConnect {
-		p.Logger.Info("Method not allowed", zap.String("method", r.Method))
+		//p.Logger.Info("Method not allowed", zap.String("method", r.Method))
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
 
-	p.Logger.Debug("Connecting", zap.String("host", r.Host))
+	//p.Logger.Debug("Connecting", zap.String("host", r.Host))
 
 	destConn, err := net.DialTimeout("tcp", r.Host, p.DestDialTimeout)
 	if err != nil {
-		p.Logger.Error("Destination dial failed", zap.Error(err))
+		//p.Logger.Error("Destination dial failed", zap.Error(err))
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)
 		return
 	}
 
-	p.Logger.Debug("Connected", zap.String("host", r.Host))
+	//p.Logger.Debug("Connected", zap.String("host", r.Host))
 
 	w.WriteHeader(http.StatusOK)
 
-	p.Logger.Debug("Hijacking", zap.String("host", r.Host))
+	//p.Logger.Debug("Hijacking", zap.String("host", r.Host))
 
 	hijacker, ok := w.(http.Hijacker)
 	if !ok {
-		p.Logger.Error("Hijacking not supported")
+		//p.Logger.Error("Hijacking not supported")
 		http.Error(w, "Hijacking not supported", http.StatusInternalServerError)
 		return
 	}
 	clientConn, _, err := hijacker.Hijack()
 	if err != nil {
-		p.Logger.Error("Hijacking failed", zap.Error(err))
+		//p.Logger.Error("Hijacking failed", zap.Error(err))
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)
 		return
 	}
 
-	p.Logger.Debug("Hijacked connection", zap.String("host", r.Host))
+	//p.Logger.Debug("Hijacked connection", zap.String("host", r.Host))
 
 	now := time.Now()
 	clientConn.SetReadDeadline(now.Add(p.ClientReadTimeout))
@@ -142,7 +142,7 @@ func parseBasicProxyAuth(authz string) (username, password string, ok bool) {
 // client.
 //
 // See: https://golang.org/pkg/net/http/httputil/#ReverseProxy
-func NewForwardingHTTPProxy(logger *log.Logger) *httputil.ReverseProxy {
+func NewForwardingHTTPProxy() *httputil.ReverseProxy {
 	director := func(req *http.Request) {
 		if _, ok := req.Header["User-Agent"]; !ok {
 			// explicitly disable User-Agent so it's not set to default value
@@ -152,7 +152,7 @@ func NewForwardingHTTPProxy(logger *log.Logger) *httputil.ReverseProxy {
 	// TODO:(alesr) Use timeouts specified via flags to customize the default
 	// transport used by the reverse proxy.
 	return &httputil.ReverseProxy{
-		ErrorLog: logger,
+		//ErrorLog: logger,
 		Director: director,
 	}
 }
@@ -190,7 +190,7 @@ func ForwardProxy(port int) {
 		flagAddr     = fmt.Sprintf("127.0.0.1:%v", port)
 		flagAuthUser = ""
 		flagAuthPass = ""
-		flagVerbose  = true
+		//flagVerbose  = true
 
 		flagDestDialTimeout         = 10 * time.Second
 		flagDestReadTimeout         = 5 * time.Second
@@ -208,38 +208,38 @@ func ForwardProxy(port int) {
 	)
 
 	//
-	c := zap.NewProductionConfig()
-	c.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	// c := zap.NewProductionConfig()
+	// c.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 
-	if flagVerbose {
-		c.Level.SetLevel(zapcore.DebugLevel)
-	} else {
-		c.Level.SetLevel(zapcore.ErrorLevel)
-	}
+	// if flagVerbose {
+	// 	c.Level.SetLevel(zapcore.DebugLevel)
+	// } else {
+	// 	c.Level.SetLevel(zapcore.ErrorLevel)
+	// }
 
-	logger, err := c.Build()
-	if err != nil {
-		log.Fatalln("Error: failed to initiate logger")
-	}
-	defer logger.Sync()
-	stdLogger := zap.NewStdLog(logger)
+	// logger, err := c.Build()
+	// if err != nil {
+	// 	log.Fatalln("Error: failed to initiate logger")
+	// }
+	// defer logger.Sync()
+	//stdLogger := zap.NewStdLog(logger)
 
 	p := &Proxy{
-		ForwardingHTTPProxy: NewForwardingHTTPProxy(stdLogger),
-		Logger:              logger,
-		AuthUser:            flagAuthUser,
-		AuthPass:            flagAuthPass,
-		DestDialTimeout:     flagDestDialTimeout,
-		DestReadTimeout:     flagDestReadTimeout,
-		DestWriteTimeout:    flagDestWriteTimeout,
-		ClientReadTimeout:   flagClientReadTimeout,
-		ClientWriteTimeout:  flagClientWriteTimeout,
+		ForwardingHTTPProxy: NewForwardingHTTPProxy(),
+		//Logger:              logger,
+		AuthUser:           flagAuthUser,
+		AuthPass:           flagAuthPass,
+		DestDialTimeout:    flagDestDialTimeout,
+		DestReadTimeout:    flagDestReadTimeout,
+		DestWriteTimeout:   flagDestWriteTimeout,
+		ClientReadTimeout:  flagClientReadTimeout,
+		ClientWriteTimeout: flagClientWriteTimeout,
 	}
 
 	s := &http.Server{
-		Addr:              flagAddr,
-		Handler:           p,
-		ErrorLog:          stdLogger,
+		Addr:    flagAddr,
+		Handler: p,
+		//ErrorLog:          stdLogger,
 		ReadTimeout:       flagServerReadTimeout,
 		ReadHeaderTimeout: flagServerReadHeaderTimeout,
 		WriteTimeout:      flagServerWriteTimeout,
@@ -249,10 +249,10 @@ func ForwardProxy(port int) {
 
 	if flagLetsEncrypt {
 		if flagLEWhitelist == "" {
-			p.Logger.Fatal("error: no -lewhitelist flag set")
+			//p.Logger.Fatal("error: no -lewhitelist flag set")
 		}
 		if flagLECacheDir == "/tmp" {
-			p.Logger.Info("-lecachedir should be set, using '/tmp' for now...")
+			//p.Logger.Info("-lecachedir should be set, using '/tmp' for now...")
 		}
 
 		m := &autocert.Manager{
@@ -271,14 +271,16 @@ func ForwardProxy(port int) {
 		signal.Notify(sigint, os.Interrupt)
 		<-sigint
 
-		p.Logger.Info("Server shutting down")
-		if err = s.Shutdown(context.Background()); err != nil {
-			p.Logger.Error("Server shutdown failed", zap.Error(err))
+		//p.Logger.Info("Server shutting down")
+		if err := s.Shutdown(context.Background()); err != nil {
+			log.Printf("Server shutdown failed: %v\n", err)
+
+			//p.Logger.Error("Server shutdown failed", zap.Error(err))
 		}
 		close(idleConnsClosed)
 	}()
 
-	p.Logger.Info("Server starting", zap.String("address", s.Addr))
+	//p.Logger.Info("Server starting", zap.String("address", s.Addr))
 
 	var svrErr error
 	if flagCertPath != "" && flagKeyPath != "" || flagLetsEncrypt {
@@ -288,9 +290,10 @@ func ForwardProxy(port int) {
 	}
 
 	if svrErr != http.ErrServerClosed {
-		p.Logger.Error("Listening for incoming connections failed", zap.Error(svrErr))
+		//p.Logger.Error("Listening for incoming connections failed", zap.Error(svrErr))
 	}
 
 	<-idleConnsClosed
-	p.Logger.Info("Server stopped")
+	//p.Logger.Info("Server stopped")
+	log.Println("Server stopped")
 }

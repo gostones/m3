@@ -45,9 +45,6 @@ require (
 	github.com/vaughan0/go-ini v0.0.0-20130923145212-a98ad7ee00ec
 	github.com/xtaci/kcp-go v0.0.0-20180203133237-42bc1dfefff5 // indirect
 	github.com/xtaci/smux v1.0.7 // indirect
-	go.uber.org/atomic v1.3.2 // indirect
-	go.uber.org/multierr v1.1.0 // indirect
-	go.uber.org/zap v1.9.1
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/sys v0.0.0-20181206074257-70b957f3b65e // indirect
 	gopkg.in/resty.v1 v1.10.3
