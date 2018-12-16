@@ -153,7 +153,7 @@ func ctrlc() {
 	}()
 }
 
-func forward(from, to string) {
+func Forward(from, to string) {
 	tcpStart(from, to)
 }
 

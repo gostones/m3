@@ -299,7 +299,7 @@ func (r *Neighborhood) checkPeer(id string) *Peer {
 
 	if self {
 		target := fmt.Sprintf("127.0.0.1:%v", r.config.ProxyPort)
-		go forward(addr, target)
+		go Forward(addr, target)
 	} else {
 		err = p2pForward(port, id)
 	}

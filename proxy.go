@@ -7,7 +7,8 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"net/http/httputil"
+	//"net/http/httputil"
+	"github.com/vulcand/oxy/forward"
 	"net/url"
 	"strings"
 	//"time"
@@ -15,17 +16,19 @@ import (
 )
 
 func serveReverseProxy(target string, res http.ResponseWriter, req *http.Request) {
-	u, _ := url.Parse(target)
+	//u, _ := url.Parse(target)
+	//req.URL = testutils.ParseURI("http://localhost:63450")
+	//fwd.ServeHTTP(w, req)
 
-	proxy := httputil.NewSingleHostReverseProxy(u)
+	// proxy := httputil.NewSingleHostReverseProxy(u)
 
-	// Update the headers to allow for SSL redirection
-	req.URL.Host = u.Host
-	req.URL.Scheme = u.Scheme
-	req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
-	req.Host = u.Host
+	// // Update the headers to allow for SSL redirection
+	// req.URL.Host = u.Host
+	// req.URL.Scheme = u.Scheme
+	// req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
+	// req.Host = u.Host
 
-	proxy.ServeHTTP(res, req)
+	// proxy.ServeHTTP(res, req)
 }
 
 func httpproxy(port int, nb *Neighborhood) {
@@ -83,7 +86,7 @@ func httpproxy(port int, nb *Neighborhood) {
 
 			log.Printf("@@@@@ Dial peer: %v addr: %v\n", network, target)
 
-			dial := proxy.NewConnectDialToProxy(fmt.Sprintf("http://%v",target))
+			dial := proxy.NewConnectDialToProxy(fmt.Sprintf("http://%v", target))
 			if dial != nil {
 				return dial(network, addr)
 			}
@@ -98,11 +101,19 @@ func httpproxy(port int, nb *Neighborhood) {
 	proxy.Verbose = true
 
 	// non proxy request handling
+
+	fwdHandler, _ := forward.New()
+	fwdURL, _ := url.Parse(fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort))
 	proxy.NonproxyHandler = http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		log.Printf("@@@@@ NonproxyHandler req: %v\n", req)
+
+		req.URL = fwdURL
+		fwdHandler.ServeHTTP(w, req)
+
 		//TODO check host is in peer id format
 		//target := fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
 		//serveReverseProxy(target, w, req)
-		http.Error(w, "This is a proxy server. Does not respond to non-proxy requests.", 500)
+		//http.Error(w, "This is a proxy server. Does not respond to non-proxy requests.", 500)
 	})
 
 	proxy.OnRequest().DoFunc(
