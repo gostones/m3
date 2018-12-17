@@ -17,18 +17,19 @@ type Config struct {
 	ProxyURL  *url.URL
 	Local     bool
 	TunPort   int
+	Blocked   []string
 	Pals      []string
 	Aliases   map[string]string
 }
 
-type peerFlags []string
+type listFlags []string
 
-func (i *peerFlags) String() string {
-	return fmt.Sprintf("%v", *i)
+func (r *listFlags) String() string {
+	return fmt.Sprintf("%v", *r)
 }
 
-func (i *peerFlags) Set(value string) error {
-	*i = append(*i, value)
+func (r *listFlags) Set(value string) error {
+	*r = append(*r, value)
 	return nil
 }
 
@@ -38,11 +39,17 @@ func main() {
 	var proxy = flag.String("proxy", "", "Internet firewall http proxy url")
 	var local = flag.Bool("local", false, "Allow localhost access")
 
-	var peers peerFlags
+	//
+	var blocked listFlags
+	flag.Var(&blocked, "block", "Silently disregard requests from specified ports")
+
+	//
+	var peers listFlags
 	flag.Var(&peers, "peer", "Peer friends.")
 
 	// var debug = flag.Bool("debug", false, "Enable debug mode")
 	flag.Parse()
+
 	pals := make([]string, len(peers))
 	aliases := make(map[string]string)
 	for _, v := range peers {
@@ -67,6 +74,7 @@ func main() {
 	cfg.Local = *local
 	cfg.WebPort = *web
 	cfg.ProxyPort = *port
+	cfg.Blocked = blocked
 	//cfg.TunPort = 8022
 	//cfg.Pals = pals
 	cfg.Aliases = aliases

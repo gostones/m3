@@ -126,9 +126,29 @@ func httpproxy(port int, nb *Neighborhood) {
 			return b
 		}
 	}
+	var isBlocked = func(host string) bool {
+		hostport := strings.Split(host, ":")
+		port := "80"
+		if len(hostport) > 1 {
+			port = hostport[1]
+		}
+		for _, v := range nb.config.Blocked {
+			if v == port {
+				return true
+			}
+		}
+		return false
+	}
 	proxy.OnRequest(isLocalHost()).DoFunc(
 		func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 			if nb.config.Local {
+				if isBlocked(req.URL.Host) {
+					//silently ignore by returning empty OK response
+					log.Printf("@@@ OnRequest blocking host: %v url: %v\n", req.Host, req.URL)
+
+					return req, goproxy.NewResponse(req,
+						goproxy.ContentTypeText, http.StatusOK, "")
+				}
 				return req, nil
 			}
 			return req, goproxy.NewResponse(req,
