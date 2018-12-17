@@ -81,28 +81,28 @@ func httpproxy(port int, nb *Neighborhood) {
 			return net.Dial(network, target)
 		}
 
-		if IsPeer(hostport[0]) {
-			log.Printf("@@@@@ Dial peer: %v addr: %v\n", network, addr)
+		// if IsPeer(hostport[0]) {
+		// 	log.Printf("@@@@@ Dial peer: %v addr: %v\n", network, addr)
 
-			//addr, tld := ConvertTLD(hostport[0])
-			tld := TLD(hostport[0])
-			id := ToPeerID(tld)
-			if id == "" {
-				return nil, fmt.Errorf("Peer invalid: %v", hostport[0])
-			}
-			target := nb.GetPeerProxy(id)
-			if target == "" {
-				return nil, fmt.Errorf("Peer not reachable: %v", hostport[0])
-			}
+		// 	//addr, tld := ConvertTLD(hostport[0])
+		// 	tld := TLD(hostport[0])
+		// 	id := ToPeerID(tld)
+		// 	if id == "" {
+		// 		return nil, fmt.Errorf("Peer invalid: %v", hostport[0])
+		// 	}
+		// 	target := nb.GetPeerProxy(id)
+		// 	if target == "" {
+		// 		return nil, fmt.Errorf("Peer not reachable: %v", hostport[0])
+		// 	}
 
-			log.Printf("@@@@@ Dial peer: %v addr: %v target: %v\n", network, addr, target)
+		// 	log.Printf("@@@@@ Dial peer: %v addr: %v target: %v\n", network, addr, target)
 
-			dial := proxy.NewConnectDialToProxy(fmt.Sprintf("http://%v", target))
-			if dial != nil {
-				return dial(network, addr)
-			}
-			return nil, fmt.Errorf("Peer proxy error: %v", target)
-		}
+		// 	dial := proxy.NewConnectDialToProxy(fmt.Sprintf("http://%v", target))
+		// 	if dial != nil {
+		// 		return dial(network, addr)
+		// 	}
+		// 	return nil, fmt.Errorf("Peer proxy error: %v", target)
+		// }
 
 		log.Printf("@@@@@ Dial network: %v addr: %v\n", network, addr)
 
