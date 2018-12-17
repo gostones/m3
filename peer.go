@@ -269,6 +269,18 @@ func (r *Neighborhood) addPals(ch chan<- string) {
 	Every(1).Minutes().Run(job)
 }
 
+// // ToHomeAddr converts host to home address
+// func (r *Neighborhood) ToHomeAddr(host string) (string, bool) {
+// 	s, tld := SplitTLD(host)
+// 	if tld != r.My.ID {
+// 		return "", false
+// 	}
+// 	if s == "" {
+// 		return "home", true
+// 	}
+// 	return s + ".home", true
+// }
+
 // GetPeerProxy returns peer proxy host:port
 func (r *Neighborhood) GetPeerProxy(id string) string {
 	log.Printf("@@@@ GetPeerProxy: id: %v\n", id)

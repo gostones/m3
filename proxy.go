@@ -40,7 +40,7 @@ func httpproxy(port int, nb *Neighborhood) {
 	proxy := goproxy.NewProxyHttpServer()
 
 	p := func(req *http.Request) (*url.URL, error) {
-		log.Printf("@@@@@ Proxy: %v\n", req.URL)
+		log.Printf("@@@@@ Proxying: %v %v %v url: %v\n", req.Proto, req.Method, req.Host, req.URL)
 
 		hostport := strings.Split(req.URL.Host, ":")
 		proxyURL := nb.config.ProxyURL
@@ -50,7 +50,22 @@ func httpproxy(port int, nb *Neighborhood) {
 		}
 
 		if IsPeer(hostport[0]) {
-			return nil, nil
+			log.Printf("@@@@@ Proxy url: %v\n", req.URL)
+
+			tld := TLD(hostport[0])
+			id := ToPeerID(tld)
+			if id == "" {
+				return nil, fmt.Errorf("Peer invalid: %v", hostport[0])
+			}
+			target := nb.GetPeerProxy(id)
+			if target == "" {
+				return nil, fmt.Errorf("Peer not reachable: %v", hostport[0])
+			}
+
+			log.Printf("@@@@@ Proxy peer url: %v target: %v\n", req.URL, target)
+
+			proxyURL, _ = url.Parse(fmt.Sprintf("http://%v", target))
+			return proxyURL, nil
 		}
 
 		return proxyURL, nil
@@ -69,6 +84,7 @@ func httpproxy(port int, nb *Neighborhood) {
 		if IsPeer(hostport[0]) {
 			log.Printf("@@@@@ Dial peer: %v addr: %v\n", network, addr)
 
+			//addr, tld := ConvertTLD(hostport[0])
 			tld := TLD(hostport[0])
 			id := ToPeerID(tld)
 			if id == "" {
@@ -79,7 +95,7 @@ func httpproxy(port int, nb *Neighborhood) {
 				return nil, fmt.Errorf("Peer not reachable: %v", hostport[0])
 			}
 
-			log.Printf("@@@@@ Dial peer: %v addr: %v\n", network, target)
+			log.Printf("@@@@@ Dial peer: %v addr: %v target: %v\n", network, addr, target)
 
 			dial := proxy.NewConnectDialToProxy(fmt.Sprintf("http://%v", target))
 			if dial != nil {
