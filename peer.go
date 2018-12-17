@@ -74,7 +74,7 @@ func (r *Neighborhood) GetPeers() []string {
 			addresses = append(addresses, addr)
 		}
 	}
-	log.Printf("@@@@ addresses: %v\n", addresses)
+	log.Printf("@@@ addresses: %v\n", addresses)
 	return addresses
 }
 
@@ -99,19 +99,19 @@ func (r *Neighborhood) Monitor() {
 			}
 		}
 		if cur >= r.max {
-			log.Printf("@@@@ current count: %v max: %v, no new peers will be added\n", cur, r.max)
+			log.Printf("@@@ current count: %v max: %v, no new peers will be added\n", cur, r.max)
 			return
 		}
 
 		//
 		peers, err := p2pPeers()
 		if err != nil {
-			log.Printf("@@@@ get peers: %v\n", err)
+			log.Printf("@@@ get peers: %v\n", err)
 			return
 		}
 
 		cnt := len(peers)
-		log.Printf("@@@@ get peers, count: %v\n", cnt)
+		log.Printf("@@@ get peers, count: %v\n", cnt)
 		if cnt <= 0 {
 			return
 		}
@@ -124,7 +124,7 @@ func (r *Neighborhood) Monitor() {
 				id := p.Peer
 				peer, found := r.Peers[id] // TODO?
 
-				log.Printf("@@@@ Peer ID: %v found: %v\n", id, found)
+				log.Printf("@@@ Peer ID: %v found: %v\n", id, found)
 
 				if found {
 					peer.Rank++
@@ -247,7 +247,7 @@ func (r *Neighborhood) addPals(ch chan<- string) {
 
 		pals := r.config.Pals
 		cnt := len(pals)
-		log.Printf("@@@@ pals count: %v\n", cnt)
+		log.Printf("@@@ pals count: %v\n", cnt)
 		if cnt <= 0 {
 			return
 		}
@@ -256,7 +256,7 @@ func (r *Neighborhood) addPals(ch chan<- string) {
 			id := pals[i]
 			peer, found := r.Peers[id] // TODO?
 
-			log.Printf("@@@@ Peer ID: %v found: %v\n", id, found)
+			log.Printf("@@@ Peer ID: %v found: %v\n", id, found)
 
 			if found {
 				peer.Rank++
@@ -269,21 +269,9 @@ func (r *Neighborhood) addPals(ch chan<- string) {
 	Every(1).Minutes().Run(job)
 }
 
-// // ToHomeAddr converts host to home address
-// func (r *Neighborhood) ToHomeAddr(host string) (string, bool) {
-// 	s, tld := SplitTLD(host)
-// 	if tld != r.My.ID {
-// 		return "", false
-// 	}
-// 	if s == "" {
-// 		return "home", true
-// 	}
-// 	return s + ".home", true
-// }
-
 // GetPeerProxy returns peer proxy host:port
 func (r *Neighborhood) GetPeerProxy(id string) string {
-	log.Printf("@@@@ GetPeerProxy: id: %v\n", id)
+	log.Printf("@@@ GetPeerProxy: id: %v\n", id)
 
 	if id == r.My.ID {
 		return fmt.Sprintf("localhost:%v", r.config.WebPort)
@@ -307,7 +295,7 @@ func (r *Neighborhood) checkPeer(id string) *Peer {
 	var err error
 	self := (id == r.My.ID)
 
-	log.Printf("@@@@ checkPeer: id: %v self: %v addr: %v\n", id, self, addr)
+	log.Printf("@@@ checkPeer: id: %v self: %v addr: %v\n", id, self, addr)
 
 	if self {
 		target := fmt.Sprintf("127.0.0.1:%v", r.config.ProxyPort)
@@ -324,7 +312,7 @@ func (r *Neighborhood) checkPeer(id string) *Peer {
 			p2pForwardClose(port, id) // no www support
 		}
 	}
-	log.Printf("@@@@ check peer: self: %v ID: %v addr: %v rank: %v err: %v\n", self, id, addr, rank, err)
+	log.Printf("@@@ check peer: self: %v ID: %v addr: %v rank: %v err: %v\n", self, id, addr, rank, err)
 
 	return &Peer{
 		Peer:      id,
@@ -348,7 +336,7 @@ func (r *Neighborhood) addPeer(id string) *Peer {
 
 	port := FreePort()
 	var err error
-	log.Printf("@@@@ addPeer: id: %v port: %v\n", id, port)
+	log.Printf("@@@ addPeer: id: %v port: %v\n", id, port)
 
 	err = p2pForward(port, id)
 
@@ -359,7 +347,7 @@ func (r *Neighborhood) addPeer(id string) *Peer {
 			rank = 1
 		}
 	}
-	log.Printf("@@@@ addPeer id: %v port: %v rank: %v err: %v\n", id, port, rank, err)
+	log.Printf("@@@ addPeer id: %v port: %v rank: %v err: %v\n", id, port, rank, err)
 
 	p = &Peer{
 		Peer:      id,
