@@ -81,28 +81,28 @@ func httpproxy(port int, nb *Neighborhood) {
 			return net.Dial(network, target)
 		}
 
-		// if IsPeer(hostport[0]) {
-		// 	log.Printf("@@@@@ Dial peer: %v addr: %v\n", network, addr)
+		if IsPeer(hostport[0]) {
+			log.Printf("@@@@@ Dial peer: %v addr: %v\n", network, addr)
 
-		// 	//addr, tld := ConvertTLD(hostport[0])
-		// 	tld := TLD(hostport[0])
-		// 	id := ToPeerID(tld)
-		// 	if id == "" {
-		// 		return nil, fmt.Errorf("Peer invalid: %v", hostport[0])
-		// 	}
-		// 	target := nb.GetPeerProxy(id)
-		// 	if target == "" {
-		// 		return nil, fmt.Errorf("Peer not reachable: %v", hostport[0])
-		// 	}
+			addr, tld := ConvertTLD(hostport[0])
+			//tld := TLD(hostport[0])
+			id := ToPeerID(tld)
+			if id == "" {
+				return nil, fmt.Errorf("Peer invalid: %v", hostport[0])
+			}
+			target := nb.GetPeerProxy(id)
+			if target == "" {
+				return nil, fmt.Errorf("Peer not reachable: %v", hostport[0])
+			}
 
-		// 	log.Printf("@@@@@ Dial peer: %v addr: %v target: %v\n", network, addr, target)
+			log.Printf("@@@@@ Dial peer: %v addr: %v target: %v\n", network, addr, target)
 
-		// 	dial := proxy.NewConnectDialToProxy(fmt.Sprintf("http://%v", target))
-		// 	if dial != nil {
-		// 		return dial(network, addr)
-		// 	}
-		// 	return nil, fmt.Errorf("Peer proxy error: %v", target)
-		// }
+			dial := proxy.NewConnectDialToProxy(fmt.Sprintf("http://%v", target))
+			if dial != nil {
+				return dial(network, addr)
+			}
+			return nil, fmt.Errorf("Peer proxy error: %v", target)
+		}
 
 		log.Printf("@@@@@ Dial network: %v addr: %v\n", network, addr)
 
@@ -134,7 +134,10 @@ func httpproxy(port int, nb *Neighborhood) {
 
 	proxy.OnRequest().DoFunc(
 		func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-			log.Printf("@@@@@ on request: %v\n", req)
+			log.Printf("@@@@@ on request Proto: %v method: %v url: %v\n", req.Proto, req.Method, req.URL)
+			if req.Method == "CONNECT" {
+				panic("boom")
+			}
 			return req, nil
 		})
 
@@ -209,118 +212,7 @@ func httpproxy(port int, nb *Neighborhood) {
 		return req, nil
 	})
 
-	// // tunnel to peer
-
-	// //var tunnels = make(map[string]int)
-	// proxy.OnRequest(isPeer()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-	// 	req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
-	// 	req.Header.Set("X-IPFS-Proxy", "Mirr")
-	// 	//
-
-	// 	// tunURL := fmt.Sprintf("http://%v:%v", addr, nb.config.TunPort)
-	// 	// host := fmt.Sprintf("%v:%v", addr, port)
-	// 	// locPort, ok := tunnels[host]
-	// 	// if !ok {
-	// 	// 	locPort := FreePort()
-	// 	// 	remote := fmt.Sprintf("localhost:%v:localhost:%v", locPort, port)
-	// 	// 	go tunnel.TunClient(proxyURL, tunURL, remote)
-	// 	// 	tunnels[host] = locPort
-	// 	// 	log.Printf("@@@@@ peer remote: %v\n", remote)
-	// 	// }
-
-	// 	hostport := strings.Split(req.URL.Host, ":")
-	// 	port := 80
-	// 	if len(hostport) > 1 {
-	// 		port = ParseInt(hostport[1], port)
-	// 	}
-
-	// 	// resolve peer id
-	// 	id := nb.ToPeerID(hostport[0])
-	// 	addr := ToPeerAddr(id)
-	// 	host := fmt.Sprintf("%v:%v", addr, port)
-
-	// 	//
-	// 	req.Host = host
-	// 	req.URL.Scheme = "http"
-	// 	req.URL.Host = host
-	// 	log.Printf("@@@@@ peer request modified: %v\n", req)
-
-	// 	return req, nil
-	// })
-
-	///////////////
-	// proxy.OnRequest().DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-	// 	ctx.RoundTripper = goproxy.RoundTripperFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (resp *http.Response, err error) {
-	// 		ctx.UserData, resp, err = tr.DetailedRoundTrip(req)
-	// 		return
-	// 	})
-	// 	logger.LogReq(req, ctx)
-	// 	return req, nil
-	// })
-
-	// proxy.OnRequest(isPeer()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-	// 	// resolve peer id
-	// 	hostport := strings.Split(req.URL.Host, ":")
-	// 	id := nb.ToPeerID(hostport[0])
-	// 	proxy := nb.GetPeerProxy(id)
-	// 	if proxy == "" {
-	// 		return req, goproxy.NewResponse(req,
-	// 			goproxy.ContentTypeText, http.StatusServiceUnavailable,
-	// 			"No proxy to peer: "+id)
-	// 	}
-
-	// 	proxyURL := fmt.Sprintf("http://%v", proxy)
-	// 	uri, _ := url.Parse(req.URL.String())
-	// 	uri.Host = ToPeerAddr(id)
-	// 	if len(hostport) > 1 {
-	// 		uri.Host = fmt.Sprintf("%v:%v", uri.Host, hostport[1])
-	// 	}
-
-	// 	// copy request
-	// 	proxyReq, err := http.NewRequest(req.Method, uri.String(), req.Body)
-	// 	if err != nil {
-	// 		return req, goproxy.NewResponse(req,
-	// 			goproxy.ContentTypeText, http.StatusInternalServerError,
-	// 			"Failed to clone request")
-	// 	}
-
-	// 	proxyReq.Header = req.Header
-	// 	// for header, values := range req.Header {
-	// 	// 	for _, value := range values {
-	// 	// 		proxyReq.Header.Add(header, value)
-	// 	// 	}
-	// 	// }
-
-	// 	proxyReq.Header.Set("Host", req.Host)
-	// 	proxyReq.Header.Set("X-Forwarded-For", req.RemoteAddr)
-
-	// 	tr := &http.Transport{Proxy: func(req *http.Request) (*url.URL, error) {
-	// 		return url.Parse(proxyURL)
-	// 	}}
-
-	// 	client := &http.Client{Transport: tr, Timeout: time.Second * 10}
-
-	// 	resp, err := client.Do(proxyReq)
-
-	// 	log.Printf("@@@@@ curl -kv -x %v %v err: %v\n", proxyURL, uri, err)
-	// 	if err != nil {
-	// 		return req, goproxy.NewResponse(req,
-	// 			goproxy.ContentTypeText, http.StatusServiceUnavailable,
-	// 			"Cannot reach peer: "+id)
-	// 	}
-
-	// 	return req, resp
-	// })
-
-	//proxy.OnRequest().HandleConnect(goproxy.AlwaysMitm)
-	// proxy.OnRequest().DoFunc(func (req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-	// 	log.Printf("@@@@@ www request: %v\n", req)
-
-	// 	if req.URL.Scheme == "https" {
-	// 		req.URL.Scheme = "http"
-	// 	}
-	// 	return req, nil
-	// })
+	
 
 	hostport := fmt.Sprintf(":%v", port)
 	log.Println("Proxy listening on: " + hostport)
