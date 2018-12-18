@@ -1,0 +1,16 @@
+# kubectl -n cicd apply -f gogs-ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gogs-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: git.home
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gogs-gogs
+          servicePort: 80

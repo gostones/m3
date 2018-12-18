@@ -1,0 +1,9 @@
+#kubectl -n kube-system apply -f kube-dns.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-dns
+  namespace: kube-system
+data:
+  stubDomains: |
+    {"home.a.cluster.local": ["10.102.219.41"]}

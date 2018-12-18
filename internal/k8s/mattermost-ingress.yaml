@@ -1,0 +1,16 @@
+# kubectl -n cwe apply -f mattermost-ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: mattermost-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: chat.home
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: mattermost-team-edition
+          servicePort: 8065
