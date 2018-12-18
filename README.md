@@ -127,6 +127,13 @@ helm install --namespace cwe --name mattermost stable/mattermost-team-edition \
 
 kubectl port-forward --namespace cwe $(kubectl get pods --namespace cwe -l "app=mattermost-mattermost-team-edition,release=mattermost" -o jsonpath='{ .items[0].metadata.name }') 8080:8065
 
+#rocket.chat MIT 20,859 NodeJS/MongoDB
+https://github.com/RocketChat/Rocket.Chat
+
+helm install --namespace cwe --name rocketchat stable/rocketchat \
+  --set ingress.enabled=true \
+  --set ingress.annotations.kubernetes\\.io/ingress\\.class=traefik \
+  --dry-run --debug
 
 #wordpress GNU 11,707 PHP
 https://github.com/WordPress/WordPress
