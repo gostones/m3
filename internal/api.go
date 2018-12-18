@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"encoding/json"
@@ -33,7 +33,7 @@ type Node struct {
 }
 
 // ipfs p2p listen /x/www/1.0 /ip4/127.0.0.1/tcp/$APP_PORT
-func p2pListen(appPort int) error {
+func P2PListen(appPort int) error {
 	target := fmt.Sprintf("/ip4/127.0.0.1/tcp/%v", appPort)
 
 	resp, err := client.R().
@@ -89,7 +89,7 @@ func p2pForwardClose(port int, serverID string) error {
 	return err
 }
 
-func p2pCloseAll() error {
+func P2PCloseAll() error {
 	resp, err := client.R().
 		SetQueryParams(map[string]string{
 			"protocol": protocolWWW,

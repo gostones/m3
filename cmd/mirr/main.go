@@ -2,36 +2,12 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"net/url"
-	//"github.com/gostones/mirr/tunnel"
 	"log"
+	"net/url"
 	"strings"
+
+	internal "github.com/dhnt/m3/internal"
 )
-
-// Config is application settings
-type Config struct {
-	//Port      int
-	WebPort   int
-	ProxyPort int
-	ProxyURL  *url.URL
-	Local     bool
-	TunPort   int
-	Blocked   []string
-	Pals      []string
-	Aliases   map[string]string
-}
-
-type listFlags []string
-
-func (r *listFlags) String() string {
-	return fmt.Sprintf("%v", *r)
-}
-
-func (r *listFlags) Set(value string) error {
-	*r = append(*r, value)
-	return nil
-}
 
 func main() {
 	var port = flag.Int("port", 18080, "The port for http proxy connection")
@@ -40,11 +16,11 @@ func main() {
 	var local = flag.Bool("local", false, "Allow localhost access")
 
 	//
-	var blocked listFlags
+	var blocked internal.ListFlags
 	flag.Var(&blocked, "block", "Silently disregard requests from specified ports")
 
 	//
-	var peers listFlags
+	var peers internal.ListFlags
 	flag.Var(&peers, "peer", "Peer friends.")
 
 	// var debug = flag.Bool("debug", false, "Enable debug mode")
@@ -64,7 +40,7 @@ func main() {
 	}
 
 	//
-	var cfg = &Config{}
+	var cfg = &internal.Config{}
 	if *proxy != "" {
 		proxyURL, err := url.Parse(*proxy)
 		if err == nil {
@@ -80,24 +56,18 @@ func main() {
 	cfg.Aliases = aliases
 
 	// clean up old p2p connections
-	err := p2pCloseAll()
+	err := internal.P2PCloseAll()
 	if err != nil {
 		panic(err)
 	}
 	//
 	log.Printf("Configuration: %v\n", cfg)
 
-	nb := NewNeighborhood(cfg)
+	nb := internal.NewNeighborhood(cfg)
 
 	//
 	log.Printf("proxy/p2p port: %v\n", cfg.ProxyPort)
-	p2pListen(cfg.ProxyPort)
-	httpproxy(cfg.ProxyPort, nb)
 
-	// log.Printf("tunnel port: %v\n", cfg.TunPort)
-	// go tunnel.TunServer(cfg.TunPort, "")
-
-	//log.Printf("web/reverse proxy port: %v\n", cfg.WebPort)
-	//rpServer(cfg.WebPort, "")
-	// loadbalance(cfg.Port, nb)
+	internal.P2PListen(cfg.ProxyPort)
+	internal.HTTPProxy(cfg.ProxyPort, nb)
 }

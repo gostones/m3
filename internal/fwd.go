@@ -1,5 +1,5 @@
 // https://github.com/kintoandar/fwd
-package main
+package internal
 
 import (
 	"fmt"

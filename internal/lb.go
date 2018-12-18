@@ -1,12 +1,10 @@
 // https://github.com/voldyman/GoLoadBalance
-package main
+package internal
 
-import (
 // "flag"
 // "fmt"
 // "runtime"
 // "time"
-)
 
 func loadbalance(port int, nb *Neighborhood) {
 	b := NewBackends(nb)

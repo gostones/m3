@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"fmt"
@@ -35,7 +35,7 @@ func TestIsLive(t *testing.T) {
 
 	addr := fmt.Sprintf("127.0.0.1:%v", port)
 	target := fmt.Sprintf("127.0.0.1:%v", cfg.ProxyPort)
-	go httpproxy(cfg.ProxyPort, nb)
+	go HTTPProxy(cfg.ProxyPort, nb)
 	go Forward(addr, target)
 	go webserver(cfg.WebPort)
 	t.Logf("addr: %v target: %v", addr, target)
@@ -82,7 +82,7 @@ func TestIsP2pProxy(t *testing.T) {
 func TestP2pCloseAll(t *testing.T) {
 	t.Skip()
 
-	err := p2pCloseAll()
+	err := P2PCloseAll()
 	if err != nil {
 		t.Fail()
 	}

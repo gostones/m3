@@ -1,5 +1,5 @@
 // https://github.com/elazarl/goproxy
-package main
+package internal
 
 import (
 	"crypto/tls"
@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func httpproxy(port int, nb *Neighborhood) {
+func HTTPProxy(port int, nb *Neighborhood) {
 
 	log.Printf("@@@ ProxyURL: %v\n", nb.config.ProxyURL)
 

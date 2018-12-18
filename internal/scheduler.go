@@ -13,7 +13,7 @@
 //    scheduler.Every().Day().Run(function)
 //    scheduler.Every().Sunday().At("08:30").Run(function)
 //  }
-package main
+package internal
 
 import (
 	"errors"

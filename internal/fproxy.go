@@ -6,7 +6,7 @@
 // Courtesy: https://medium.com/@mlowicki/http-s-proxy-in-golang-in-less-than-100-lines-of-code-6a51c2f2c38c
 // $ openssl req -newkey rsa:2048 -nodes -keyout server.key -new -x509 -sha256 -days 3650 -out server.pem
 
-package main
+package internal
 
 import (
 	"context"

@@ -1,9 +1,9 @@
-package main
+package internal
 
 import (
 	"fmt"
-	"github.com/gostones/mirr/rp"
-	"github.com/gostones/mirr/tunnel"
+	"github.com/dhnt/m3/internal/rp"
+	"github.com/dhnt/m3/internal/tunnel"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -168,7 +168,7 @@ func serve(port int, target string) {
 	}
 }
 
-//package main
+//package internal
 
 // import (
 // 	"fmt"
