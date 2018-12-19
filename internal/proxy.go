@@ -167,7 +167,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 	}
 	proxy.OnRequest(isHome()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
-		req.Header.Set("X-Peer-ID", nb.My.ID)
+		req.Header.Set("X-Peer-Id", nb.My.ID)
 
 		hostport := strings.Split(req.URL.Host, ":")
 		addr := nb.ResolveAddr(hostport[0])
@@ -209,6 +209,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 	// response
 	proxy.OnResponse().DoFunc(func(r *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 		if r != nil {
+			r.Header.Set("X-Peer-Id", nb.My.ID)
 			log.Printf("@@@ OnResponse status: %v length: %v\n", r.StatusCode, r.ContentLength)
 		}
 
