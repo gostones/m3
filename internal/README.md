@@ -67,6 +67,8 @@ https://github.com/containous/traefik
 
 helm install stable/traefik --name traefik --namespace kube-system \
 	--set ssl.insecureSkipVerify=true \
+	--set cpuLimit=1000m \
+	--set memoryLimit=1Gi \
 	--set dashboard.enabled=true \
 	--set dashboard.domain=localhost
 

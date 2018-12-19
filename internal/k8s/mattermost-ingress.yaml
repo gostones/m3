@@ -14,3 +14,10 @@ spec:
         backend:
           serviceName: mattermost-team-edition
           servicePort: 8065
+  - host: chat.<hexid>
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: mattermost-team-edition
+          servicePort: 8065
