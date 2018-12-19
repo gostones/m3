@@ -3,6 +3,7 @@
 M3, MMM - the inverse of WWW (world wide web), will 
 usher a new era of Internet based on peer technologies.
 
+![M3 architecture](doc/m3-architecture.png "The next gen peer to peer web")
 ### Terminology
 
 <dl>
