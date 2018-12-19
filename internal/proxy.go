@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"github.com/elazarl/goproxy"
+	//"github.com/elazarl/goproxy/ext/auth"
 	"log"
 	"net"
 	"net/http"
@@ -21,7 +22,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 	proxy := goproxy.NewProxyHttpServer()
 
 	p := func(req *http.Request) (*url.URL, error) {
-		log.Printf("@@@ Proxying: %v %v %v url: %v\n", req.Proto, req.Method, req.Host, req.URL)
+		log.Printf("@@@ Proxy: %v %v %v url: %v\n", req.Proto, req.Method, req.Host, req.URL)
 
 		hostport := strings.Split(req.URL.Host, ":")
 		proxyURL := nb.config.ProxyURL
@@ -78,7 +79,9 @@ func HTTPProxy(port int, nb *Neighborhood) {
 
 			log.Printf("@@@ Dial peer: %v addr: %v target: %v\n", network, addr, target)
 
-			dial := proxy.NewConnectDialToProxy(fmt.Sprintf("http://%v", target))
+			dial := proxy.NewConnectDialToProxyWithHandler(fmt.Sprintf("http://%v", target), func(req *http.Request) {
+				log.Printf("\n@@@ Dial NewConnectDialToProxyWithHandler peer: %v addr: %v target: %v\nreq: %v\n", network, addr, target, req)
+			})
 			if dial != nil {
 				return dial(network, addr)
 			}
@@ -107,6 +110,15 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		//TODO check host is in peer id format
 		http.Error(w, "This is a proxy server. Does not respond to non-proxy requests.", 500)
 	})
+
+	// auth
+	// auth.ProxyBasic(proxy, "m3_realm", func(user, passwd string) bool {
+	// 	//TODO verify peer is who it claims to be
+	// 	//user is the peer id and pwd is: peer_addr,timestamp
+	// 	//after decrypting with peer's public key
+	// 	//return user == json[0]
+	// 	return true
+	// })
 
 	// request
 	var isBlocked = func(port string) bool {
