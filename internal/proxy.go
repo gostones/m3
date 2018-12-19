@@ -106,32 +106,97 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		http.Error(w, "This is a proxy server. Does not respond to non-proxy requests.", 500)
 	})
 
-	proxy.OnRequest().DoFunc(
-		func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-			log.Printf("@@@ OnRequest Proto: %v method: %v url: %v\n", req.Proto, req.Method, req.URL)
-			log.Printf("@@@ OnRequest request: %v\n", req)
+	// // localhost
+	// var isLocalHost = func() goproxy.ReqConditionFunc {
+	// 	return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
+	// 		hostport := strings.Split(req.URL.Host, ":")
+	// 		b := IsLocalHost(hostport[0])
+	// 		log.Printf("@@@ isLocalHost: %v host: %v\n", b, req.URL.Host)
+	// 		return b
+	// 	}
+	// }
+	// var isBlocked = func(host string) bool {
+	// 	hostport := strings.Split(host, ":")
+	// 	port := "80"
+	// 	if len(hostport) > 1 {
+	// 		port = hostport[1]
+	// 	}
+	// 	for _, v := range nb.config.Blocked {
+	// 		if v == port {
+	// 			return true
+	// 		}
+	// 	}
+	// 	return false
+	// }
+	// proxy.OnRequest(isLocalHost()).DoFunc(
+	// 	func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+	// 		if nb.config.Local {
+	// 			if isBlocked(req.URL.Host) {
+	// 				//silently ignore by returning empty OK response
+	// 				log.Printf("@@@ OnRequest blocking host: %v url: %v\n", req.Host, req.URL)
 
-			if req.Method == "CONNECT" {
-				panic("boom")
-			}
-			return req, nil
-		})
+	// 				return req, goproxy.NewResponse(req,
+	// 					goproxy.ContentTypeText, http.StatusOK, "")
+	// 			}
+	// 			return req, nil
+	// 		}
+	// 		return req, goproxy.NewResponse(req,
+	// 			goproxy.ContentTypeText, http.StatusForbidden,
+	// 			fmt.Sprintf("Nice try: %v", req.URL.Host))
+	// 	})
 
-	// localhost
-	var isLocalHost = func() goproxy.ReqConditionFunc {
-		return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
-			hostport := strings.Split(req.URL.Host, ":")
-			b := IsLocalHost(hostport[0])
-			log.Printf("@@@ isLocalHost: %v host: %v\n", b, req.URL.Host)
-			return b
-		}
-	}
-	var isBlocked = func(host string) bool {
-		hostport := strings.Split(host, ":")
-		port := "80"
-		if len(hostport) > 1 {
-			port = hostport[1]
-		}
+	// home node - forward to k8s
+	// var isHome = func() goproxy.ReqConditionFunc {
+	// 	return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
+	// 		hostport := strings.Split(req.URL.Host, ":")
+	// 		b := nb.IsHome(hostport[0])
+	// 		log.Printf("@@@ isHome: %v host: %v\n", b, req.URL.Host)
+	// 		return b
+	// 	}
+	// }
+	// proxy.OnRequest(isHome()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+	// 	req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
+	// 	req.Header.Set("X-Peer-Id", nb.My.ID)
+
+	// 	hostport := strings.Split(req.URL.Host, ":")
+	// 	addr := nb.ResolveAddr(hostport[0])
+	// 	//
+	// 	req.Host = addr
+	// 	//req.URL.Scheme = "http"
+	// 	req.URL.Host = addr
+	// 	log.Printf("@@@ OnRequest home modified url: %v header: %v\n", req.URL, req.Header)
+
+	// 	return req, nil
+	// })
+
+	// // peer node
+	// var isPeer = func() goproxy.ReqConditionFunc {
+	// 	return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
+	// 		hostport := strings.Split(req.URL.Host, ":")
+	// 		b := nb.IsPeer(hostport[0])
+	// 		log.Printf("@@@ isPeer: %v host: %v\n", b, req.URL.Host)
+	// 		return b
+	// 	}
+	// }
+	// proxy.OnRequest(isPeer()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+	// 	req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
+	// 	req.Header.Set("X-Peer-ID", nb.My.ID)
+
+	// 	// Resolve peer id
+	// 	hostport := strings.Split(req.URL.Host, ":")
+	// 	addr := nb.ResolveAddr(hostport[0])
+
+	// 	//
+	// 	req.Host = addr
+	// 	//req.URL.Scheme = "http"
+	// 	req.URL.Host = addr
+	// 	log.Printf("@@@ OnRequest peer modified url: %v header: %v\n", req.URL, req.Header)
+
+	// 	return req, nil
+	// })
+
+	// request
+	var isBlocked = func(port string) bool {
 		for _, v := range nb.config.Blocked {
 			if v == port {
 				return true
@@ -139,75 +204,74 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		}
 		return false
 	}
-	proxy.OnRequest(isLocalHost()).DoFunc(
-		func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-			if nb.config.Local {
-				if isBlocked(req.URL.Host) {
-					//silently ignore by returning empty OK response
-					log.Printf("@@@ OnRequest blocking host: %v url: %v\n", req.Host, req.URL)
 
-					return req, goproxy.NewResponse(req,
-						goproxy.ContentTypeText, http.StatusOK, "")
+	proxy.OnRequest().DoFunc(
+		func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+			log.Printf("\n\n\n##################\n")
+
+			log.Printf("@@@ OnRequest Proto: %v method: %v url: %v\n", req.Proto, req.Method, req.URL)
+			log.Printf("@@@ OnRequest request: %v\n", req)
+
+			//
+			hostport := strings.Split(req.URL.Host, ":")
+
+			//
+			if IsLocalHost(hostport[0]) {
+				log.Printf("@@@ OnRequest isLocal: %v\n", req.URL.Host)
+				if nb.config.Local {
+					port := "80"
+					if len(hostport) > 1 {
+						port = hostport[1]
+					}
+					if isBlocked(port) {
+						//silently ignore by returning empty OK response
+						log.Printf("@@@ OnRequest blocking host: %v url: %v\n", req.Host, req.URL)
+
+						return req, goproxy.NewResponse(req,
+							goproxy.ContentTypeText, http.StatusOK, "")
+					}
+					return req, nil
 				}
+				return req, goproxy.NewResponse(req,
+					goproxy.ContentTypeText, http.StatusForbidden,
+					fmt.Sprintf("Nice try: %v", req.URL.Host))
+			}
+
+			if nb.IsHome(hostport[0]) {
+				log.Printf("@@@ OnRequest isHome: %v\n", req.URL.Host)
+				addr := nb.ResolveAddr(hostport[0])
+				//
+				req.Host = addr
+				//req.URL.Scheme = "http"
+				req.URL.Host = addr
+				log.Printf("@@@ OnRequest home modified url: %v header: %v\n", req.URL, req.Header)
+
 				return req, nil
 			}
-			return req, goproxy.NewResponse(req,
-				goproxy.ContentTypeText, http.StatusForbidden,
-				fmt.Sprintf("Nice try: %v", req.URL.Host))
+
+			if nb.IsPeer(hostport[0]) {
+				log.Printf("@@@ OnRequest isPeer: %v\n", req.URL.Host)
+				addr := nb.ResolveAddr(hostport[0])
+
+				//
+				req.Host = addr
+				//req.URL.Scheme = "http"
+				req.URL.Host = addr
+				log.Printf("@@@ OnRequest peer modified url: %v header: %v\n", req.URL, req.Header)
+
+				return req, nil
+			}
+
+			//
+			log.Printf("@@@ OnRequest WWW: %v\n", req.URL.Host)
+
+			return req, nil
 		})
-
-	// home node - forward to k8s
-	var isHome = func() goproxy.ReqConditionFunc {
-		return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
-			hostport := strings.Split(req.URL.Host, ":")
-			b := nb.IsHome(hostport[0])
-			log.Printf("@@@ isHome: %v host: %v\n", b, req.URL.Host)
-			return b
-		}
-	}
-	proxy.OnRequest(isHome()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
-		req.Header.Set("X-Peer-Id", nb.My.ID)
-
-		hostport := strings.Split(req.URL.Host, ":")
-		addr := nb.ResolveAddr(hostport[0])
-		//
-		req.Host = addr
-		//req.URL.Scheme = "http"
-		req.URL.Host = addr
-		log.Printf("@@@ OnRequest home modified url: %v header: %v\n", req.URL, req.Header)
-
-		return req, nil
-	})
-
-	// peer node
-	var isPeer = func() goproxy.ReqConditionFunc {
-		return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
-			hostport := strings.Split(req.URL.Host, ":")
-			b := nb.IsPeer(hostport[0])
-			log.Printf("@@@ isPeer: %v host: %v\n", b, req.URL.Host)
-			return b
-		}
-	}
-	proxy.OnRequest(isPeer()).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
-		req.Header.Set("X-Peer-ID", nb.My.ID)
-
-		// Resolve peer id
-		hostport := strings.Split(req.URL.Host, ":")
-		addr := nb.ResolveAddr(hostport[0])
-
-		//
-		req.Host = addr
-		//req.URL.Scheme = "http"
-		req.URL.Host = addr
-		log.Printf("@@@ OnRequest peer modified url: %v header: %v\n", req.URL, req.Header)
-
-		return req, nil
-	})
 
 	// response
 	proxy.OnResponse().DoFunc(func(r *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
+		log.Printf("\n--------------------\n")
+
 		if r != nil {
 			r.Header.Set("X-Peer-Id", nb.My.ID)
 			log.Printf("@@@ OnResponse status: %v length: %v\n", r.StatusCode, r.ContentLength)
