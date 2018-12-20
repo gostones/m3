@@ -35,6 +35,9 @@ function build() {
     go build $FLAG -buildmode=exe -o bin/mirr ./cmd/mirr; if [ $? -ne 0 ]; then
         return 1
     fi
+    go build $FLAG -buildmode=exe -o bin/hexid ./cmd/hexid; if [ $? -ne 0 ]; then
+        return 1
+    fi
 }
 
 echo "#### Building ..."
