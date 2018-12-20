@@ -21,12 +21,16 @@ https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 *IPFS*
 
 https://github.com/ipfs/go-ipfs
-
-Run 
-`ipfs daemon`
+bulid and Run 
+```
+ipfs daemon
+```
 
 Clone this repo and run
-` bin/mirr`
+```
+./build.sh
+ bin/mirr
+ ```
 
 
 *Chrome Proxy Plugin*
@@ -45,16 +49,20 @@ In my humble opinion, programming language is not English so the latter's gramma
 
 For naming conventions:
 
-prefer singular over plural
-use word stem instead of its inflected variant
+prefer singular over plural.
+
+use word stem instead of its inflected variant.
 
 
 #### Principle
-https://en.wikipedia.org/wiki/KISS_principle
-https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
+[KISS](https://en.wikipedia.org/wiki/KISS_principle)
+
+[DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)
 
 
 #### Practice
 https://peter.bourgon.org/go-best-practices-2016/
+
 https://github.com/golang/go/wiki/CodeReviewComments
+
 https://github.com/golang-standards/project-layout
