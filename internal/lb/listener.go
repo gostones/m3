@@ -5,6 +5,7 @@ import (
 	"io"
 	"net"
 	"strconv"
+	"time"
 )
 
 func startServer(listenPort int, backends *Backends) {
@@ -19,30 +20,44 @@ func startServer(listenPort int, backends *Backends) {
 		return
 	}
 
+	// listener.SetDeadline(time.Now().Add(time.Second * 10))
+
+	defer func() {
+		listener.Close()
+		fmt.Println("Listener closed")
+	}()
+
 	for {
-		con, err := listener.Accept()
+		conn, err := listener.Accept()
 		if err != nil {
-			fmt.Println("Error occured accepting a connection", err.Error())
+			fmt.Println("Error occurred accepting a connection", err.Error())
+			continue
 		}
 
-		go handleConnection(con, backends.NextAddress())
-	}
+		conn.SetDeadline(time.Now().Add(time.Second * 60))
 
+		addr := backends.NextAddress()
+		if addr == "" {
+			conn.Close()
+			continue
+		}
+		go handleConnection(conn, addr)
+	}
 }
 
-func handleConnection(cli_conn net.Conn, srv_addr string) {
-	srv_conn, err := net.Dial("tcp", srv_addr)
+func handleConnection(cliConn net.Conn, srvAddr string) {
+	srvConn, err := net.Dial("tcp", srvAddr)
 	if err != nil {
-		fmt.Printf("Could not connect to server (%q), connection dropping\n", srv_addr)
+		fmt.Printf("Could not connect to server (%q), connection dropping\n", srvAddr)
 		return
 	}
 
-	// close the conections when done
+	// close the connections when done
 	defer func() {
-		srv_conn.Close()
-		cli_conn.Close()
+		srvConn.Close()
+		cliConn.Close()
 	}()
 
-	go io.Copy(cli_conn, srv_conn)
-	io.Copy(srv_conn, cli_conn)
+	go io.Copy(cliConn, srvConn)
+	io.Copy(srvConn, cliConn)
 }
