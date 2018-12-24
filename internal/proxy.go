@@ -39,7 +39,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 			if id == "" {
 				return nil, fmt.Errorf("Peer invalid: %v", hostport[0])
 			}
-			target := nb.GetPeerProxy(id)
+			target := nb.GetPeerTarget(id)
 			if target == "" {
 				return nil, fmt.Errorf("Peer not reachable: %v", hostport[0])
 			}
@@ -72,7 +72,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 			if id == "" {
 				return nil, fmt.Errorf("Peer invalid: %v", hostport[0])
 			}
-			target := nb.GetPeerProxy(id)
+			target := nb.GetPeerTarget(id)
 			if target == "" {
 				return nil, fmt.Errorf("Peer not reachable: %v", hostport[0])
 			}
