@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"log"
-	"net/url"
+	//"net/url"
 	"strings"
 
 	internal "github.com/dhnt/m3/internal"
@@ -11,8 +11,8 @@ import (
 
 func main() {
 	var port = flag.Int("port", 18080, "The port for http proxy connection")
-	var web = flag.Int("web", 80, "The port for traefik reverse proxy connection to local k8s")
-	var proxy = flag.String("proxy", "", "Internet firewall http proxy url")
+	var web = flag.String("web", "localhost:80", "The web host:port for traefik reverse proxy connection to local home k8s")
+	//var proxy = flag.String("proxy", "", "Internet firewall http proxy url")
 	var local = flag.Bool("local", false, "Allow localhost access")
 
 	//
@@ -41,15 +41,16 @@ func main() {
 
 	//
 	var cfg = &internal.Config{}
-	if *proxy != "" {
-		proxyURL, err := url.Parse(*proxy)
-		if err == nil {
-			cfg.ProxyURL = proxyURL
-		}
-	}
+	// if *proxy != "" {
+	// 	proxyURL, err := url.Parse(*proxy)
+	// 	if err == nil {
+	// 		cfg.ProxyURL = proxyURL
+	// 	}
+	// }
+
 	cfg.Local = *local
-	cfg.WebPort = *web
-	cfg.ProxyPort = *port
+	cfg.WebHost = *web
+	//cfg.ProxyPort = *port
 	cfg.Blocked = blocked
 	//cfg.TunPort = 8022
 	//cfg.Pals = pals
@@ -68,6 +69,6 @@ func main() {
 	//
 	log.Printf("proxy/p2p port: %v\n", cfg.ProxyPort)
 
-	internal.P2PListen(cfg.ProxyPort)
-	internal.HTTPProxy(cfg.ProxyPort, nb)
+	internal.P2PListen(*port)
+	internal.HTTPProxy(*port, nb)
 }

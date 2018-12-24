@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"net/url"
-	"os"
+	//"net/url"
+	//"os"
 	"testing"
 )
 
@@ -24,10 +24,11 @@ func TestIsLive(t *testing.T) {
 	port := FreePort()
 
 	var cfg = &Config{}
-	cfg.WebPort = FreePort()
+	//cfg.WebHost = fmt.Sprintf("http://localhost:%v", FreePort())
+
 	cfg.ProxyPort = FreePort()
 	cfg.Pals = []string{""}
-	cfg.ProxyURL, _ = url.Parse(os.Getenv("http_proxy"))
+	//cfg.ProxyURL, _ = url.Parse(os.Getenv("http_proxy"))
 
 	t.Logf("Configuration: %v\n", cfg)
 
@@ -37,7 +38,7 @@ func TestIsLive(t *testing.T) {
 	target := fmt.Sprintf("127.0.0.1:%v", cfg.ProxyPort)
 	go HTTPProxy(cfg.ProxyPort, nb)
 	go Forward(addr, target)
-	go webserver(cfg.WebPort)
+	go webserver(FreePort())
 	t.Logf("addr: %v target: %v", addr, target)
 
 	ok := p2pIsLive(port)
@@ -61,7 +62,7 @@ func TestIsP2pProxy(t *testing.T) {
 	//
 	port := FreePort()
 	var cfg = &Config{}
-	cfg.WebPort = 5001
+	//cfg.WebPort = 5001
 	cfg.ProxyPort = FreePort()
 	cfg.Pals = []string{id}
 

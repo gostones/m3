@@ -16,7 +16,7 @@ import (
 // HTTPProxy dispatches request based on network addr
 func HTTPProxy(port int, nb *Neighborhood) {
 
-	log.Printf("@@@ ProxyURL: %v\n", nb.config.ProxyURL)
+	//log.Printf("@@@ ProxyURL: %v\n", nb.config.ProxyURL)
 
 	//
 	proxy := goproxy.NewProxyHttpServer()
@@ -25,7 +25,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		log.Printf("@@@ Proxy: %v %v %v url: %v\n", req.Proto, req.Method, req.Host, req.URL)
 
 		hostport := strings.Split(req.URL.Host, ":")
-		proxyURL := nb.config.ProxyURL
+		//proxyURL := nb.config.ProxyURL
 
 		if IsLocalHost(hostport[0]) || IsHome(hostport[0]) {
 			return nil, nil
@@ -46,10 +46,11 @@ func HTTPProxy(port int, nb *Neighborhood) {
 
 			log.Printf("@@@ Proxy peer url: %v target: %v\n", req.URL, target)
 
-			proxyURL, _ = url.Parse(fmt.Sprintf("http://%v", target))
+			proxyURL, _ := url.Parse(fmt.Sprintf("http://%v", target))
 			return proxyURL, nil
 		}
 
+		var proxyURL *url.URL
 		return proxyURL, nil
 	}
 
@@ -58,7 +59,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		hostport[0] = nb.ResolveAddr(hostport[0])
 
 		if IsHome(hostport[0]) {
-			target := fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
+			target := nb.config.WebHost //fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
 			log.Printf("@@@ Dial home network: %v addr: %v home: %v\n", network, addr, target)
 
 			return net.Dial(network, target)
