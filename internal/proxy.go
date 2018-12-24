@@ -25,7 +25,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		log.Printf("@@@ Proxy: %v %v %v url: %v\n", req.Proto, req.Method, req.Host, req.URL)
 
 		hostport := strings.Split(req.URL.Host, ":")
-		//proxyURL := nb.config.ProxyURL
+		hostport[0] = nb.ResolveAddr(hostport[0])
 
 		if IsLocalHost(hostport[0]) || IsHome(hostport[0]) {
 			return nil, nil
@@ -50,8 +50,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 			return proxyURL, nil
 		}
 
-		var proxyURL *url.URL
-		return proxyURL, nil
+		return nb.config.WebProxy, nil
 	}
 
 	dial := func(network, addr string) (net.Conn, error) {

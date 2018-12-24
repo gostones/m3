@@ -2,9 +2,12 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
-	//"net/url"
+	"net/url"
 	"strings"
+
+	"github.com/dhnt/m3/internal/lb"
 
 	internal "github.com/dhnt/m3/internal"
 )
@@ -26,7 +29,7 @@ func main() {
 	// var debug = flag.Bool("debug", false, "Enable debug mode")
 	flag.Parse()
 
-	pals := make([]string, len(peers))
+	pals := []string{} //make([]string, len(peers))
 	aliases := make(map[string]string)
 	for _, v := range peers {
 		pa := strings.SplitN(v, ":", 2)
@@ -66,8 +69,27 @@ func main() {
 
 	nb := internal.NewNeighborhood(cfg)
 
+	// local web proxy
+	localProxyPort := internal.FreePort()
+	cfg.WebProxy, _ = url.Parse(fmt.Sprintf("http://127.0.0.1:%v", localProxyPort))
+
+	go internal.LocalProxy(localProxyPort)
+
+	//TODO dynamic proxy
+	lbPort := internal.FreePort()
+	backends := []string{fmt.Sprintf("localhost:%v", localProxyPort)}
+
+	for _, v := range pals {
+		addr := nb.AddPeerProxy(v)
+		backends = append(backends, addr)
+	}
+
 	//
-	log.Printf("proxy/p2p port: %v\n", cfg.ProxyPort)
+	log.Printf("web proxy load balancer: %v backends: %v\n", lbPort, backends)
+
+	log.Printf("proxy/p2p port: %v\n", *port)
+
+	go lb.Start(lbPort, backends, true)
 
 	internal.P2PListen(*port)
 	internal.HTTPProxy(*port, nb)

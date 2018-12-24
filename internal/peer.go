@@ -56,7 +56,7 @@ func NewNeighborhood(c *Config) *Neighborhood {
 	// 	}
 	// }()
 
-	go nb.init()
+	nb.init()
 
 	//go nb.addSelf()
 	//go nb.addPals(ch)
@@ -287,11 +287,11 @@ func (r *Neighborhood) AddPeerProxy(id string) string {
 func (r *Neighborhood) GetPeerTarget(id string) string {
 	log.Printf("@@@ GetPeerTarget: id: %v\n", id)
 
-	if id == r.My.ID {
-		//TODO
-		return ""
-		//return fmt.Sprintf("localhost:%v", r.config.WebPort)
-	}
+	// if id == r.My.ID {
+	// 	//TODO
+	// 	return ""
+	// 	//return fmt.Sprintf("localhost:%v", r.config.WebPort)
+	// }
 
 	p := r.getPeer(id)
 	if p != nil && p.Port > 0 && p.Rank > 0 {

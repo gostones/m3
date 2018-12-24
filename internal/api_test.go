@@ -26,7 +26,7 @@ func TestIsLive(t *testing.T) {
 	var cfg = &Config{}
 	//cfg.WebHost = fmt.Sprintf("http://localhost:%v", FreePort())
 
-	cfg.ProxyPort = FreePort()
+	proxyPort := FreePort()
 	cfg.Pals = []string{""}
 	//cfg.ProxyURL, _ = url.Parse(os.Getenv("http_proxy"))
 
@@ -35,8 +35,8 @@ func TestIsLive(t *testing.T) {
 	nb := NewNeighborhood(cfg)
 
 	addr := fmt.Sprintf("127.0.0.1:%v", port)
-	target := fmt.Sprintf("127.0.0.1:%v", cfg.ProxyPort)
-	go HTTPProxy(cfg.ProxyPort, nb)
+	target := fmt.Sprintf("127.0.0.1:%v", proxyPort)
+	go HTTPProxy(proxyPort, nb)
 	go Forward(addr, target)
 	go webserver(FreePort())
 	t.Logf("addr: %v target: %v", addr, target)
@@ -63,7 +63,7 @@ func TestIsP2pProxy(t *testing.T) {
 	port := FreePort()
 	var cfg = &Config{}
 	//cfg.WebPort = 5001
-	cfg.ProxyPort = FreePort()
+	//proxyPort = FreePort()
 	cfg.Pals = []string{id}
 
 	t.Logf("Configuration: %v\n", cfg)
