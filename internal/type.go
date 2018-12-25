@@ -7,13 +7,11 @@ import (
 
 // Config is application settings
 type Config struct {
-	//Port      int
+	Port     int
 	WebHost  string
 	WebProxy *url.URL
-	//ProxyPort int
-	//ProxyURL  *url.URL
-	Local   bool
-	TunPort int
+	Local    bool
+	//TunPort int
 	Blocked []string
 	Pals    []string
 	Aliases map[string]string

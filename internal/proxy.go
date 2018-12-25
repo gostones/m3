@@ -6,12 +6,35 @@ import (
 	"fmt"
 	"github.com/elazarl/goproxy"
 	//"github.com/elazarl/goproxy/ext/auth"
+	"github.com/dhnt/m3/internal/lb"
+
+	"bytes"
+	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
 	"net/url"
 	"strings"
 )
+
+func redirectHost(r *http.Request, host, body string) *http.Response {
+	resp := &http.Response{}
+	resp.Request = r
+	resp.TransferEncoding = r.TransferEncoding
+	resp.Header = make(http.Header)
+	resp.Header.Add("Content-Type", "text/plain")
+
+	u := *r.URL
+	u.Host = host
+	resp.Header.Set("Location", u.String())
+
+	resp.StatusCode = http.StatusMovedPermanently
+	resp.Status = http.StatusText(resp.StatusCode)
+	buf := bytes.NewBufferString(body)
+	resp.ContentLength = int64(buf.Len())
+	resp.Body = ioutil.NopCloser(buf)
+	return resp
+}
 
 // HTTPProxy dispatches request based on network addr
 func HTTPProxy(port int, nb *Neighborhood) {
@@ -130,6 +153,23 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		return false
 	}
 
+	var convertAliasTLD = func(host string) (string, bool) {
+		sa := strings.Split(host, ".")
+		le := len(sa)
+		tld := sa[le-1]
+		//
+		alias, ok := nb.config.Aliases[tld]
+		if !ok {
+			return "", false
+		}
+		addr := ToPeerAddr(alias)
+		if addr == "" {
+			return "", false
+		}
+		sa[le-1] = addr
+		return strings.Join(sa, "."), true
+	}
+
 	proxy.OnRequest().DoFunc(
 		func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 			log.Printf("\n\n\n##################\n")
@@ -162,6 +202,17 @@ func HTTPProxy(port int, nb *Neighborhood) {
 					fmt.Sprintf("Nice try: %v", req.URL.Host))
 			}
 
+			// alias
+			if h, err := Alias(hostport[0]); err == nil {
+				addr, ok := convertAliasTLD(h)
+				if !ok {
+					return req, goproxy.NewResponse(req,
+						goproxy.ContentTypeText, http.StatusNotFound,
+						fmt.Sprintf("Alias invalid: %v", hostport[0]))
+				}
+				return req, redirectHost(req, addr, fmt.Sprintf("Redirect: %v", hostport[0]))
+			}
+
 			return req, nil
 		})
 
@@ -181,4 +232,43 @@ func HTTPProxy(port int, nb *Neighborhood) {
 
 	log.Printf("Proxy listening on: %v\n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), proxy))
+}
+
+// StartProxy starts proxy services
+func StartProxy(cfg *Config) {
+	// clean up old p2p connections
+	err := P2PCloseAll()
+	if err != nil {
+		panic(err)
+	}
+	//
+	log.Printf("Configuration: %v\n", cfg)
+
+	nb := NewNeighborhood(cfg)
+
+	// local web proxy
+	lbPort := FreePort()
+	cfg.WebProxy, _ = url.Parse(fmt.Sprintf("http://127.0.0.1:%v", lbPort))
+
+	localProxyPort := FreePort()
+	go LocalProxy(localProxyPort)
+
+	//TODO dynamic proxy
+	backends := []string{fmt.Sprintf("localhost:%v", localProxyPort)}
+
+	for _, v := range cfg.Pals {
+		addr := nb.AddPeerProxy(v)
+		backends = append(backends, addr)
+	}
+
+	//
+	port := cfg.Port
+
+	log.Printf("web proxy load balancer: %v backends: %v\n", lbPort, backends)
+	log.Printf("proxy/p2p port: %v\n", port)
+
+	go lb.Start(lbPort, backends, true)
+
+	P2PListen(port)
+	HTTPProxy(port, nb)
 }
