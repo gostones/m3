@@ -70,13 +70,13 @@ func main() {
 	nb := internal.NewNeighborhood(cfg)
 
 	// local web proxy
-	localProxyPort := internal.FreePort()
-	cfg.WebProxy, _ = url.Parse(fmt.Sprintf("http://127.0.0.1:%v", localProxyPort))
+	lbPort := internal.FreePort()
+	cfg.WebProxy, _ = url.Parse(fmt.Sprintf("http://127.0.0.1:%v", lbPort))
 
+	localProxyPort := internal.FreePort()
 	go internal.LocalProxy(localProxyPort)
 
 	//TODO dynamic proxy
-	lbPort := internal.FreePort()
 	backends := []string{fmt.Sprintf("localhost:%v", localProxyPort)}
 
 	for _, v := range pals {
