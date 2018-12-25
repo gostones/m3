@@ -170,7 +170,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		log.Printf("\n--------------------\n")
 
 		if r != nil {
-			r.Header.Set("X-Peer-Id", nb.My.ID)
+			r.Header.Add("X-Peer-Id", nb.My.ID)
 			log.Printf("@@@ OnResponse status: %v length: %v\n", r.StatusCode, r.ContentLength)
 		}
 
