@@ -81,7 +81,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		hostport[0] = nb.ResolveAddr(hostport[0])
 
 		if IsHome(hostport[0]) {
-			target := nb.config.WebHost //fmt.Sprintf("127.0.0.1:%v", nb.config.WebPort)
+			target := nb.config.Home
 			log.Printf("@@@ Dial home network: %v addr: %v home: %v\n", network, addr, target)
 
 			return net.Dial(network, target)
@@ -158,7 +158,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		le := len(sa)
 		tld := sa[le-1]
 		//
-		alias, ok := nb.config.Aliases[tld]
+		alias, ok := nb.config.Alias[tld]
 		if !ok {
 			return "", false
 		}
@@ -256,7 +256,7 @@ func StartProxy(cfg *Config) {
 	//TODO dynamic proxy
 	backends := []string{fmt.Sprintf("localhost:%v", localProxyPort)}
 
-	for _, v := range cfg.Pals {
+	for _, v := range cfg.Proxy {
 		addr := nb.AddPeerProxy(v)
 		backends = append(backends, addr)
 	}

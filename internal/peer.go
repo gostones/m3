@@ -175,7 +175,7 @@ func (r *Neighborhood) IsReady() bool {
 func (r *Neighborhood) resolveAlias(s string) string {
 	a, err := Alias(s)
 	if err == nil && a != "" {
-		alias, b := r.config.Aliases[a]
+		alias, b := r.config.Alias[a]
 		if b {
 			return alias
 		}

@@ -8,13 +8,12 @@ import (
 // Config is application settings
 type Config struct {
 	Port     int
-	WebHost  string
+	Home     string
 	WebProxy *url.URL
 	Local    bool
-	//TunPort int
-	Blocked []string
-	Pals    []string
-	Aliases map[string]string
+	Blocked  []string
+	Proxy    []string
+	Alias    map[string]string
 }
 
 // ListFlags is for collecting an array of command line arguments

@@ -27,7 +27,7 @@ func TestIsLive(t *testing.T) {
 	//cfg.WebHost = fmt.Sprintf("http://localhost:%v", FreePort())
 
 	proxyPort := FreePort()
-	cfg.Pals = []string{""}
+	//cfg.Pals = []string{""}
 	//cfg.ProxyURL, _ = url.Parse(os.Getenv("http_proxy"))
 
 	t.Logf("Configuration: %v\n", cfg)
@@ -64,7 +64,7 @@ func TestIsP2pProxy(t *testing.T) {
 	var cfg = &Config{}
 	//cfg.WebPort = 5001
 	//proxyPort = FreePort()
-	cfg.Pals = []string{id}
+	//cfg.Pals = []string{id}
 
 	t.Logf("Configuration: %v\n", cfg)
 
