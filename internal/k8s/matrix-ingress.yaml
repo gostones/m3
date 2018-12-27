@@ -1,0 +1,48 @@
+# kubectl -n cwe apply -f matrix-ingress.yaml
+# riot
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: riot-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: riot.home
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: riot
+          servicePort: 8080
+  - host: riot.<hexid>
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: riot
+          servicePort: 8080
+---
+# synapse
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: synapse-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: matrix.home
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: synapse
+          servicePort: 8008
+  - host: matrix.<hexid>
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: synapse
+          servicePort: 8008
