@@ -14,6 +14,7 @@ require (
 	github.com/gorilla/websocket v1.4.0
 	github.com/gostones/lib v0.0.0-20181125223556-f15be2643075
 	github.com/gxed/hashland v0.0.0-20180221191214-d9f6b97f8db2 // indirect
+	github.com/ilius/crock32 v0.0.0-20180429101545-733fd36abb8c
 	github.com/jpillora/ansi v0.0.0-20170202005112-f496b27cd669 // indirect
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7
 	github.com/jpillora/chisel v0.0.0-20171123140225-12fec693f1ca

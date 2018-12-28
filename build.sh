@@ -18,9 +18,9 @@ function build() {
     fi
 
     # echo "## Testing ..."
-    # go test $FLAG ./...; if [ $? -ne 0 ]; then
-    #     return 1
-    # fi
+    go test $FLAG ./...; if [ $? -ne 0 ]; then
+        return 1
+    fi
 
     echo "## Building ..."
 #    go build $FLAG -buildmode=exe -o bin/mirr -ldflags '-extldflags "-static"'; if [ $? -ne 0 ]; then

@@ -24,6 +24,8 @@ github.com/gostones/lib v0.0.0-20181125223556-f15be2643075 h1:/nQLRcNgNRM8/z+v/7
 github.com/gostones/lib v0.0.0-20181125223556-f15be2643075/go.mod h1:VliJxdTvLEW32wlXEuy9tUHgBplkR0dzoGdoeeGiB7s=
 github.com/gxed/hashland v0.0.0-20180221191214-d9f6b97f8db2 h1:neM/RzmgBKxsJ3ioEZnIQmgQQq/sn6xDqYOEYnH3RYM=
 github.com/gxed/hashland v0.0.0-20180221191214-d9f6b97f8db2/go.mod h1:YUhWml1NaWLTNBl4NPptkB8MadfaIhgq+a2TRc+Mw4Q=
+github.com/ilius/crock32 v0.0.0-20180429101545-733fd36abb8c h1:ksPfsAQoZa+Y3iuRGtnulPFzTxxCQXHfDHkvwdT2dZc=
+github.com/ilius/crock32 v0.0.0-20180429101545-733fd36abb8c/go.mod h1:ERkCbU4b16B5wJp8LsESdCupDG6HxdqN0iN80jAY2mE=
 github.com/jpillora/ansi v0.0.0-20170202005112-f496b27cd669 h1:l5rH/CnVVu+HPxjtxjM90nHrm4nov3j3RF9/62UjgLs=
 github.com/jpillora/ansi v0.0.0-20170202005112-f496b27cd669/go.mod h1:kOeLNvjNBGSV3uYtFjvb72+fnZCMFJF1XDvRIjdom0g=
 github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7 h1:K//n/AqR5HjG3qxbrBCL4vJPW0MVFSs9CPK1OOJdRME=

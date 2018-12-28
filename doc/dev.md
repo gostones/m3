@@ -42,6 +42,9 @@ and point it to localhost:18080
 
 This plugin is optional if you change your system default to localhost:18080
 
+## References
+
+[Base32 Encoding](http://www.crockford.com/wrmg/base32.html)
 
 ## Best practices 
 
