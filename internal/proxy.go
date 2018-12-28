@@ -36,6 +36,13 @@ func redirectHost(r *http.Request, host, body string) *http.Response {
 	return resp
 }
 
+func cors(r *http.Response) {
+	r.Header.Set("Access-Control-Allow-Origin", "*")
+	r.Header.Set("Access-Control-Allow-Credentials", "true")
+	r.Header.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	r.Header.Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization, X-CSRF-Token")
+}
+
 // HTTPProxy dispatches request based on network addr
 func HTTPProxy(port int, nb *Neighborhood) {
 
@@ -222,6 +229,9 @@ func HTTPProxy(port int, nb *Neighborhood) {
 
 		if r != nil {
 			r.Header.Add("X-Peer-Id", nb.My.ID)
+
+			cors(r)
+
 			log.Printf("@@@ OnResponse status: %v length: %v\n", r.StatusCode, r.ContentLength)
 		}
 
