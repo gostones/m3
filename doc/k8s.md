@@ -95,7 +95,16 @@ helm install stable/traefik --name traefik --namespace kube-system \
 	--set memoryLimit=1Gi \
 	--set dashboard.enabled=true \
 	--set dashboard.domain=localhost
+
 ```
+
+<!--
+helm upgrade traefik stable/traefik \
+  --set proxyProtocol.enabled=false \
+  --set forwardedHeaders.enabled=false \
+  --set ssl.enabled=false \
+  --set ssl.enforced=false
+  -->
 
 To allow incoming traffic to any applications you have deployed, enable \.home and \.\[hexid\] domains
 

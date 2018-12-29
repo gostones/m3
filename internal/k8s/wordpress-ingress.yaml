@@ -14,7 +14,7 @@ spec:
         backend:
           serviceName: wordpress-wordpress
           servicePort: 80
-  - host: <hexid>
+  - host: <myid>
     http:
       paths:
       - path: /
@@ -28,3 +28,5 @@ spec:
         backend:
           serviceName: wordpress-wordpress
           servicePort: 80
+  # tls:
+  # - secretName: traefik-home-tls-cert
