@@ -97,7 +97,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		if IsPeer(hostport[0]) {
 			log.Printf("@@@ Dial peer: %v addr: %v\n", network, addr)
 
-			addr, tld := ConvertTLD(hostport[0])
+			tld := TLD(hostport[0])
 			id := ToPeerID(tld)
 			if id == "" {
 				return nil, fmt.Errorf("Peer invalid: %v", hostport[0])

@@ -149,11 +149,11 @@ func IsHome(host string) bool {
 		localHomeRE.MatchString(host)
 }
 
-// ConvertTLD changes tld to home
-func ConvertTLD(host string) (string, string) {
-	sa := strings.Split(host, ".")
-	le := len(sa)
-	tld := sa[le-1]
-	sa[le-1] = "home"
-	return strings.Join(sa, "."), tld
-}
+// // ConvertTLD changes tld to home
+// func ConvertTLD(host string) (string, string) {
+// 	sa := strings.Split(host, ".")
+// 	le := len(sa)
+// 	tld := sa[le-1]
+// 	sa[le-1] = "home"
+// 	return strings.Join(sa, "."), tld
+// }
