@@ -8,9 +8,10 @@ import (
 )
 
 func main() {
-	var port = flag.Int("port", 18080, "Proxy port")
+	var port = flag.Int("port", 18080, "Bind port")
 
-	var home = flag.String("home", "localhost:80", "Home host:port to local k8s")
+	var home internal.ListFlags
+	flag.Var(&home, "home", "Home routes domain/host:port")
 
 	var proxy internal.ListFlags
 	flag.Var(&proxy, "proxy", "Peer ID as Internet proxy")
@@ -37,12 +38,28 @@ func main() {
 		}
 	}
 
+	homereg := internal.NewRouteRegistry()
+	homereg.SetDefault("localhost:80")
+	for _, v := range home {
+		pa := strings.SplitN(v, "/", 2) // domain/host:port
+		switch len(pa) {
+		case 1:
+			// invalid
+		case 2:
+			if pa[0] == "" {
+				homereg.SetDefault(pa[1])
+			} else {
+				homereg.Add(pa[0], pa[1])
+			}
+		}
+	}
+
 	//
 	var cfg = &internal.Config{}
 
 	cfg.Port = *port
 	cfg.Local = *local
-	cfg.Home = *home
+	cfg.Home = homereg
 	cfg.Blocked = blocked
 	cfg.Proxy = proxy
 	cfg.Alias = aliasMap

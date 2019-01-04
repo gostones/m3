@@ -14,3 +14,10 @@ spec:
         backend:
           serviceName: dokuwiki-dokuwiki
           servicePort: 80
+  - host: wiki.<hexid>
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: dokuwiki-dokuwiki
+          servicePort: 80

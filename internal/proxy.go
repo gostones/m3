@@ -81,6 +81,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		}
 
 		return nb.config.WebProxy, nil
+		//return nil, nil
 	}
 
 	dial := func(network, addr string) (net.Conn, error) {
@@ -88,8 +89,12 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		hostport[0] = nb.ResolveAddr(hostport[0])
 
 		if IsHome(hostport[0]) {
-			target := nb.config.Home
-			log.Printf("@@@ Dial home network: %v addr: %v home: %v\n", network, addr, target)
+			route := nb.config.Home.Match(hostport[0])
+			target := route.Backend[0].Host //TODO lb
+			if strings.Index(target, ":") < 0 {
+				target = fmt.Sprintf("%v:%v", target, hostport[1])
+			}
+			log.Printf("@@@ Dial home network: %v addr: %v target: %v\n", network, addr, target)
 
 			return net.Dial(network, target)
 		}
