@@ -163,7 +163,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 	proxy.ConnectDial = nil
 	proxy.Tr.Dial = dial
 	proxy.Tr.Proxy = nil
-	proxy.NonproxyHandler = http.HandlerFunc(HealthHandler)
+	proxy.NonproxyHandler = HealthHandlerFunc(fmt.Sprintf("http://127.0.0.1:%v", port))
 
 	//
 	proxy.Verbose = true
@@ -289,7 +289,7 @@ func StartProxy(cfg *Config) {
 
 	sbPort := FreePort()
 	sbAPIPort := FreePort()
-	sbBackends := []string{fmt.Sprintf("localhost:%v", w3Port)}
+	sbBackends := []string{fmt.Sprintf("127.0.0.1:%v", w3Port)}
 
 	for _, v := range cfg.Web {
 		addr := nb.AddPeerProxy(v)
@@ -297,14 +297,14 @@ func StartProxy(cfg *Config) {
 	}
 	go sb.SwitchBoard(sbPort, sbAPIPort, sbBackends)
 
-	nb.W3ProxyHost = fmt.Sprintf("localhost:%v", sbPort)
+	nb.W3ProxyHost = fmt.Sprintf("127.0.0.1:%v", sbPort)
 
 	// home
 	nb.Home = NewRouteRegistry()
-	nb.Home.SetDefault("localhost:80")
+	nb.Home.SetDefault("127.0.0.1:80")
 
 	// switchboard
-	nb.Home.Add("w3.sb.home", fmt.Sprintf("localhost:%v", sbAPIPort))
+	nb.Home.Add("w3.sb.home", fmt.Sprintf("127.0.0.1:%v", sbAPIPort))
 
 	for _, v := range cfg.Home {
 		pa := strings.SplitN(v, "/", 2) // domain/host:port

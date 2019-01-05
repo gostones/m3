@@ -11,8 +11,8 @@ import (
 func W3Proxy(port int) {
 	hostport := fmt.Sprintf(":%v", port)
 	proxy := goproxy.NewProxyHttpServer()
+	proxy.NonproxyHandler = HealthHandlerFunc(fmt.Sprintf("http://127.0.0.1:%v", port))
 
-	proxy.NonproxyHandler = http.HandlerFunc(HealthHandler)
 	proxy.Verbose = true
 
 	log.Printf("W3 proxy listening: %v\n", hostport)
