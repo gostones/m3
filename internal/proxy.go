@@ -162,6 +162,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 
 	proxy.ConnectDial = nil
 	proxy.Tr.Dial = dial
+	proxy.Tr.DialTLS = nil
 	proxy.Tr.Proxy = nil
 	proxy.NonproxyHandler = HealthHandlerFunc(fmt.Sprintf("http://127.0.0.1:%v", port))
 
@@ -253,17 +254,12 @@ func HTTPProxy(port int, nb *Neighborhood) {
 	// response
 	proxy.OnResponse().DoFunc(func(r *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 		log.Printf("\n--------------------\n")
-
 		if r != nil {
 			r.Header.Add("X-Peer-Id", nb.My.ID)
-
 			cors(r)
-
-			log.Printf("@@@ OnResponse status: %v length: %v\n", r.StatusCode, r.ContentLength)
+			log.Printf("@@@ Proxy OnResponse status: %v length: %v\n", r.StatusCode, r.ContentLength)
 		}
-
 		log.Printf("@@@ OnResponse response: %v\n", r)
-
 		return r
 	})
 
