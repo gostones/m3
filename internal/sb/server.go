@@ -1,6 +1,7 @@
 package sb
 
 import (
+	"flag"
 	"fmt"
 	_ "net/http/pprof"
 	"os"
@@ -51,8 +52,17 @@ func newConfig(port int, apiport int, be []string) *config.Config {
 		})
 	}
 
-	rc.Logger, _ = cflager.New("M3-sb")
-	rc.StaticDir = "sb/static"
+	name := "w3-sb"
+	flags := flag.NewFlagSet(name, flag.ExitOnError)
+	cflager.AddFlags(flags)
+	rc.Logger, _ = cflager.New(name)
+
+	//
+	// dir, err := os.Getwd()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	rc.StaticDir = "internal/sb/static"
 
 	return &rc
 }

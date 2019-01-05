@@ -23,11 +23,13 @@ type Peer struct {
 
 // Neighborhood is
 type Neighborhood struct {
-	Peers  map[string]*Peer
-	My     *Node
-	config *Config
-	min    int
-	max    int
+	Peers       map[string]*Peer
+	My          *Node
+	Home        *RouteRegistry
+	W3ProxyHost string
+	config      *Config
+	min         int
+	max         int
 
 	sync.Mutex
 }

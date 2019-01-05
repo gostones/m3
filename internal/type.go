@@ -2,19 +2,18 @@ package internal
 
 import (
 	"fmt"
-	"net/url"
+	//"net/url"
 	"strings"
 )
 
 // Config is application settings
 type Config struct {
-	Port     int
-	Home     *RouteRegistry
-	WebProxy *url.URL
-	Local    bool
-	Blocked  []string
-	Proxy    []string
-	Alias    map[string]string
+	Port    int
+	Local   bool
+	Blocked []string
+	Home    []string
+	Web     []string
+	Alias   map[string]string
 }
 
 // ListFlags is for collecting an array of command line arguments

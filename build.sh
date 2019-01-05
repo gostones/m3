@@ -17,7 +17,7 @@ function build() {
         return 1
     fi
 
-    # echo "## Testing ..."
+    echo "## Testing ..."
     go test $FLAG ./...; if [ $? -ne 0 ]; then
         return 1
     fi
@@ -38,6 +38,9 @@ function build() {
     go build $FLAG -buildmode=exe -o bin/hexid ./cmd/hexid; if [ $? -ne 0 ]; then
         return 1
     fi
+
+    echo "## Tidying up modules ..."
+    go mod tidy
 }
 
 echo "#### Building ..."
