@@ -17,12 +17,19 @@ type Health struct {
 }
 
 func HealthHandlerFunc(proxyURL string) http.HandlerFunc {
+	const elapse int64 = 60000 //one min
+	last := toTimestamp(time.Now())
+	healthy := false
 
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		healthy := pingProxy(proxyURL)
+		now := toTimestamp(time.Now())
+		if !healthy || now-last > elapse {
+			healthy = pingProxy(proxyURL)
+			last = now
+		}
 		m := &Health{
 			Healthy:   healthy,
-			Timestamp: toTimestamp(time.Now()),
+			Timestamp: now,
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
