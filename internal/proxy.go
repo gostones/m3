@@ -292,7 +292,7 @@ func StartProxy(cfg *Config) {
 
 	sbPort := FreePort()
 	sbAPIPort := FreePort()
-	sbBackends := [][]string{[]string{nb.My.ID, fmt.Sprintf("127.0.0.1:%v", w3Port)}}
+	sbBackends := [][]string{[]string{"*" + nb.My.ID, fmt.Sprintf("127.0.0.1:%v", w3Port)}}
 
 	for _, v := range cfg.Web {
 		pid := ToPeerID(v)

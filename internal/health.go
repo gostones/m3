@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -20,8 +21,11 @@ func HealthHandlerFunc(proxyURL string) http.HandlerFunc {
 	const elapse int64 = 60000 //one min
 	last := toTimestamp(time.Now())
 	healthy := false
-
+	mutex := &sync.Mutex{}
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		mutex.Lock()
+		defer mutex.Unlock()
+
 		now := toTimestamp(time.Now())
 		if !healthy || now-last > elapse {
 			healthy = pingProxy(proxyURL)
