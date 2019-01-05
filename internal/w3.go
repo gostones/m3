@@ -8,7 +8,7 @@ import (
 )
 
 //W3Proxy start a proxy to W3
-func W3Proxy(port int) {
+func W3Proxy(pid string, port int) {
 	hostport := fmt.Sprintf(":%v", port)
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.NonproxyHandler = HealthHandlerFunc(fmt.Sprintf("http://127.0.0.1:%v", port))
@@ -16,7 +16,7 @@ func W3Proxy(port int) {
 	proxy.Verbose = true
 	proxy.OnResponse().DoFunc(func(r *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 		if r != nil {
-			r.Header.Add("X-W3-Proxy", hostport)
+			r.Header.Add("X-W3-Proxy", pid)
 			log.Printf("@@@ OnResponse status: %v length: %v\n", r.StatusCode, r.ContentLength)
 		}
 		log.Printf("@@@ W3Proxy OnResponse response: %v\n", r)

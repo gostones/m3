@@ -279,18 +279,25 @@ func StartProxy(cfg *Config) {
 
 	nb := NewNeighborhood(cfg)
 
+	// my ID
+	node, err := p2pID()
+	if err != nil {
+		panic(err)
+	}
+	nb.My = &node
+
 	// web
 	w3Port := FreePort()
-	go W3Proxy(w3Port)
+	go W3Proxy(nb.My.ID, w3Port)
 
 	sbPort := FreePort()
 	sbAPIPort := FreePort()
-	sbBackends := []string{fmt.Sprintf("127.0.0.1:%v", w3Port)}
+	sbBackends := [][]string{[]string{nb.My.ID, fmt.Sprintf("127.0.0.1:%v", w3Port)}}
 
 	for _, v := range cfg.Web {
 		pid := ToPeerID(v)
 		addr := nb.AddPeerProxy(pid)
-		sbBackends = append(sbBackends, addr)
+		sbBackends = append(sbBackends, []string{pid, addr})
 	}
 	go sb.SwitchBoard(sbPort, sbAPIPort, sbBackends)
 

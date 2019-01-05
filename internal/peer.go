@@ -58,7 +58,7 @@ func NewNeighborhood(c *Config) *Neighborhood {
 	// 	}
 	// }()
 
-	nb.init()
+	//nb.init()
 
 	//go nb.addSelf()
 	//go nb.addPals(ch)
@@ -66,13 +66,13 @@ func NewNeighborhood(c *Config) *Neighborhood {
 	return nb
 }
 
-func (r *Neighborhood) init() {
-	node, err := p2pID()
-	if err != nil {
-		panic(err)
-	}
-	r.My = &node
-}
+// func (r *Neighborhood) init() {
+// 	node, err := p2pID()
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	r.My = &node
+// }
 
 // GetPeers is
 func (r *Neighborhood) GetPeers() []string {

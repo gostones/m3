@@ -25,7 +25,7 @@ import (
 	"github.com/tedsuo/ifrit/sigmon"
 )
 
-func newConfig(port int, apiport int, be []string) *config.Config {
+func newConfig(port int, apiport int, be [][]string) *config.Config {
 	var rc config.Config
 
 	rc.API = config.API{
@@ -41,10 +41,11 @@ func newConfig(port int, apiport int, be []string) *config.Config {
 	}
 
 	for _, v := range be {
-		hp := strings.SplitN(v, ":", 2)
+		pid := v[0]
+		hp := strings.SplitN(v[1], ":", 2)
 		p, _ := strconv.ParseUint(hp[1], 10, 32)
 		rc.Proxy.Backends = append(rc.Proxy.Backends, config.Backend{
-			Name:           v,
+			Name:           pid + " " + v[1],
 			Host:           hp[0],
 			Port:           uint(p),
 			StatusPort:     uint(p),
@@ -67,7 +68,7 @@ func newConfig(port int, apiport int, be []string) *config.Config {
 	return &rc
 }
 
-func SwitchBoard(port int, apiport int, be []string) {
+func SwitchBoard(port int, apiport int, be [][]string) {
 	rootConfig := newConfig(port, apiport, be)
 
 	logger := rootConfig.Logger
