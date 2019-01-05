@@ -292,7 +292,8 @@ func StartProxy(cfg *Config) {
 	sbBackends := []string{fmt.Sprintf("127.0.0.1:%v", w3Port)}
 
 	for _, v := range cfg.Web {
-		addr := nb.AddPeerProxy(v)
+		pid := ToPeerID(v)
+		addr := nb.AddPeerProxy(pid)
 		sbBackends = append(sbBackends, addr)
 	}
 	go sb.SwitchBoard(sbPort, sbAPIPort, sbBackends)
