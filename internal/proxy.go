@@ -7,6 +7,7 @@ import (
 	"github.com/elazarl/goproxy"
 	//"github.com/elazarl/goproxy/ext/auth"
 	//"github.com/dhnt/m3/internal/lb"
+	"github.com/dhnt/m3/internal/rp"
 	"github.com/dhnt/m3/internal/sb"
 
 	"bytes"
@@ -307,6 +308,16 @@ func StartProxy(cfg *Config) {
 	nb.Home = NewRouteRegistry()
 	nb.Home.SetDefault("127.0.0.1:80")
 
+	//
+	rpPort := FreePort()
+	rpSupport := FreePort()
+	go rp.Serve(rpPort, rpSupport)
+
+	// reverse proxy
+	myAddr := ToPeerAddr(nb.My.ID)
+	nb.Home.Add(".home", fmt.Sprintf("127.0.0.1:%v", rpPort))
+	nb.Home.Add("."+myAddr, fmt.Sprintf("127.0.0.1:%v", rpPort))
+
 	// switchboard
 	nb.Home.Add("w3.sb.home", fmt.Sprintf("127.0.0.1:%v", sbAPIPort))
 
@@ -323,24 +334,6 @@ func StartProxy(cfg *Config) {
 			}
 		}
 	}
-
-	//T
-	// lbPort := FreePort()
-	// cfg.WebProxy, _ = url.Parse(fmt.Sprintf("http://127.0.0.1:%v", lbPort))
-
-	// localProxyPort := FreePort()
-	// go LocalProxy(localProxyPort)
-
-	// //TODO dynamic proxy
-	// backends := []string{fmt.Sprintf("localhost:%v", localProxyPort)}
-
-	// for _, v := range cfg.Proxy {
-	// 	addr := nb.AddPeerProxy(v)
-	// 	backends = append(backends, addr)
-	// }
-
-	// go lb.Start(lbPort, backends, true)
-	// log.Printf("web proxy load balancer: %v backends: %v\n", lbPort, backends)
 
 	//
 	port := cfg.Port
