@@ -1,5 +1,17 @@
 # Developer Guide
 
+## Set up
+
+M3 source code and third party projects will be checked out under dhnt.
+For third party Golang projects that still require the GOPATH to build will go into dhnt/go.
+
+```
+mkdir ~/dhnt
+mkdir ~/dhnt/go
+export GOPATH=~/dhnt/go
+export PATH=$GOPATH/bin:$PATH
+```
+
 ## Install required tools
 
 *Docker CE/Kubernetes*
@@ -14,23 +26,69 @@ test with kubectl and helm with charts at https://github.com/helm/charts
 
 *Git*
 
+Client
+
 https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
+Git server - Gogs
+
+https://github.com/gogs/gogs
+
+Install and run from [source](https://gogs.io/docs/installation/install_from_source.html)
+
+```
+export GOPATH=~/dhnt/go
+
+mkdir -p $GOPATH/src/github.com/gogs
+cd $GOPATH/src/github.com/gogs
+git clone https://github.com/gogs/gogs.git
+cd gogs
+go build -tags "sqlite pam cert"
+
+./gogs web
+```
+
+Visit: http://0.0.0.0:3000
 
 
 *IPFS*
 
 https://github.com/ipfs/go-ipfs
-bulid and Run 
+
+build and Run from [source](https://github.com/ipfs/go-ipfs#development)
+
 ```
+export GOPATH=~/dhnt/go
+export PATH=$GOPATH/bin:$PATH
+
+mkdir $GOPATH/src/github.com/ipfs
+cd $GOPATH/src/github.com/ipfs
+git clone https://github.com/ipfs/go-ipfs.git
+cd go-ipfs
+make install
+
+#optional - change default ports
+ipfs config Addresses
+ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/9001
+ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
+#
+
 ipfs daemon
 ```
 
-Clone this repo and run
+*M3*
+
+Clone this repo and run from [source](https://github.com/dhnt/m3.git)
+
 ```
+cd ~/dhnt
+git clone https://github.com/dhnt/m3.git
+cd m3
 ./build.sh
- bin/mirr
- ```
+bin/mirr --local=true
+
+```
+
 
 
 *Chrome Proxy Plugin*
