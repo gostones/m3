@@ -2,7 +2,7 @@ package internal
 
 import (
 	"fmt"
-	"github.com/dhnt/m3/internal/rp"
+	"github.com/dhnt/m3/internal/frp"
 	"github.com/dhnt/m3/internal/tunnel"
 	"log"
 	"net/http"
@@ -73,7 +73,7 @@ func rpServer(listen int, web string) {
 	}
 
 	//
-	go rp.Server(rpsIni)
+	go frp.Server(rpsIni)
 
 	port := FreePort()
 	proxy := fmt.Sprintf("http://localhost:%v", port)
@@ -111,7 +111,7 @@ func rpClient(url, proxy, hostport string, port int) {
 			panic(err)
 		}
 
-		rp.Client(fmt.Sprintf(rpcIni, lport, shost, sport, port))
+		frp.Client(fmt.Sprintf(rpcIni, lport, shost, sport, port))
 
 		//should never return or error
 		sleep(fmt.Errorf("Reverse proxy error"))
