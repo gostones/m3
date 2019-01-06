@@ -832,17 +832,17 @@ func Serve(port, support int) {
 // TODO Dataclients https://github.com/zalando/skipper/blob/master/docs/tutorials/development.md
 var routes = `
 riot:
-    Host("^riot.(home|920j8197p3mq6fdb1xhpserz22x146pzmnr2hj987ay8nea39fr40h)$")
+    Host("^riot.(home|92114bmb5wjn6hfz0qb2jdr1qc2a5j3hqcr7efsfe2gj09yjmj5eg8)$")
     -> setRequestHeader("X-Skipper-Tag", "skipper")
     -> "http://localhost:8080";
 
 matrix:
-    Host("^matrix.(home|920j8197p3mq6fdb1xhpserz22x146pzmnr2hj987ay8nea39fr40h)(:8008)?$")
+    Host("^matrix.(home|92114bmb5wjn6hfz0qb2jdr1qc2a5j3hqcr7efsfe2gj09yjmj5eg8)(:8008)?$")
     -> setRequestHeader("X-Skipper-Tag", "skipper")
     -> "http://localhost:8008";
 
 matrixFederation:
-    Host("^matrix.(home|920j8197p3mq6fdb1xhpserz22x146pzmnr2hj987ay8nea39fr40h):8448$")
+    Host("^matrix.(home|92114bmb5wjn6hfz0qb2jdr1qc2a5j3hqcr7efsfe2gj09yjmj5eg8):8448$")
     -> setRequestHeader("X-Skipper-Tag", "skipper")
 	-> "http://localhost:8008";
 
