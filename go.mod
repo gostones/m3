@@ -9,6 +9,7 @@ require (
 	github.com/elazarl/goproxy v0.0.0-20181111060418-2ce16c963a8a
 	github.com/fatih/color v1.7.0
 	github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e // indirect
+	github.com/gostones/gpm v0.0.0-20190107075358-eb62f7608816
 	github.com/gostones/lib v0.0.0-20181125223556-f15be2643075
 	github.com/gxed/hashland v0.0.0-20180221191214-d9f6b97f8db2 // indirect
 	github.com/ilius/crock32 v0.0.0-20180429101545-733fd36abb8c
@@ -34,7 +35,6 @@ require (
 	github.com/tedsuo/rata v1.0.0 // indirect
 	github.com/zalando/skipper v0.10.147
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9 // indirect
-	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4 // indirect
 	golang.org/x/sys v0.0.0-20181206074257-70b957f3b65e // indirect
 	gopkg.in/resty.v1 v1.10.3
 	gopkg.in/validator.v2 v2.0.0-20180514200540-135c24b11c19 // indirect

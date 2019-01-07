@@ -17,6 +17,7 @@ import (
 	"net/http"
 
 	"strings"
+	"time"
 )
 
 func redirectHost(r *http.Request, host, body string) *http.Response {
@@ -270,10 +271,14 @@ func HTTPProxy(port int, nb *Neighborhood) {
 
 // StartProxy starts proxy services
 func StartProxy(cfg *Config) {
+	gitPort := FreePort()
+
+	go StartGPM(gitPort)
+
 	// clean up old p2p connections
 	err := P2PCloseAll()
 	if err != nil {
-		panic(err)
+		//panic(err)
 	}
 
 	log.Printf("Configuration: %v\n", cfg)
@@ -281,10 +286,16 @@ func StartProxy(cfg *Config) {
 	nb := NewNeighborhood(cfg)
 
 	// my ID
-	node, err := p2pID()
-	if err != nil {
-		panic(err)
+	var node Node
+
+	for node, err = p2pID(); err != nil; node, err = p2pID() {
+		log.Printf("IPFS not ready, will retry in a sec: %v\n", err)
+
+		time.Sleep(1 * time.Second)
 	}
+	// if err != nil {
+	// 	panic(err)
+	// }
 	nb.My = &node
 
 	// web
@@ -317,6 +328,10 @@ func StartProxy(cfg *Config) {
 	myAddr := ToPeerAddr(nb.My.ID)
 	nb.Home.Add(".home", fmt.Sprintf("127.0.0.1:%v", rpPort))
 	nb.Home.Add("."+myAddr, fmt.Sprintf("127.0.0.1:%v", rpPort))
+
+	// git
+	nb.Home.Add("git.home", fmt.Sprintf("127.0.0.1:%v", gitPort))
+	nb.Home.Add("git."+myAddr, fmt.Sprintf("127.0.0.1:%v", gitPort))
 
 	// switchboard
 	nb.Home.Add("w3.sb.home", fmt.Sprintf("127.0.0.1:%v", sbAPIPort))
