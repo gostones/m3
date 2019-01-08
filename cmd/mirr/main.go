@@ -4,25 +4,25 @@ import (
 	"flag"
 	"strings"
 
-	internal "github.com/dhnt/m3/internal"
+	m3 "github.com/dhnt/m3/internal"
 )
 
 func main() {
 	//
-	var port = flag.Int("port", 18080, "Bind port")
+	var port = flag.Int("port", m3.GetDefaultPort(), "Bind port")
 
-	var home internal.ListFlags
+	var home m3.ListFlags
 	flag.Var(&home, "home", "Home routes domain/host:port")
 
-	var web internal.ListFlags
+	var web m3.ListFlags
 	flag.Var(&web, "web", "Peer ID as W3 proxy ")
 
 	var local = flag.Bool("local", false, "Allow localhost access")
-	var blocked internal.ListFlags
+	var blocked m3.ListFlags
 	flag.Var(&blocked, "block", "Block port if local is enabled")
 
 	//
-	var alias internal.ListFlags
+	var alias m3.ListFlags
 	flag.Var(&alias, "alias", "Peer ID alias name:id")
 
 	// var debug = flag.Bool("debug", false, "Enable debug mode")
@@ -40,7 +40,7 @@ func main() {
 	}
 
 	//
-	var cfg = &internal.Config{}
+	var cfg = &m3.Config{}
 
 	cfg.Port = *port
 	cfg.Local = *local
@@ -49,5 +49,5 @@ func main() {
 	cfg.Web = web
 	cfg.Alias = aliasMap
 
-	internal.StartProxy(cfg)
+	m3.StartProxy(cfg)
 }

@@ -38,6 +38,9 @@ function build() {
     go build $FLAG -buildmode=exe -o bin/hexid ./cmd/hexid; if [ $? -ne 0 ]; then
         return 1
     fi
+    go build $FLAG -buildmode=exe -o bin/systray ./cmd/systray; if [ $? -ne 0 ]; then
+        return 1
+    fi
 
     echo "## Tidying up modules ..."
     go mod tidy

@@ -9,12 +9,17 @@ You may run setup.sh to have all the required projects setup automatically; howe
 
 wget -O - https://raw.githubusercontent.com/dhnt/m3/master/setup.sh | bash
 
+cd ~/dhnt/m3
+source env.sh
 
 ```
-mkdir ~/dhnt
-mkdir ~/dhnt/go
+#mkdir -p ~/dhnt
+#mkdir -p ~/dhnt/go
+mkdir -p ~/dhnt/go/bin
+
+export DHNT_BASE=~/dhnt
 export GOPATH=~/dhnt/go
-export PATH=$GOPATH/bin:$PATH
+export PATH=./:$GOPATH/bin:$DHNT_BASE/bin:$PATH
 ```
 
 ## Install required tools

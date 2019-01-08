@@ -12,10 +12,11 @@ function install_m3() {
     #no auto pull here
     ./build.sh
 
-    cp ~/dhnt/m3/bin/mirr $GOPATH/bin/
+    # cp ~/dhnt/m3/bin/mirr $GOPATH/bin/
 }
 
 function install_ipfs() {
+    export GOPATH=~/dhnt/go
     export GO111MODULE=off
 
     mkdir $GOPATH/src/github.com/ipfs
@@ -37,10 +38,11 @@ function install_ipfs() {
     ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/9001
     #ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
 
-    #cp cmd/ipfs/ipfs $GOPATH/bin/
+    #$GOPATH/bin/ipfs
 }
 
 function install_gogs() {
+    export GOPATH=~/dhnt/go
     export GO111MODULE=off
 
     mkdir -p $GOPATH/src/github.com/gogs
@@ -53,12 +55,14 @@ function install_gogs() {
 
     go build -tags "sqlite pam cert"
 
-    cp $GOPATH/src/github.com/gogs/gogs/gogs $GOPATH/bin/
+    #./gogs
+    #export GOGS_WORK_DIR=./
 }
 
 
 ## setup
 
+#mkdir -p ~/dhnt
 #mkdir -p ~/dhnt/go
 mkdir -p ~/dhnt/go/bin
 

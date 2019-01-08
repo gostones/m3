@@ -4,33 +4,92 @@ import (
 	"context"
 	"fmt"
 	"github.com/gostones/gpm"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
 )
 
-var gpm_config_json = `
+// ipfs, gogs, mirr
+var gpmConfigJSON = `
 [
-  {
-    "name": "gogs",
-    "command": "gogs web --port %v"
-  },
-  {
-    "name": "ipfs",
-    "command": "ipfs daemon",
-    "autoRestart": true
-  }
+	{
+		"name": "ipfs",
+		"command": "ipfs daemon",
+		"autoRestart": true,
+		"workDir": "%v/go/src/github.com/ipfs/go-ipfs"
+	},
+	{
+		"name": "gogs",
+		"command": "gogs web --port 3000",
+		"autoRestart": true,
+		"workDir": "%v/go/src/github.com/gogs/gogs"
+  	},
+	{
+		"name": "mirr",
+		"command": "mirr --port 18080",
+		"autoRestart": true,
+		"workDir": "%v/m3"
+	}
 ]
 `
 
-func StartGPM(gitPort int) {
+// createDir returns true if base does not exist and was created successfully
+// or false if it already exists; otherwise error
+func createDir(base string) (bool, error) {
+	src, err := os.Stat(base)
+
+	if os.IsNotExist(err) {
+		if errDir := os.MkdirAll(base, 0755); errDir != nil {
+			return false, errDir
+		}
+		return true, nil
+	}
+
+	if src.Mode().IsRegular() {
+		return false, fmt.Errorf("%v exists as file", base)
+	}
+
+	return false, nil
+}
+
+func readOrCreateConf(base string) (string, error) {
+	cf := base + "/gpm.json"
+	log.Println("GPM config file: ", cf)
+
+	data, err := ioutil.ReadFile(cf)
+	if err == nil {
+		return string(data), nil
+	}
+
+	data = []byte(fmt.Sprintf(gpmConfigJSON, base, base, base))
+	if err := ioutil.WriteFile(cf, data, 0644); err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
+// StartGPM starts core services: p2p, git, and proxy
+func StartGPM() {
+	base := GetDefaultBase()
+	if base == "" {
+		panic("No DHNT base found!")
+	}
+	// ensure base exist
+	if _, err := createDir(base); err != nil {
+		panic(err)
+	}
+	//
 	pm := gpm.NewProcessManager()
-	data := fmt.Sprintf(gpm_config_json, gitPort)
-	log.Println("gpm config: " + data)
-	err := pm.ParseConfig(data)
+	data, err := readOrCreateConf(base)
 	if err != nil {
-		log.Println("Could not parse config file", err)
-		return
+		panic(err)
+	}
+	log.Println("gpm config: " + data)
+
+	err = pm.ParseConfig(data)
+	if err != nil {
+		panic(err)
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())

@@ -271,10 +271,6 @@ func HTTPProxy(port int, nb *Neighborhood) {
 
 // StartProxy starts proxy services
 func StartProxy(cfg *Config) {
-	gitPort := FreePort()
-
-	go StartGPM(gitPort)
-
 	// clean up old p2p connections
 	err := P2PCloseAll()
 	if err != nil {
@@ -330,6 +326,7 @@ func StartProxy(cfg *Config) {
 	nb.Home.Add("."+myAddr, fmt.Sprintf("127.0.0.1:%v", rpPort))
 
 	// git
+	gitPort := 3000 //TODO read from config
 	nb.Home.Add("git.home", fmt.Sprintf("127.0.0.1:%v", gitPort))
 	nb.Home.Add("git."+myAddr, fmt.Sprintf("127.0.0.1:%v", gitPort))
 

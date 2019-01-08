@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"github.com/ilius/crock32"
 	"github.com/jpillora/backoff"
+	"github.com/mitchellh/go-homedir"
 	"github.com/multiformats/go-multihash"
+
 	"net"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -157,3 +160,25 @@ func IsHome(host string) bool {
 // 	sa[le-1] = "home"
 // 	return strings.Join(sa, "."), tld
 // }
+
+// GetDefaultBase returns $DHNT_BASE or $HOME/.dhnt if not found
+func GetDefaultBase() string {
+	base := os.Getenv("DHNT_BASE")
+	if base == "" {
+		home, err := homedir.Dir()
+		if err != nil {
+			base = fmt.Sprintf("%v/.dhnt", home)
+		}
+	}
+	return base
+}
+
+// GetDefaultPort returns $M3_PORT or 18080 if not found
+func GetDefaultPort() int {
+	if p := os.Getenv("M3_PORT"); p != "" {
+		if port, err := strconv.Atoi(p); err == nil {
+			return port
+		}
+	}
+	return 18080
+}

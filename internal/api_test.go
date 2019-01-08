@@ -24,11 +24,8 @@ func TestIsLive(t *testing.T) {
 	port := FreePort()
 
 	var cfg = &Config{}
-	//cfg.WebHost = fmt.Sprintf("http://localhost:%v", FreePort())
 
 	proxyPort := FreePort()
-	//cfg.Pals = []string{""}
-	//cfg.ProxyURL, _ = url.Parse(os.Getenv("http_proxy"))
 
 	t.Logf("Configuration: %v\n", cfg)
 
