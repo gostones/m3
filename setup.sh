@@ -78,7 +78,7 @@ install_gogs
 
 install_m3
 
-chmod 755 $GOPATH/bin/*
+chmod -R 755 $GOPATH/bin/
 
 echo "Done!"
 
