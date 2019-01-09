@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"os/signal"
+	//"os/signal"
 )
 
 // ipfs, gogs, mirr
@@ -69,6 +69,13 @@ func readOrCreateConf(base string) (string, error) {
 	return string(data), nil
 }
 
+var signalChan chan bool
+
+// StopGPM stops core services
+func StopGPM() {
+	signalChan <- true
+}
+
 // StartGPM starts core services: p2p, git, and proxy
 func StartGPM() {
 	base := GetDefaultBase()
@@ -98,8 +105,10 @@ func StartGPM() {
 		done <- pm.StartProcesses(ctx)
 	}()
 
-	signalChan := make(chan os.Signal, 1)
-	signal.Notify(signalChan, os.Interrupt)
+	//signalChan := make(chan os.Signal, 1)
+	//signal.Notify(signalChan, os.Interrupt)
+
+	signalChan = make(chan bool, 1)
 
 	select {
 	case err = <-done:

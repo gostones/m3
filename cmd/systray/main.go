@@ -12,10 +12,11 @@ import (
 
 func main() {
 	onExit := func() {
-		fmt.Println("Starting onExit")
+		//fmt.Println("Starting onExit")
 		//now := time.Now()
 		//ioutil.WriteFile(fmt.Sprintf(`on_exit_%d.txt`, now.UnixNano()), []byte(now.String()), 0644)
-		fmt.Println("Finished onExit")
+		//fmt.Println("Finished onExit")
+		m3.StopGPM()
 	}
 
 	go m3.StartGPM()
