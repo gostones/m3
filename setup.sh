@@ -4,6 +4,7 @@
 function install_m3() {
     export GO111MODULE=on
 
+    mkdir -p ~/dhnt
     cd ~/dhnt
     git clone https://github.com/dhnt/m3.git; if [ $? -ne 0 ]; then
         echo "Git repo exists?"
@@ -19,7 +20,7 @@ function install_ipfs() {
     export GOPATH=~/dhnt/go
     export GO111MODULE=off
 
-    mkdir $GOPATH/src/github.com/ipfs
+    mkdir -p $GOPATH/src/github.com/ipfs
     cd $GOPATH/src/github.com/ipfs
     git clone https://github.com/ipfs/go-ipfs.git; if [ $? -ne 0 ]; then
         echo "Git repo exists?"
