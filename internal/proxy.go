@@ -8,7 +8,7 @@ import (
 	//"github.com/elazarl/goproxy/ext/auth"
 	//"github.com/dhnt/m3/internal/lb"
 	"github.com/dhnt/m3/internal/rp"
-	"github.com/dhnt/m3/internal/sb"
+	//"github.com/dhnt/m3/internal/sb"
 
 	"bytes"
 	"io/ioutil"
@@ -298,18 +298,20 @@ func StartProxy(cfg *Config) {
 	w3Port := FreePort()
 	go W3Proxy(nb.My.ID, w3Port)
 
-	sbPort := FreePort()
-	sbAPIPort := FreePort()
-	sbBackends := [][]string{[]string{"*" + nb.My.ID, fmt.Sprintf("127.0.0.1:%v", w3Port)}}
+	// sbPort := FreePort()
+	// sbAPIPort := FreePort()
+	// sbBackends := [][]string{[]string{"*" + nb.My.ID, fmt.Sprintf("127.0.0.1:%v", w3Port)}}
 
-	for _, v := range cfg.Web {
-		pid := ToPeerID(v)
-		addr := nb.AddPeerProxy(pid)
-		sbBackends = append(sbBackends, []string{pid, addr})
-	}
-	go sb.SwitchBoard(sbPort, sbAPIPort, sbBackends)
+	// for _, v := range cfg.Web {
+	// 	pid := ToPeerID(v)
+	// 	addr := nb.AddPeerProxy(pid)
+	// 	sbBackends = append(sbBackends, []string{pid, addr})
+	// }
+	// go sb.SwitchBoard(sbPort, sbAPIPort, sbBackends)
 
-	nb.W3ProxyHost = fmt.Sprintf("127.0.0.1:%v", sbPort)
+	// nb.W3ProxyHost = fmt.Sprintf("127.0.0.1:%v", sbPort)
+
+	nb.W3ProxyHost = fmt.Sprintf("127.0.0.1:%v", w3Port)
 
 	// home
 	nb.Home = NewRouteRegistry()
@@ -330,8 +332,8 @@ func StartProxy(cfg *Config) {
 	nb.Home.Add("git.home", fmt.Sprintf("127.0.0.1:%v", gitPort))
 	nb.Home.Add("git."+myAddr, fmt.Sprintf("127.0.0.1:%v", gitPort))
 
-	// switchboard
-	nb.Home.Add("w3.sb.home", fmt.Sprintf("127.0.0.1:%v", sbAPIPort))
+	// // switchboard
+	// nb.Home.Add("w3.sb.home", fmt.Sprintf("127.0.0.1:%v", sbAPIPort))
 
 	for _, v := range cfg.Home {
 		pa := strings.SplitN(v, "/", 2) // domain/host:port
