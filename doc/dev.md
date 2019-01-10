@@ -2,15 +2,24 @@
 
 ## Set up
 
-M3 source code and third party projects will be checked out under dhnt.
-For third party Golang projects that still require the GOPATH to build will go into dhnt/go.
 
-You may run setup.sh to have all the required projects setup automatically; however if it fails, please follow the manual steps.
+You may run setup.sh to have all the required projects set up automatically as follows:
 
+```
 wget -O - https://raw.githubusercontent.com/dhnt/m3/master/setup.sh | bash
 
-cd ~/dhnt/m3
-source env.sh
+source ~/dhnt/m3/env.sh; systray
+```
+
+If everything goes well, you should now have M3 up and running.
+
+
+However if it failed, please follow the following manual steps.
+
+Assuming M3 source code and third party projects will be checked out under `dhnt`.
+For third party Golang projects that still require the GOPATH to build will go into dhnt/go.
+
+
 
 ```
 #mkdir -p ~/dhnt
