@@ -19,7 +19,7 @@ type Health struct {
 
 func HealthHandlerFunc(proxyURL string) http.HandlerFunc {
 	const elapse int64 = 60000 //one min
-	last := toTimestamp(time.Now())
+	last := ToTimestamp(time.Now())
 	healthy := false
 	mutex := &sync.Mutex{}
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {

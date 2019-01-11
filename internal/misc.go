@@ -183,12 +183,16 @@ func GetDefaultPort() int {
 	return 18080
 }
 
-// GetPort returns port from env
-func GetPort(env string, port int) int {
+// GetIntEnv returns int env or default
+func GetIntEnv(env string, i int) int {
 	if p := os.Getenv(env); p != "" {
-		if port, err := strconv.Atoi(p); err == nil {
-			return port
+		if i, err := strconv.Atoi(p); err == nil {
+			return i
 		}
 	}
-	return port
+	return i
+}
+
+func ToTimestamp(d time.Time) int64 {
+	return d.UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))
 }

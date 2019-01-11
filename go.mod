@@ -18,6 +18,8 @@ require (
 	github.com/ilius/crock32 v0.0.0-20180429101545-733fd36abb8c
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7
 	github.com/jtolds/gls v4.2.1+incompatible // indirect
+	github.com/kardianos/osext v0.0.0-20170510131534-ae77be60afb1 // indirect
+	github.com/kardianos/service v0.0.0-20181115005516-4c239ee84e7b
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/minio/blake2b-simd v0.0.0-20160723061019-3f5f724cb5b1 // indirect

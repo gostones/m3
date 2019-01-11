@@ -2,6 +2,8 @@ package internal
 
 import (
 	"context"
+	"path/filepath"
+
 	"fmt"
 	"github.com/gostones/gpm"
 	"io/ioutil"
@@ -60,7 +62,7 @@ func createDir(base string) (bool, error) {
 }
 
 func readOrCreateConf(base string) (string, error) {
-	cf := base + "/gpm.json"
+	cf := filepath.Join(base, "etc/gpm.json")
 	log.Println("GPM config file: ", cf)
 
 	data, err := ioutil.ReadFile(cf)

@@ -9,7 +9,7 @@ import (
 
 //W3Proxy start a proxy to W3
 func W3Proxy(pid string, port int) {
-	hostport := fmt.Sprintf(":%v", port)
+	address := fmt.Sprintf(":%v", port)
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.NonproxyHandler = HealthHandlerFunc(fmt.Sprintf("http://127.0.0.1:%v", port))
 
@@ -23,6 +23,6 @@ func W3Proxy(pid string, port int) {
 		return r
 	})
 
-	log.Printf("W3 proxy listening: %v\n", hostport)
-	log.Fatal(http.ListenAndServe(hostport, proxy))
+	log.Printf("W3 proxy listening: %v\n", address)
+	log.Fatal(http.ListenAndServe(address, proxy))
 }
