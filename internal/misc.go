@@ -182,3 +182,13 @@ func GetDefaultPort() int {
 	}
 	return 18080
 }
+
+// GetPort returns port from env
+func GetPort(env string, port int) int {
+	if p := os.Getenv(env); p != "" {
+		if port, err := strconv.Atoi(p); err == nil {
+			return port
+		}
+	}
+	return port
+}

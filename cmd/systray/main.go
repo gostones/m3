@@ -6,8 +6,6 @@ import (
 	m3 "github.com/dhnt/m3/internal"
 	"github.com/getlantern/systray"
 	"github.com/skratchdot/open-golang/open"
-	"os"
-	"strconv"
 )
 
 func main() {
@@ -23,15 +21,6 @@ func main() {
 
 	// Should be called at the very beginning of main().
 	systray.Run(onReady, onExit)
-}
-
-func getPort(env string, port int) int {
-	if p := os.Getenv(env); p != "" {
-		if port, err := strconv.Atoi(p); err == nil {
-			return port
-		}
-	}
-	return port
 }
 
 //
@@ -97,13 +86,13 @@ func onReady() {
 			// 	mEnabled.SetTitle("Disabled")
 			// 	mEnabled.Disable()
 			case <-mHome.ClickedCh:
-				open.Run(fmt.Sprintf("http://localhost:%v/", getPort("M3_HOME_PORT", 5001)))
+				open.Run(fmt.Sprintf("http://localhost:%v/", m3.GetPort("M3_HOME_PORT", 5001)))
 
 			case <-mGit.ClickedCh:
-				open.Run(fmt.Sprintf("http://localhost:%v/", getPort("M3_GIT_PORT", 3000)))
+				open.Run(fmt.Sprintf("http://localhost:%v/", m3.GetPort("M3_GIT_PORT", 3000)))
 
 			case <-mTerm.ClickedCh:
-				open.Run(fmt.Sprintf("http://localhost:%v/", getPort("M3_TERM_PORT", 50022)))
+				open.Run(fmt.Sprintf("http://localhost:%v/", m3.GetPort("M3_TERM_PORT", 50022)))
 			// case <-mToggle.ClickedCh:
 			// 	if shown {
 			// 		mQuitOrig.Hide()
