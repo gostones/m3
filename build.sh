@@ -32,13 +32,13 @@ function build() {
     fi
 
     #bin
-    go build $FLAG -buildmode=exe -o bin/mirr ./cmd/mirr; if [ $? -ne 0 ]; then
+    go build $FLAG -buildmode=exe -o $GOPATH/bin/mirr ./cmd/mirr; if [ $? -ne 0 ]; then
         return 1
     fi
-    go build $FLAG -buildmode=exe -o bin/hexid ./cmd/hexid; if [ $? -ne 0 ]; then
+    go build $FLAG -buildmode=exe -o $GOPATH/bin/hexid ./cmd/hexid; if [ $? -ne 0 ]; then
         return 1
     fi
-    go build $FLAG -buildmode=exe -o bin/systray ./cmd/systray; if [ $? -ne 0 ]; then
+    go build $FLAG -buildmode=exe -o $GOPATH/bin/systray ./cmd/systray; if [ $? -ne 0 ]; then
         return 1
     fi
 

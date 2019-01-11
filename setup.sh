@@ -12,10 +12,9 @@ function install_m3() {
     cd m3
     #no auto pull here
     ./build.sh
-
-    # cp ~/dhnt/m3/bin/mirr $GOPATH/bin/
 }
 
+# p2p
 function install_ipfs() {
     export GOPATH=~/dhnt/go
     export GO111MODULE=off
@@ -42,6 +41,7 @@ function install_ipfs() {
     #$GOPATH/bin/ipfs
 }
 
+# git server
 function install_gogs() {
     export GOPATH=~/dhnt/go
     export GO111MODULE=off
@@ -54,18 +54,39 @@ function install_gogs() {
     cd gogs
     git pull
 
-    go build -tags "sqlite pam cert"
+    go install -tags "sqlite pam cert"
 
-    #./gogs
-    #export GOGS_WORK_DIR=./
+    #
+    export GOGS_WORK_DIR=~/dhnt/var/gogs
+
+    mkdir -p $GOGS_WORK_DIR
+    cp -R $GOPATH/src/github.com/gogs/gogs/templates $GOGS_WORK_DIR
+    #
 }
 
+# web terminal
+function install_gotty() {
+    export GOPATH=~/dhnt/go
+    export GO111MODULE=on
+
+    mkdir -p $GOPATH/src/github.com/yudai
+    cd $GOPATH/src/github.com/yudai
+    git clone https://github.com/yudai/gotty.git; if [ $? -ne 0 ]; then
+        echo "Git repo exists?"
+    fi
+    cd gotty
+    git pull
+
+    go install
+}
 
 ## setup
 
 #mkdir -p ~/dhnt
 #mkdir -p ~/dhnt/go
 mkdir -p ~/dhnt/go/bin
+
+export DHNT_BASE=~/dhnt
 
 export GO111MODULE=auto
 export GOPATH=~/dhnt/go
@@ -76,6 +97,8 @@ export PATH=$GOPATH/bin:$PATH
 install_ipfs
 
 install_gogs
+
+install_gotty
 
 install_m3
 

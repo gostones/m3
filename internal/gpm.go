@@ -24,6 +24,12 @@ var gpmConfigJSON = `
 		"command": "gogs web --port 3000",
 		"autoRestart": true,
 		"workDir": "%v/go/src/github.com/gogs/gogs"
+	},
+	{
+		"name": "gotty",
+		"command": "gotty --port 50022 --permit-write login",
+		"autoRestart": true,
+		"workDir": "%v/go/src/github.com/yudai/gotty"
   	},
 	{
 		"name": "mirr",
@@ -62,7 +68,7 @@ func readOrCreateConf(base string) (string, error) {
 		return string(data), nil
 	}
 
-	data = []byte(fmt.Sprintf(gpmConfigJSON, base, base, base))
+	data = []byte(fmt.Sprintf(gpmConfigJSON, base, base, base, base))
 	if err := ioutil.WriteFile(cf, data, 0644); err != nil {
 		return "", err
 	}

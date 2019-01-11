@@ -64,6 +64,8 @@ func onReady() {
 
 		mGit := systray.AddMenuItem("Git", "Git repository")
 
+		mTerm := systray.AddMenuItem("Term", "Terminal")
+
 		// Sets the icon of a menu item. Only available on Mac.
 		// mQuit.SetIcon(icon.Data)
 		mAbout := systray.AddMenuItem("About", "M3 webstie")
@@ -95,10 +97,13 @@ func onReady() {
 			// 	mEnabled.SetTitle("Disabled")
 			// 	mEnabled.Disable()
 			case <-mHome.ClickedCh:
-				open.Run(fmt.Sprintf("http://localhost:%v/", getPort("M3_HOME_PORT", 8080)))
+				open.Run(fmt.Sprintf("http://localhost:%v/", getPort("M3_HOME_PORT", 5001)))
 
 			case <-mGit.ClickedCh:
 				open.Run(fmt.Sprintf("http://localhost:%v/", getPort("M3_GIT_PORT", 3000)))
+
+			case <-mTerm.ClickedCh:
+				open.Run(fmt.Sprintf("http://localhost:%v/", getPort("M3_TERM_PORT", 50022)))
 			// case <-mToggle.ClickedCh:
 			// 	if shown {
 			// 		mQuitOrig.Hide()
