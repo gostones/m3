@@ -8,7 +8,12 @@ You may run setup.sh to have all the required projects set up automatically as f
 ```
 wget -O - https://raw.githubusercontent.com/dhnt/m3/master/setup.sh | bash
 
-source ~/dhnt/m3/env.sh; systray
+source ~/dhnt/m3/env.sh
+
+sudo -E m3d install
+sudo -E m3d start
+
+systray
 ```
 
 If everything goes well, you should now have M3 up and running.

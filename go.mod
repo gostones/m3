@@ -18,8 +18,6 @@ require (
 	github.com/ilius/crock32 v0.0.0-20180429101545-733fd36abb8c
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7
 	github.com/jtolds/gls v4.2.1+incompatible // indirect
-	github.com/kardianos/osext v0.0.0-20170510131534-ae77be60afb1 // indirect
-	github.com/kardianos/service v0.0.0-20181115005516-4c239ee84e7b
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/minio/blake2b-simd v0.0.0-20160723061019-3f5f724cb5b1 // indirect
@@ -36,6 +34,7 @@ require (
 	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d // indirect
 	github.com/smartystreets/goconvey v0.0.0-20181108003508-044398e4856c // indirect
 	github.com/spaolacci/murmur3 v0.0.0-20180118202830-f09979ecbc72 // indirect
+	github.com/takama/daemon v0.0.0-20180403113744-aa76b0035d12
 	github.com/zalando/skipper v0.10.147
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9 // indirect
 	golang.org/x/sys v0.0.0-20181206074257-70b957f3b65e // indirect

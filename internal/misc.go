@@ -183,6 +183,16 @@ func GetDefaultPort() int {
 	return 18080
 }
 
+// GetDaemonPort returns $M3_PORT or 18080 if not found
+func GetDaemonPort() int {
+	if p := os.Getenv("M3D_PORT"); p != "" {
+		if port, err := strconv.Atoi(p); err == nil {
+			return port
+		}
+	}
+	return 18082
+}
+
 // GetIntEnv returns int env or default
 func GetIntEnv(env string, i int) int {
 	if p := os.Getenv(env); p != "" {
