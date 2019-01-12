@@ -9,6 +9,7 @@ import (
 
 	"net"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -161,16 +162,37 @@ func IsHome(host string) bool {
 // 	return strings.Join(sa, "."), tld
 // }
 
-// GetDefaultBase returns $DHNT_BASE or $HOME/.dhnt if not found
+// GetDefaultBase returns $DHNT_BASE or $HOME/dhnt if not found
 func GetDefaultBase() string {
 	base := os.Getenv("DHNT_BASE")
-	if base == "" {
-		home, err := homedir.Dir()
-		if err != nil {
-			base = fmt.Sprintf("%v/.dhnt", home)
+	if base != "" {
+		return base
+	}
+	home, err := homedir.Dir()
+	if err != nil {
+		base = fmt.Sprintf("%v/dhnt", home)
+	}
+
+	return getBaseFromExe()
+}
+
+func getBaseFromExe() string {
+	// dhnt/go/bin/m3d
+	exe, err := os.Executable()
+	if err != nil {
+		return ""
+	}
+	dir := filepath.Dir(exe)
+	for {
+		dir, file := filepath.Split(dir)
+		if file == "dhnt" {
+			return filepath.Join(dir, file)
+		}
+		if dir == "" {
+			break
 		}
 	}
-	return base
+	return ""
 }
 
 // GetDefaultPort returns $M3_PORT or 18080 if not found

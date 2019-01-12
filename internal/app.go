@@ -14,7 +14,7 @@ type AppDesc struct {
 	WorkingDirectory string `json:"workDir"`
 }
 
-//LoadAppDesc loads app configuration by name from ./, $dhnt_base/etc/ or $HOME/.dhnt/etc/
+//LoadAppDesc loads app configuration by name from ./, $dhnt_base/etc/ or $HOME/dhnt/etc/
 func LoadAppDesc(name string) (*AppDesc, error) {
 	// current dir
 	desc, err := loadJSON(name)

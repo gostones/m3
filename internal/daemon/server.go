@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"net"
 	"net/rpc"
+	"sync"
+
+	"github.com/dhnt/m3/internal"
 )
 
 type Request struct {
@@ -23,35 +26,49 @@ const (
 // Handler holds the methods to be exposed by the RPC
 // server as well as properties
 type Handler struct {
-	service *Service
+	running bool
+	mux     sync.Mutex
+}
+
+func (r *Handler) start() {
+	r.mux.Lock()
+	defer r.mux.Unlock()
+	if !r.running {
+		r.running = true
+		internal.StartGPM()
+	}
+}
+
+func (r *Handler) stop() {
+	r.mux.Lock()
+	defer r.mux.Unlock()
+	internal.StopGPM()
+
+	r.running = false
 }
 
 // Start starts service
 func (r *Handler) Start(req Request, res *Response) error {
-	msg, err := r.service.Start()
-
-	res.Status = (err == nil)
-	res.Message = msg
+	r.start()
+	res.Status = true
+	res.Message = "started"
 
 	return nil
 }
 
 // Stop stops service
 func (r *Handler) Stop(req Request, res *Response) error {
-	msg, err := r.service.Stop()
-
-	res.Status = (err == nil)
-	res.Message = msg
+	r.stop()
+	res.Status = true
+	res.Message = "stopped"
 
 	return nil
 }
 
 // Status returns service status
 func (r *Handler) Status(req Request, res *Response) error {
-	msg, err := r.service.Status()
-
-	res.Status = (err == nil)
-	res.Message = msg
+	res.Status = r.running
+	res.Message = fmt.Sprintf("running - %v", r.running)
 
 	return nil
 }
@@ -80,10 +97,8 @@ func (r *Server) Addr() string {
 }
 
 // Serve initializes the RPC server.
-func (r *Server) Serve(service *Service) (err error) {
-	handler := &Handler{
-		service: service,
-	}
+func (r *Server) Serve() (err error) {
+	handler := &Handler{}
 	err = rpc.Register(handler)
 	if err != nil {
 		return
@@ -92,6 +107,9 @@ func (r *Server) Serve(service *Service) (err error) {
 	if err != nil {
 		return
 	}
+
+	handler.start()
+	defer handler.stop()
 
 	rpc.Accept(r.listener)
 

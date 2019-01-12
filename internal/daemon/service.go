@@ -13,7 +13,7 @@ import (
 
 const (
 	// name of the service
-	name        = "M3"
+	name        = "dhnt.m3"
 	description = "M3 Service"
 )
 
@@ -30,7 +30,7 @@ type Service struct {
 // Manage by daemon commands or run the daemon
 func (service *Service) Manage() (string, error) {
 
-	usage := "Usage: m3d install | remove | start | stop | status"
+	usage := "Usage: m3d install | uninstall | start | stop | status"
 
 	// if received any kind of command, do it
 	if len(os.Args) > 1 {
@@ -38,13 +38,11 @@ func (service *Service) Manage() (string, error) {
 		switch command {
 		case "install":
 			return service.Install()
-		case "remove":
+		case "uninstall":
 			return service.Remove()
 		case "start":
-			go internal.StartGPM()
 			return service.Start()
 		case "stop":
-			//internal.StopGPM()
 			return service.Stop()
 		case "status":
 			return service.Status()
@@ -52,6 +50,7 @@ func (service *Service) Manage() (string, error) {
 			return usage, nil
 		}
 	}
+
 	// Do something, call your goroutines, etc
 
 	// Set up channel on which to send signal notifications.
@@ -67,7 +66,9 @@ func (service *Service) Manage() (string, error) {
 		Port: port,
 	}
 
-	go listener.Serve(service)
+	defer listener.Close()
+
+	go listener.Serve()
 
 	// loop work cycle with accept connections or interrupt
 	// by system signal
@@ -76,8 +77,6 @@ func (service *Service) Manage() (string, error) {
 		case killSignal := <-interrupt:
 			stdlog.Println("Got signal:", killSignal)
 			stdlog.Println("Stoping listening on ", listener.Addr())
-			listener.Close()
-			internal.StopGPM()
 
 			if killSignal == os.Interrupt {
 				return "Daemon was interrupted by system signal", nil
