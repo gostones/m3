@@ -23,6 +23,7 @@ func main() {
 
 	flag.Parse()
 
+	gpm := m3.NewGPM()
 	//
 	endpoint := fmt.Sprintf("http://localhost:%v", *svc)
 	address := fmt.Sprintf(":%v", *port)
@@ -45,13 +46,13 @@ func main() {
 
 	http.HandleFunc("/start", func(w http.ResponseWriter, req *http.Request) {
 		log.Println("Starting M3 ...")
-		go m3.StartGPM()
+		go gpm.Start()
 
 		response("started", w)
 	})
 	http.HandleFunc("/stop", func(w http.ResponseWriter, req *http.Request) {
 		log.Println("Stopping M3 ...")
-		m3.StopGPM()
+		gpm.Stop()
 
 		response("stopped", w)
 	})

@@ -27,6 +27,7 @@ const (
 // server as well as properties
 type Handler struct {
 	running bool
+	gpm     *internal.GPM
 	mux     sync.Mutex
 }
 
@@ -35,14 +36,14 @@ func (r *Handler) start() {
 	defer r.mux.Unlock()
 	if !r.running {
 		r.running = true
-		internal.StartGPM()
+		r.gpm.Start()
 	}
 }
 
 func (r *Handler) stop() {
 	r.mux.Lock()
 	defer r.mux.Unlock()
-	internal.StopGPM()
+	r.gpm.Stop()
 
 	r.running = false
 }
@@ -98,7 +99,13 @@ func (r *Server) Addr() string {
 
 // Serve initializes the RPC server.
 func (r *Server) Serve() (err error) {
-	handler := &Handler{}
+	stdlog.Println("RPC Serve starting ...")
+
+	dumpEnv()
+
+	handler := &Handler{
+		gpm: internal.NewGPM(),
+	}
 	err = rpc.Register(handler)
 	if err != nil {
 		return
@@ -111,7 +118,11 @@ func (r *Server) Serve() (err error) {
 	handler.start()
 	defer handler.stop()
 
+	stdlog.Println("RPC Serve accepting ...")
+
 	rpc.Accept(r.listener)
+
+	stdlog.Println("RPC Serve exited.")
 
 	return
 }

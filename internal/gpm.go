@@ -77,15 +77,21 @@ func readOrCreateConf(base string) (string, error) {
 	return string(data), nil
 }
 
-var signalChan chan bool
+type GPM struct {
+	signalChan chan bool
+}
+
+func NewGPM() *GPM {
+	return &GPM{}
+}
 
 // StopGPM stops core services
-func StopGPM() {
-	signalChan <- true
+func (r *GPM) Stop() {
+	r.signalChan <- true
 }
 
 // StartGPM starts core services: p2p, git, and proxy
-func StartGPM() {
+func (r *GPM) Start() {
 	base := GetDefaultBase()
 	if base == "" {
 		panic("No DHNT base found!")
@@ -116,7 +122,7 @@ func StartGPM() {
 	//signalChan := make(chan os.Signal, 1)
 	//signal.Notify(signalChan, os.Interrupt)
 
-	signalChan = make(chan bool, 1)
+	r.signalChan = make(chan bool, 1)
 
 	select {
 	case err = <-done:
@@ -126,7 +132,7 @@ func StartGPM() {
 		} else {
 			log.Println("Processes finished by themselves.")
 		}
-	case <-signalChan:
+	case <-r.signalChan:
 		log.Println("Got interrupt, stopping processes.")
 		cancel()
 		select {
@@ -139,3 +145,66 @@ func StartGPM() {
 		}
 	}
 }
+
+// var signalChan chan bool
+
+// // StopGPM stops core services
+// func StopGPM() {
+// 	signalChan <- true
+// }
+
+// // StartGPM starts core services: p2p, git, and proxy
+// func StartGPM() {
+// 	base := GetDefaultBase()
+// 	if base == "" {
+// 		panic("No DHNT base found!")
+// 	}
+// 	// ensure base exist
+// 	if _, err := createDir(base); err != nil {
+// 		panic(err)
+// 	}
+// 	//
+// 	pm := gpm.NewProcessManager()
+// 	data, err := readOrCreateConf(base)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	log.Println("gpm config: " + data)
+
+// 	err = pm.ParseConfig(data)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	ctx, cancel := context.WithCancel(context.Background())
+// 	done := make(chan error, 1)
+// 	go func() {
+// 		done <- pm.StartProcesses(ctx)
+// 	}()
+
+// 	//signalChan := make(chan os.Signal, 1)
+// 	//signal.Notify(signalChan, os.Interrupt)
+
+// 	signalChan = make(chan bool, 1)
+
+// 	select {
+// 	case err = <-done:
+// 		cancel()
+// 		if err != nil {
+// 			log.Println("Error while running processes: ", err)
+// 		} else {
+// 			log.Println("Processes finished by themselves.")
+// 		}
+// 	case <-signalChan:
+// 		log.Println("Got interrupt, stopping processes.")
+// 		cancel()
+// 		select {
+// 		case err = <-done:
+// 			if err != nil {
+// 				log.Println("Error while stopping processes: ", err)
+// 			} else {
+// 				log.Println("All processes stopped without issues.")
+// 			}
+// 		}
+// 	}
+// }

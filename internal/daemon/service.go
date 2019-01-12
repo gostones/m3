@@ -51,6 +51,8 @@ func (service *Service) Manage() (string, error) {
 		}
 	}
 
+	stdlog.Printf("Manage args: %v", os.Args)
+
 	// Do something, call your goroutines, etc
 
 	// Set up channel on which to send signal notifications.
@@ -65,6 +67,8 @@ func (service *Service) Manage() (string, error) {
 	listener := &Server{
 		Port: port,
 	}
+
+	stdlog.Printf("Starting gpm daemon")
 
 	defer listener.Close()
 
@@ -105,4 +109,10 @@ func Startup() {
 		os.Exit(1)
 	}
 	fmt.Println(status)
+}
+
+func dumpEnv() {
+	for _, pair := range os.Environ() {
+		stdlog.Println(pair)
+	}
 }
