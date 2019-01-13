@@ -29,6 +29,7 @@ type Service struct {
 
 // Manage by daemon commands or run the daemon
 func (service *Service) Manage() (string, error) {
+	stdlog.Printf("Manage args: %v", os.Args)
 
 	usage := "Usage: m3d install | uninstall | start | stop | status"
 
@@ -50,8 +51,6 @@ func (service *Service) Manage() (string, error) {
 			return usage, nil
 		}
 	}
-
-	stdlog.Printf("Manage args: %v", os.Args)
 
 	// Do something, call your goroutines, etc
 
@@ -95,9 +94,10 @@ func init() {
 	errlog = log.New(os.Stderr, "", 0)
 }
 
-// Startup initializes daemon service
-func Startup() {
-	stdlog.Println("starting up ...")
+// Run daemon service
+func Run() {
+	stdlog.Println("Daemon ...")
+	dumpEnv()
 
 	srv, err := daemon.New(name, description, dependencies...)
 	if err != nil {
@@ -117,6 +117,8 @@ func Startup() {
 }
 
 func dumpEnv() {
+	stdlog.Println("dump env ...")
+
 	for _, pair := range os.Environ() {
 		stdlog.Println(pair)
 	}

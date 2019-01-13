@@ -100,6 +100,7 @@ func (r *Server) Addr() string {
 // Serve initializes the RPC server.
 func (r *Server) Serve() (err error) {
 	stdlog.Println("RPC Serve starting ...")
+	//internal.SetDefaultEnv()
 
 	dumpEnv()
 

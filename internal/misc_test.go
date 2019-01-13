@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"os"
 	"testing"
 )
 
@@ -196,9 +195,9 @@ func TestIsHOme(t *testing.T) {
 	}
 }
 
-func TestSetDefaultEnv(t *testing.T) {
-	SetDefaultEnv()
-	for _, nv := range os.Environ() {
-		t.Log(nv)
-	}
-}
+// func TestSetDefaultEnv(t *testing.T) {
+// 	SetDefaultEnv()
+// 	for _, nv := range os.Environ() {
+// 		t.Log(nv)
+// 	}
+// }

@@ -234,18 +234,18 @@ func ToTimestamp(d time.Time) int64 {
 	return d.UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))
 }
 
-// SetDefaultPath sets required env
-func SetDefaultEnv() {
-	base := getBase()
-	gopath := fmt.Sprintf("%v/go", base)
-	gogsworkdir := fmt.Sprintf("%v/var/gogs", base)
+// // SetDefaultPath sets required env
+// func SetDefaultEnv() {
+// 	base := getBase()
+// 	gopath := fmt.Sprintf("%v/go", base)
+// 	gogsworkdir := fmt.Sprintf("%v/var/gogs", base)
 
-	os.Setenv("DHNT_BASE", base)
-	os.Setenv("GOPATH", gopath)
-	os.Setenv("GOGS_WORK_DIR", gogsworkdir)
+// 	os.Setenv("DHNT_BASE", base)
+// 	os.Setenv("GOPATH", gopath)
+// 	os.Setenv("GOGS_WORK_DIR", gogsworkdir)
 
-	AddPath([]string{
-		fmt.Sprintf("%v/bin", gopath),
-		fmt.Sprintf("%v/bin", base),
-	})
-}
+// 	AddPath([]string{
+// 		fmt.Sprintf("%v/bin", gopath),
+// 		fmt.Sprintf("%v/bin", base),
+// 	})
+// }
