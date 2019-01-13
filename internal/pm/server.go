@@ -99,10 +99,10 @@ func (r *Server) Addr() string {
 
 // Serve initializes the RPC server.
 func (r *Server) Serve() (err error) {
-	stdlog.Println("RPC Serve starting ...")
+	internal.Stdlog.Println("RPC Serve starting ...")
 	//internal.SetDefaultEnv()
 
-	dumpEnv()
+	internal.DumpEnv()
 
 	handler := &Handler{
 		gpm: internal.NewGPM(),
@@ -120,11 +120,11 @@ func (r *Server) Serve() (err error) {
 
 	go handler.start()
 
-	stdlog.Println("RPC Serve accepting ...")
+	internal.Stdlog.Println("RPC Serve accepting ...")
 
 	rpc.Accept(r.listener)
 
-	stdlog.Println("RPC Serve exited.")
+	internal.Stdlog.Println("RPC Serve exited.")
 
 	return
 }

@@ -60,18 +60,9 @@ func (service *Service) Manage() (string, error) {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
 
-	// Set up listener for defined host and port
-	port := internal.GetDaemonPort()
-
-	listener := &Server{
-		Port: port,
-	}
-
-	stdlog.Printf("Starting gpm daemon")
-
-	defer listener.Close()
-
-	go listener.Serve()
+	// Set up
+	base := internal.GetDefaultBase()
+	internal.Execute(base, "go/bin/pm")
 
 	// loop work cycle with accept connections or interrupt
 	// by system signal
@@ -79,7 +70,7 @@ func (service *Service) Manage() (string, error) {
 		select {
 		case killSignal := <-interrupt:
 			stdlog.Println("Got signal:", killSignal)
-			stdlog.Println("Stoping listening on ", listener.Addr())
+			//stdlog.Println("Stoping listening on ", listener.Addr())
 
 			if killSignal == os.Interrupt {
 				return "Daemon was interrupted by system signal", nil

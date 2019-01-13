@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/ilius/crock32"
 	"github.com/jpillora/backoff"
@@ -9,6 +10,7 @@ import (
 
 	"net"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strconv"
@@ -163,7 +165,6 @@ func IsHome(host string) bool {
 // }
 
 // GetDefaultBase returns $DHNT_BASE or $HOME/dhnt if not found
-
 func GetDefaultBase() string {
 	return getBase()
 }
@@ -249,3 +250,59 @@ func ToTimestamp(d time.Time) int64 {
 // 		fmt.Sprintf("%v/bin", base),
 // 	})
 // }
+
+// Execute sets up env and runs file
+func Execute(base, file string) error {
+	// binary, err := exec.LookPath(file)
+	// if err != nil {
+	// 	return err
+	// }
+	binary := filepath.Join(base, file)
+	cmd := exec.Command(binary)
+
+	//TODO template?
+	el := []string{
+		fmt.Sprintf("DHNT_BASE=%v/go", base),
+		fmt.Sprintf("GOPATH=%v/go", base),
+		fmt.Sprintf("GOGS_WORK_DIR=%v/var/gogs", base),
+		fmt.Sprintf("PATH=%v", AddPath(os.Getenv("PATH"), []string{
+			fmt.Sprintf("%v/go/bin", base),
+			fmt.Sprintf("%v/bin", base),
+		})),
+	}
+	env := os.Environ()
+	for _, e := range el {
+		env = append(env, e)
+	}
+	cmd.Env = env
+
+	//
+	// cmdOut, err := cmd.StdoutPipe()
+	// cmdErr, _ := cmd.StderrPipe()
+	// read stdout and stderr
+	// stdOutput, _ := ioutil.ReadAll(cmdOut)
+	// errOutput, _ := ioutil.ReadAll(cmdErr)
+	// fmt.Printf("STDOUT: %s\n", stdOutput)
+	// fmt.Printf("ERROUT: %s\n", errOutput)
+
+	cmdOut, err := cmd.StdoutPipe()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "error creating stdout", err)
+		return err
+	}
+
+	scanner := bufio.NewScanner(cmdOut)
+	go func() {
+		for scanner.Scan() {
+			fmt.Printf("> %s\n", scanner.Text())
+		}
+	}()
+
+	err = cmd.Start()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "error starting cmd", err)
+		return err
+	}
+
+	return cmd.Wait()
+}
