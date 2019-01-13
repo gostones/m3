@@ -97,12 +97,17 @@ func init() {
 
 // Startup initializes daemon service
 func Startup() {
+	stdlog.Println("starting up ...")
+
 	srv, err := daemon.New(name, description, dependencies...)
 	if err != nil {
 		errlog.Println("Error: ", err)
 		os.Exit(1)
 	}
 	service := &Service{srv}
+
+	stdlog.Printf("Calling Manage. service: %v", service)
+
 	status, err := service.Manage()
 	if err != nil {
 		errlog.Println(status, "\nError: ", err)

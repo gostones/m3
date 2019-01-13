@@ -163,7 +163,12 @@ func IsHome(host string) bool {
 // }
 
 // GetDefaultBase returns $DHNT_BASE or $HOME/dhnt if not found
+
 func GetDefaultBase() string {
+	return getBase()
+}
+
+func getBase() string {
 	base := os.Getenv("DHNT_BASE")
 	if base != "" {
 		return base
@@ -231,7 +236,7 @@ func ToTimestamp(d time.Time) int64 {
 
 // SetDefaultPath sets required env
 func SetDefaultEnv() {
-	base := GetDefaultBase()
+	base := getBase()
 	gopath := fmt.Sprintf("%v/go", base)
 	gogsworkdir := fmt.Sprintf("%v/var/gogs", base)
 
