@@ -115,8 +115,9 @@ func (r *Server) Serve() (err error) {
 		return
 	}
 
-	handler.start()
 	defer handler.stop()
+
+	go handler.start()
 
 	stdlog.Println("RPC Serve accepting ...")
 
