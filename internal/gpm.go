@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/gostones/gpm"
 	"io/ioutil"
-	"log"
 	"os"
 	"os/signal"
 )
@@ -63,7 +62,7 @@ func createDir(base string) (bool, error) {
 
 func readOrCreateConf(base string) (string, error) {
 	cf := filepath.Join(base, "etc/gpm.json")
-	log.Println("GPM config file: ", cf)
+	logger.Println("GPM config file: ", cf)
 
 	data, err := ioutil.ReadFile(cf)
 	if err == nil {
@@ -111,7 +110,7 @@ func (r *GPM) Run() {
 	if err != nil {
 		panic(err)
 	}
-	log.Println("gpm config: " + data)
+	logger.Println("gpm config: " + data)
 
 	err = pm.ParseConfig(data)
 	if err != nil {
@@ -133,30 +132,30 @@ func (r *GPM) Run() {
 	case err = <-done:
 		cancel()
 		if err != nil {
-			log.Println("Error while running processes: ", err)
+			logger.Println("Error while running processes: ", err)
 		} else {
-			log.Println("Processes finished by themselves.")
+			logger.Println("Processes finished by themselves.")
 		}
 	case <-signalChan:
-		log.Println("Got interrupt, stopping processes.")
+		logger.Println("Got interrupt, stopping processes.")
 		cancel()
 		select {
 		case err = <-done:
 			if err != nil {
-				log.Println("Error while stopping processes: ", err)
+				logger.Println("Error while stopping processes: ", err)
 			} else {
-				log.Println("All processes stopped without issues.")
+				logger.Println("All processes stopped without issues.")
 			}
 		}
 	case <-r.signalChan:
-		log.Println("Got interrupt, stopping processes.")
+		logger.Println("Got interrupt, stopping processes.")
 		cancel()
 		select {
 		case err = <-done:
 			if err != nil {
-				log.Println("Error while stopping processes: ", err)
+				logger.Println("Error while stopping processes: ", err)
 			} else {
-				log.Println("All processes stopped without issues.")
+				logger.Println("All processes stopped without issues.")
 			}
 		}
 	}
@@ -178,7 +177,7 @@ func (r *GPM) Run() {
 // 	if err != nil {
 // 		panic(err)
 // 	}
-// 	log.Println("gpm config: " + data)
+// 	logger.Println("gpm config: " + data)
 
 // 	err = pm.ParseConfig(data)
 // 	if err != nil {
@@ -198,19 +197,19 @@ func (r *GPM) Run() {
 // 	case err = <-done:
 // 		cancel()
 // 		if err != nil {
-// 			log.Println("Error while running processes: ", err)
+// 			logger.Println("Error while running processes: ", err)
 // 		} else {
-// 			log.Println("Processes finished by themselves.")
+// 			logger.Println("Processes finished by themselves.")
 // 		}
 // 	case <-signalChan:
-// 		log.Println("Got interrupt, stopping processes.")
+// 		logger.Println("Got interrupt, stopping processes.")
 // 		cancel()
 // 		select {
 // 		case err = <-done:
 // 			if err != nil {
-// 				log.Println("Error while stopping processes: ", err)
+// 				logger.Println("Error while stopping processes: ", err)
 // 			} else {
-// 				log.Println("All processes stopped without issues.")
+// 				logger.Println("All processes stopped without issues.")
 // 			}
 // 		}
 // 	}

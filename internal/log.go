@@ -7,7 +7,7 @@ import (
 
 var Stdlog, Errlog *log.Logger
 
-//var log = Stdlog
+var logger = Stdlog
 
 func init() {
 	Stdlog = log.New(os.Stdout, "", 0)
