@@ -41,7 +41,7 @@ function build() {
     go build $FLAG -buildmode=exe -o $GOPATH/bin/systray ./cmd/systray; if [ $? -ne 0 ]; then
         return 1
     fi
-    go build $FLAG -buildmode=exe -o $GOPATH/bin/pm ./cmd/pm; if [ $? -ne 0 ]; then
+    go build $FLAG -buildmode=exe -o $GOPATH/bin/pmd ./cmd/pmd; if [ $? -ne 0 ]; then
         return 1
     fi
     go build $FLAG -buildmode=exe -o $GOPATH/bin/m3d ./cmd/m3d; if [ $? -ne 0 ]; then

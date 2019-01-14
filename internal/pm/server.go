@@ -9,6 +9,8 @@ import (
 	"github.com/dhnt/m3/internal"
 )
 
+var logger = internal.Stdlog
+
 type Request struct {
 }
 
@@ -91,7 +93,7 @@ func (r *Server) Stop() (err error) {
 	return
 }
 
-// Addr
+// Addr returns host:port
 func (r *Server) Addr() string {
 	addr := fmt.Sprintf("%v:%v", r.Host, r.Port)
 	return addr
@@ -105,7 +107,7 @@ func (r *Server) Start() (err error) {
 
 // Run initializes the RPC server.
 func (r *Server) Run() (err error) {
-	internal.Stdlog.Println("RPC Serve starting ...")
+	logger.Println("RPC Serve starting ...")
 
 	internal.DumpEnv()
 
@@ -124,11 +126,11 @@ func (r *Server) Run() (err error) {
 	defer handler.stop()
 	handler.start()
 
-	internal.Stdlog.Println("RPC Serve accepting ...")
+	logger.Println("RPC Serve accepting ...")
 
 	rpc.Accept(r.listener)
 
-	internal.Stdlog.Println("RPC Serve exited.")
+	logger.Println("RPC Serve exited.")
 
 	return
 }
@@ -141,17 +143,17 @@ func NewServer(port int) *Server {
 	}
 }
 
-// func StartServer(host string, port int) {
-// 	s := Server{
-// 		Host: host,
-// 		Port: port,
-// 	}
+func StartServer(host string, port int) {
+	s := Server{
+		Host: host,
+		Port: port,
+	}
 
-// 	defer s.Close()
+	defer s.Stop()
 
-// 	log.Printf("starting: %v\n", s)
+	logger.Printf("starting: %v\n", s)
 
-// 	s.Serve()
+	s.Run()
 
-// 	log.Printf("exited: %v\n", s)
-// }
+	logger.Printf("exited: %v\n", s)
+}
