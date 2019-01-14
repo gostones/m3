@@ -98,7 +98,7 @@ func (service *Service) Manage() (string, error) {
 
 	// Set up listener for defined host and port
 	port := internal.GetDaemonPort()
-	listener := pm.NewServer(port)
+	listener := pm.NewServer("", port)
 
 	defer listener.Stop()
 	listener.Start()

@@ -135,20 +135,17 @@ func (r *Server) Run() (err error) {
 	return
 }
 
-// NewServer creates a RPC server
-func NewServer(port int) *Server {
+// NewServer creates rpc server
+func NewServer(host string, port int) *Server {
 	return &Server{
-		Host: "",
+		Host: host,
 		Port: port,
 	}
 }
 
+// StartServer runs rpc server
 func StartServer(host string, port int) {
-	s := Server{
-		Host: host,
-		Port: port,
-	}
-
+	s := NewServer(host, port)
 	defer s.Stop()
 
 	logger.Printf("starting: %v\n", s)
