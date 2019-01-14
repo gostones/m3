@@ -3,11 +3,11 @@ package daemon
 import (
 	"fmt"
 	"os"
-	"os/signal"
-	"syscall"
+	// "os/signal"
+	// "syscall"
 
 	"github.com/dhnt/m3/internal"
-	"github.com/dhnt/m3/internal/pm"
+	//"github.com/dhnt/m3/internal/pm"
 	"github.com/takama/daemon"
 )
 
@@ -89,35 +89,40 @@ func (service *Service) Manage() (string, error) {
 	}
 
 	stdlog.Printf("Manage set up args: %v len: %v", os.Args, len(os.Args))
+	// port := internal.GetDaemonPort()
+	// pm.StartServer("", port)
+	internal.StartGPM()
+
+	return "gpm exited", nil
 
 	// Set up channel on which to send signal notifications.
 	// We must use a buffered channel or risk missing the signal
 	// if we're not ready to receive when the signal is sent.
-	interrupt := make(chan os.Signal, 1)
-	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
+	// interrupt := make(chan os.Signal, 1)
+	// signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
 
-	// Set up listener for defined host and port
-	port := internal.GetDaemonPort()
-	listener := pm.NewServer("", port)
+	// // Set up listener for defined host and port
+	// port := internal.GetDaemonPort()
+	// listener := pm.NewServer("", port)
 
-	defer listener.Stop()
-	listener.Start()
+	// defer listener.Stop()
+	// listener.Start()
 
-	// loop work cycle with accept connections or interrupt
-	// by system signal
-	for {
-		select {
-		case killSignal := <-interrupt:
-			stdlog.Println("Got signal:", killSignal)
-			stdlog.Println("Stoping listening on ", listener.Addr())
-			listener.Stop()
+	// // loop work cycle with accept connections or interrupt
+	// // by system signal
+	// for {
+	// 	select {
+	// 	case killSignal := <-interrupt:
+	// 		stdlog.Println("Got signal:", killSignal)
+	// 		stdlog.Println("Stoping listening on ", listener.Addr())
+	// 		listener.Stop()
 
-			if killSignal == os.Interrupt {
-				return "Daemon was interruped by system signal", nil
-			}
-			return "Daemon was killed", nil
-		}
-	}
+	// 		if killSignal == os.Interrupt {
+	// 			return "Daemon was interruped by system signal", nil
+	// 		}
+	// 		return "Daemon was killed", nil
+	// 	}
+	// }
 
 	// never happen, but need to complete code
 	// return usage, nil

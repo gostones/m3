@@ -164,6 +164,20 @@ func (r *GPM) Run() {
 	}
 }
 
+// StartGPM runs gpm server
+func StartGPM() {
+
+	s := NewGPM()
+
+	defer s.Stop()
+
+	logger.Printf("starting: %v\n", s)
+
+	s.Run()
+
+	logger.Printf("exited: %v\n", s)
+}
+
 // // StartGPM starts core services: p2p, git, and proxy
 // func StartGPM() {
 // 	base := GetDefaultBase()

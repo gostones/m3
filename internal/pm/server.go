@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"net"
 	"net/rpc"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 
 	"github.com/dhnt/m3/internal"
 )
@@ -109,7 +112,7 @@ func (r *Server) Start() (err error) {
 func (r *Server) Run() (err error) {
 	logger.Println("RPC Serve starting ...")
 
-	internal.DumpEnv()
+	//internal.DumpEnv()
 
 	handler := &Handler{
 		gpm: internal.NewGPM(),
@@ -144,8 +147,25 @@ func NewServer(host string, port int) *Server {
 }
 
 // StartServer runs rpc server
+// func StartServer(host string, port int) {
+// 	s := NewServer(host, port)
+// 	defer s.Stop()
+
+// 	logger.Printf("starting: %v\n", s)
+
+// 	s.Run()
+
+// 	logger.Printf("exited: %v\n", s)
+// }
+
+// StartServer runs pm server
 func StartServer(host string, port int) {
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
+
+	// Set up listener for defined host and port
 	s := NewServer(host, port)
+
 	defer s.Stop()
 
 	logger.Printf("starting: %v\n", s)
@@ -153,4 +173,16 @@ func StartServer(host string, port int) {
 	s.Run()
 
 	logger.Printf("exited: %v\n", s)
+	//
+	select {
+	case killSignal := <-interrupt:
+		logger.Println("Got signal:", killSignal)
+		logger.Println("Stoping listening on ", s.Addr())
+		s.Stop()
+
+		if killSignal == os.Interrupt {
+			logger.Println("Daemon was interrupted by system signal")
+		}
+		logger.Println("Daemon was killed")
+	}
 }
