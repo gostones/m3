@@ -15,6 +15,7 @@ type Client struct {
 	client *rpc.Client
 }
 
+// NewClient creates rpc cleint
 func NewClient(host string, port int) (*Client, error) {
 	c := Client{
 		Host: host,
