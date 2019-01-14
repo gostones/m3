@@ -1,4 +1,4 @@
-package daemon
+package pm
 
 import (
 	"fmt"
@@ -83,8 +83,8 @@ type Server struct {
 	listener net.Listener
 }
 
-// Close gracefully terminates the server listener.
-func (r *Server) Close() (err error) {
+// Stop gracefully terminates the server listener.
+func (r *Server) Stop() (err error) {
 	if r.listener != nil {
 		err = r.listener.Close()
 	}
@@ -97,10 +97,15 @@ func (r *Server) Addr() string {
 	return addr
 }
 
-// Serve initializes the RPC server.
-func (r *Server) Serve() (err error) {
+// Start Runs the RPC server.
+func (r *Server) Start() (err error) {
+	go r.Run()
+	return nil
+}
+
+// Run initializes the RPC server.
+func (r *Server) Run() (err error) {
 	internal.Stdlog.Println("RPC Serve starting ...")
-	//internal.SetDefaultEnv()
 
 	internal.DumpEnv()
 
@@ -117,8 +122,7 @@ func (r *Server) Serve() (err error) {
 	}
 
 	defer handler.stop()
-
-	go handler.start()
+	handler.start()
 
 	internal.Stdlog.Println("RPC Serve accepting ...")
 
@@ -127,6 +131,14 @@ func (r *Server) Serve() (err error) {
 	internal.Stdlog.Println("RPC Serve exited.")
 
 	return
+}
+
+// NewServer creates a RPC server
+func NewServer(port int) *Server {
+	return &Server{
+		Host: "",
+		Port: port,
+	}
 }
 
 // func StartServer(host string, port int) {

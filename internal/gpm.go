@@ -9,7 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	//"os/signal"
+	"os/signal"
 )
 
 // ipfs, gogs, mirr
@@ -85,13 +85,18 @@ func NewGPM() *GPM {
 	return &GPM{}
 }
 
-// StopGPM stops core services
+// Stop stops core services
 func (r *GPM) Stop() {
 	r.signalChan <- true
 }
 
-// StartGPM starts core services: p2p, git, and proxy
+// Start starts core services: p2p, git, and proxy
 func (r *GPM) Start() {
+	go r.Run()
+}
+
+// Run starts core services
+func (r *GPM) Run() {
 	base := GetDefaultBase()
 	if base == "" {
 		panic("No DHNT base found!")
@@ -119,8 +124,8 @@ func (r *GPM) Start() {
 		done <- pm.StartProcesses(ctx)
 	}()
 
-	//signalChan := make(chan os.Signal, 1)
-	//signal.Notify(signalChan, os.Interrupt)
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, os.Interrupt)
 
 	r.signalChan = make(chan bool, 1)
 
@@ -131,6 +136,17 @@ func (r *GPM) Start() {
 			log.Println("Error while running processes: ", err)
 		} else {
 			log.Println("Processes finished by themselves.")
+		}
+	case <-signalChan:
+		log.Println("Got interrupt, stopping processes.")
+		cancel()
+		select {
+		case err = <-done:
+			if err != nil {
+				log.Println("Error while stopping processes: ", err)
+			} else {
+				log.Println("All processes stopped without issues.")
+			}
 		}
 	case <-r.signalChan:
 		log.Println("Got interrupt, stopping processes.")
@@ -145,13 +161,6 @@ func (r *GPM) Start() {
 		}
 	}
 }
-
-// var signalChan chan bool
-
-// // StopGPM stops core services
-// func StopGPM() {
-// 	signalChan <- true
-// }
 
 // // StartGPM starts core services: p2p, git, and proxy
 // func StartGPM() {
@@ -182,10 +191,8 @@ func (r *GPM) Start() {
 // 		done <- pm.StartProcesses(ctx)
 // 	}()
 
-// 	//signalChan := make(chan os.Signal, 1)
-// 	//signal.Notify(signalChan, os.Interrupt)
-
-// 	signalChan = make(chan bool, 1)
+// 	signalChan := make(chan os.Signal, 1)
+// 	signal.Notify(signalChan, os.Interrupt)
 
 // 	select {
 // 	case err = <-done:

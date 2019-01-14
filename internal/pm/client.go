@@ -1,4 +1,4 @@
-package daemon
+package pm
 
 import (
 	"fmt"
