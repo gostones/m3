@@ -7,11 +7,12 @@ import (
 
 var Stdlog, Errlog *log.Logger
 
-var logger = Stdlog
+var logger *log.Logger
 
 func init() {
 	Stdlog = log.New(os.Stdout, "", 0)
 	Errlog = log.New(os.Stderr, "", 0)
+	logger = Stdlog
 }
 
 func DumpEnv() {
