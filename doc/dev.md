@@ -18,7 +18,6 @@ systray
 
 If everything goes well, you should now have M3 up and running.
 
-
 However if it failed, please follow the following manual steps.
 
 Assuming M3 source code and third party projects will be checked out under `dhnt`.
@@ -109,11 +108,22 @@ cd ~/dhnt
 git clone https://github.com/dhnt/m3.git
 cd m3
 ./build.sh
-bin/mirr --local=true
 
 ```
 
+run `pmd --port 18082`
 
+ps command should list something similar to the following:
+
+```
+$ps
+
+13751 ttys001    0:00.06 pmd -port 18082
+13752 ttys001    0:00.07 /Users/liqiang/dhnt/go/bin/mirr --port 18080
+13753 ttys001    0:00.03 /Users/liqiang/dhnt/go/bin/gotty --port 50022 --permit-wr
+13754 ttys001    0:00.44 /Users/liqiang/dhnt/go/bin/gogs web --port 3000
+13755 ttys001    0:00.19 /Users/liqiang/dhnt/go/bin/ipfs daemon
+```
 
 *Chrome Proxy Plugin*
 

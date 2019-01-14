@@ -83,6 +83,8 @@ function install_gotty() {
 ## setup
 
 #mkdir -p ~/dhnt
+mkdir -p ~/dhnt/etc
+
 #mkdir -p ~/dhnt/go
 mkdir -p ~/dhnt/go/bin
 
