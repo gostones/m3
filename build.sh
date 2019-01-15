@@ -44,9 +44,6 @@ function build() {
     go build $FLAG -buildmode=exe -o $GOPATH/bin/pmd ./cmd/pmd; if [ $? -ne 0 ]; then
         return 1
     fi
-    go build $FLAG -buildmode=exe -o $GOPATH/bin/m3d ./cmd/m3d; if [ $? -ne 0 ]; then
-        return 1
-    fi
     go build $FLAG -buildmode=exe -o $GOPATH/bin/pmctl ./cmd/pmctl; if [ $? -ne 0 ]; then
         return 1
     fi

@@ -1,22 +1,30 @@
 package main
 
 import (
-	"flag"
-	"fmt"
-	"github.com/dhnt/m3/internal"
-	"github.com/dhnt/m3/internal/pm"
+	"github.com/dhnt/m3/internal/daemon"
 )
 
 func main() {
-	host := flag.String("host", "", "service host")
-	port := flag.Int("port", internal.GetDaemonPort(), "service port")
-	flag.Parse()
-
-	fmt.Println("starting pm service ...")
-	pm.StartServer(*host, *port)
-
-	fmt.Println("pm service stopped")
+	daemon.Run()
 }
+
+// import (
+// 	"flag"
+// 	"fmt"
+// 	"github.com/dhnt/m3/internal"
+// 	"github.com/dhnt/m3/internal/pm"
+// )
+
+// func main() {
+// 	host := flag.String("host", "", "service host")
+// 	port := flag.Int("port", internal.GetDaemonPort(), "service port")
+// 	flag.Parse()
+
+// 	fmt.Println("starting pm service ...")
+// 	pm.StartServer(*host, *port)
+
+// 	fmt.Println("pm service stopped")
+// }
 
 // func main() {
 // 	port := flag.Int("port", internal.GetDaemonPort(), "service port")
