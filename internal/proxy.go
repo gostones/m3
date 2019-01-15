@@ -313,6 +313,7 @@ func StartProxy(cfg *Config) {
 
 	nb.W3ProxyHost = fmt.Sprintf("127.0.0.1:%v", w3Port)
 
+	//TODO external config
 	// home
 	nb.Home = NewRouteRegistry()
 	nb.Home.SetDefault("127.0.0.1:80")
@@ -331,6 +332,10 @@ func StartProxy(cfg *Config) {
 	gitPort := 3000 //TODO read from config
 	nb.Home.Add("git.home", fmt.Sprintf("127.0.0.1:%v", gitPort))
 	nb.Home.Add("git."+myAddr, fmt.Sprintf("127.0.0.1:%v", gitPort))
+
+	termPort := 50022 //TODO read from config
+	nb.Home.Add("term.home", fmt.Sprintf("127.0.0.1:%v", termPort))
+	nb.Home.Add("term."+myAddr, fmt.Sprintf("127.0.0.1:%v", termPort))
 
 	// // switchboard
 	// nb.Home.Add("w3.sb.home", fmt.Sprintf("127.0.0.1:%v", sbAPIPort))
