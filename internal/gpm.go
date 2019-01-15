@@ -8,7 +8,7 @@ import (
 	"github.com/gostones/gpm"
 	"io/ioutil"
 	"os"
-	"os/signal"
+	// "os/signal"
 )
 
 // ipfs, gogs, mirr
@@ -83,8 +83,11 @@ type GPM struct {
 	signalChan chan bool
 }
 
+//
 func NewGPM() *GPM {
-	return &GPM{}
+	return &GPM{
+		signalChan: make(chan bool, 1),
+	}
 }
 
 // Stop stops core services
@@ -136,41 +139,41 @@ func (r *GPM) Run() {
 		done <- pm.StartProcesses(ctx)
 	}()
 
-	signalChan := make(chan os.Signal, 1)
-	signal.Notify(signalChan, os.Interrupt)
+	defer cancel()
 
-	r.signalChan = make(chan bool, 1)
+	// signalChan := make(chan os.Signal, 1)
+	// signal.Notify(signalChan, os.Interrupt)
 
 	select {
 	case err = <-done:
-		cancel()
+		//cancel()
 		if err != nil {
-			logger.Println("Error while running processes: ", err)
+			logger.Println("Error running processes: ", err)
 		} else {
-			logger.Println("Processes finished by themselves.")
+			logger.Println("Processes completed")
 		}
-	case <-signalChan:
-		logger.Println("Got interrupt, stopping processes.")
-		cancel()
-		select {
-		case err = <-done:
-			if err != nil {
-				logger.Println("Error while stopping processes: ", err)
-			} else {
-				logger.Println("All processes stopped without issues.")
-			}
-		}
+	// case <-signalChan:
+	// 	logger.Println("Got interrupt, stopping processes.")
+	// 	cancel()
+	// 	select {
+	// 	case err = <-done:
+	// 		if err != nil {
+	// 			logger.Println("Error while stopping processes: ", err)
+	// 		} else {
+	// 			logger.Println("All processes stopped without issues.")
+	// 		}
+	// 	}
 	case <-r.signalChan:
-		logger.Println("Got interrupt, stopping processes.")
-		cancel()
-		select {
-		case err = <-done:
-			if err != nil {
-				logger.Println("Error while stopping processes: ", err)
-			} else {
-				logger.Println("All processes stopped without issues.")
-			}
-		}
+		logger.Println("Processes stopped")
+		// cancel()
+		// select {
+		// case err = <-done:
+		// 	if err != nil {
+		// 		logger.Println("Error while stopping processes: ", err)
+		// 	} else {
+		// 		logger.Println("All processes stopped without issues.")
+		// 	}
+		// }
 	}
 }
 
