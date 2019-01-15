@@ -99,25 +99,35 @@ func (r *GPM) Start() {
 
 // Run starts core services
 func (r *GPM) Run() {
+	DumpEnv()
+
+	logger.Println("running gpm")
+
 	base := GetDefaultBase()
 	if base == "" {
-		panic("No DHNT base found!")
+		logger.Println("No DHNT base found!")
+		return
 	}
+	logger.Println("DHNT base:", base)
+
 	// ensure base exist
 	if _, err := createDir(base); err != nil {
-		panic(err)
+		logger.Println(err)
+		return
 	}
 	//
 	pm := gpm.NewProcessManager()
 	data, err := readOrCreateConf(base)
 	if err != nil {
-		panic(err)
+		logger.Println(err)
+		return
 	}
 	logger.Println("gpm config: " + data)
 
 	err = pm.ParseConfig(data)
 	if err != nil {
-		panic(err)
+		logger.Println(err)
+		return
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())

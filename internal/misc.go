@@ -262,7 +262,7 @@ func Execute(base, file string) error {
 
 	//TODO template?
 	el := []string{
-		fmt.Sprintf("DHNT_BASE=%v/go", base),
+		fmt.Sprintf("DHNT_BASE=%v", base),
 		fmt.Sprintf("GOPATH=%v/go", base),
 		fmt.Sprintf("GOGS_WORK_DIR=%v/var/gogs", base),
 		fmt.Sprintf("PATH=%v", AddPath(os.Getenv("PATH"), []string{

@@ -3,8 +3,8 @@ package daemon
 import (
 	"fmt"
 	"os"
-	// "os/signal"
-	// "syscall"
+	"os/signal"
+	"syscall"
 
 	"github.com/dhnt/m3/internal"
 	//"github.com/dhnt/m3/internal/pm"
@@ -91,7 +91,16 @@ func (service *Service) Manage() (string, error) {
 	stdlog.Printf("Manage set up args: %v len: %v", os.Args, len(os.Args))
 	// port := internal.GetDaemonPort()
 	// pm.StartServer("", port)
-	internal.StartGPM()
+
+	// internal.StartGPM()
+
+	// port := internal.GetDaemonPort()
+	// m3port := internal.GetDefaultPort()
+	// pm.StartHTTPServer(port, m3port)
+
+	signal.Ignore(syscall.SIGHUP)
+	base := internal.GetDefaultBase()
+	internal.Execute(base, "go/bin/pmd")
 
 	return "gpm exited", nil
 
@@ -117,7 +126,7 @@ func (service *Service) Manage() (string, error) {
 	// 		stdlog.Println("Stoping listening on ", listener.Addr())
 	// 		listener.Stop()
 
-	// 		if killSignal == os.Interrupt {
+	// 		if killSaignal == os.Interrupt {
 	// 			return "Daemon was interruped by system signal", nil
 	// 		}
 	// 		return "Daemon was killed", nil
