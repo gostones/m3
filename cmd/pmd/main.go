@@ -5,9 +5,18 @@ import (
 	"github.com/dhnt/m3/internal/daemon"
 )
 
+var logger = internal.Stdlog
+
 func main() {
+	logger.Println("starting daemon")
+
 	base := internal.GetDefaultBase()
+
+	logger.Println("base:", base)
+
 	internal.SetDefaultEnviron(base)
+
+	internal.DumpEnv()
 
 	daemon.Run()
 }

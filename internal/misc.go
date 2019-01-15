@@ -179,24 +179,26 @@ func getBase() string {
 		base = fmt.Sprintf("%v/dhnt", home)
 	}
 
-	return getBaseFromExe()
-}
-
-func getBaseFromExe() string {
 	// dhnt/go/bin/m3d
 	exe, err := os.Executable()
 	if err != nil {
 		return ""
 	}
-	dir := filepath.Dir(exe)
+	return getBaseFromPath(exe)
+}
+
+func getBaseFromPath(dir string) string {
+	dir = filepath.Dir(dir)
 	for {
-		dir, file := filepath.Split(dir)
-		if file == "dhnt" {
-			return filepath.Join(dir, file)
+		d, f := filepath.Split(dir)
+		logger.Println("dir: ", d, " file: ", f)
+		if f == "dhnt" {
+			return filepath.Join(d, f)
 		}
-		if dir == "" {
+		if d == "" || d == "/" {
 			break
 		}
+		dir = filepath.Dir(d) // strip trailing path separator
 	}
 	return ""
 }
