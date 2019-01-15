@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 ##
+source env.sh
+##
 [[ $DEBUG ]] && FLAG="-x"
 
 function build() {
