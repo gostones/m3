@@ -11,13 +11,13 @@ wget -O - https://raw.githubusercontent.com/dhnt/m3/master/setup.sh | bash
 #
 source ~/dhnt/m3/env.sh
 
-sudo -E pmd install
-sudo -E pmd start
+sudo m3d install
+sudo m3d start
 
 systray
 
-sudo -E pmd stop
-sudo -E pmd uninstall
+sudo m3d stop
+sudo m3d uninstall
 
 ```
 
