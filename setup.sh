@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
 
 ##
+function set_env() {
+    export DHNT_BASE=~/dhnt
+
+    #
+    export GOPATH=$DHNT_BASE/go
+    export PATH=$GOPATH/bin:$DHNT_BASE/bin:$PATH
+
+    #
+    export HOME=$DHNT_BASE/home
+    export IPFS_PATH=$DHNT_BASE/home/ipfs
+    export GOGS_WORK_DIR=$DHNT_BASE/var/gogs
+}
+##
 function install_m3() {
     export GO111MODULE=on
 
@@ -33,6 +46,7 @@ function install_ipfs() {
 
     make install
 
+    ipfs init 
     #optional - change default ports
     #ipfs config Addresses
     ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/9001
@@ -82,17 +96,21 @@ function install_gotty() {
 
 ## setup
 
+set_env
+
 #mkdir -p ~/dhnt
 mkdir -p ~/dhnt/etc
 
 #mkdir -p ~/dhnt/go
 mkdir -p ~/dhnt/go/bin
 
-export DHNT_BASE=~/dhnt
+mkdir -p ~/dhnt/home
+
+# export DHNT_BASE=~/dhnt
 
 export GO111MODULE=auto
 export GOPATH=~/dhnt/go
-export PATH=$GOPATH/bin:$PATH
+# export PATH=$GOPATH/bin:$PATH
 
 #
 
