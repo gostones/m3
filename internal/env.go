@@ -28,6 +28,7 @@ func DefaultEnviron(base string) []string {
 	el := []string{
 		fmt.Sprintf("DHNT_BASE=%v", base),
 		fmt.Sprintf("GOPATH=%v/go", base),
+		fmt.Sprintf("HOME=%v/home", base),
 		fmt.Sprintf("GOGS_WORK_DIR=%v/var/gogs", base),
 		fmt.Sprintf("PATH=%v", AddPath(os.Getenv("PATH"), []string{
 			fmt.Sprintf("%v/go/bin", base),
