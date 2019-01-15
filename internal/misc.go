@@ -221,35 +221,9 @@ func GetDaemonPort() int {
 	return 18082
 }
 
-// GetIntEnv returns int env or default
-func GetIntEnv(env string, i int) int {
-	if p := os.Getenv(env); p != "" {
-		if i, err := strconv.Atoi(p); err == nil {
-			return i
-		}
-	}
-	return i
-}
-
 func ToTimestamp(d time.Time) int64 {
 	return d.UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))
 }
-
-// // SetDefaultPath sets required env
-// func SetDefaultEnv() {
-// 	base := getBase()
-// 	gopath := fmt.Sprintf("%v/go", base)
-// 	gogsworkdir := fmt.Sprintf("%v/var/gogs", base)
-
-// 	os.Setenv("DHNT_BASE", base)
-// 	os.Setenv("GOPATH", gopath)
-// 	os.Setenv("GOGS_WORK_DIR", gogsworkdir)
-
-// 	AddPath([]string{
-// 		fmt.Sprintf("%v/bin", gopath),
-// 		fmt.Sprintf("%v/bin", base),
-// 	})
-// }
 
 // Execute sets up env and runs file
 func Execute(base, file string) error {
@@ -260,21 +234,8 @@ func Execute(base, file string) error {
 	binary := filepath.Join(base, file)
 	cmd := exec.Command(binary)
 
-	//TODO template?
-	el := []string{
-		fmt.Sprintf("DHNT_BASE=%v", base),
-		fmt.Sprintf("GOPATH=%v/go", base),
-		fmt.Sprintf("GOGS_WORK_DIR=%v/var/gogs", base),
-		fmt.Sprintf("PATH=%v", AddPath(os.Getenv("PATH"), []string{
-			fmt.Sprintf("%v/go/bin", base),
-			fmt.Sprintf("%v/bin", base),
-		})),
-	}
-	env := os.Environ()
-	for _, e := range el {
-		env = append(env, e)
-	}
-	cmd.Env = env
+	//
+	cmd.Env = DefaultEnviron(base)
 
 	//
 	// cmdOut, err := cmd.StdoutPipe()

@@ -1,10 +1,14 @@
 package main
 
 import (
+	"github.com/dhnt/m3/internal"
 	"github.com/dhnt/m3/internal/daemon"
 )
 
 func main() {
+	base := internal.GetDefaultBase()
+	internal.SetDefaultEnviron(base)
+
 	daemon.Run()
 }
 

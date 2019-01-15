@@ -194,10 +194,3 @@ func TestIsHOme(t *testing.T) {
 		t.Fail()
 	}
 }
-
-// func TestSetDefaultEnv(t *testing.T) {
-// 	SetDefaultEnv()
-// 	for _, nv := range os.Environ() {
-// 		t.Log(nv)
-// 	}
-// }
