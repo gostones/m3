@@ -39,7 +39,7 @@ const (
 	defaultSourcePollTimeout               = int64(3000)
 	defaultSupportListener                 = ":9911"
 	defaultBackendFlushInterval            = 20 * time.Millisecond
-	defaultExperimentalUpgrade             = false
+	defaultExperimentalUpgrade             = true
 	defaultLoadBalancerHealthCheckInterval = 0 // disabled
 	defaultMaxAuditBody                    = 1024
 

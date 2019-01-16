@@ -21,15 +21,26 @@ func checkOrCreateEskip(base, myid string) (string, error) {
 		return cf, nil
 	}
 
-	data := []byte(fmt.Sprintf(routesEskip, myid, myid, myid))
+	data := []byte(fmt.Sprintf(routesEskip, myid, myid, myid, myid, myid))
 	if err := ioutil.WriteFile(cf, data, 0644); err != nil {
 		return "", err
 	}
 	return cf, nil
 }
 
-// TODO Dataclients https://github.com/zalando/skipper/blob/master/docs/tutorials/development.md
+// See Dataclients https://github.com/zalando/skipper/blob/master/docs/tutorials/development.md
+//
 var routesEskip = `
+git:
+    Host("^git.(home|%v)$")
+    -> setRequestHeader("X-Skipper-Tag", "skipper")
+	-> "http://localhost:3000";
+
+term:
+    Host("^term.(home|%v)$")
+    -> setRequestHeader("X-Skipper-Tag", "skipper")
+    -> "http://localhost:50022";
+	
 riot:
     Host("^riot.(home|%v)$")
     -> setRequestHeader("X-Skipper-Tag", "skipper")

@@ -310,32 +310,6 @@ func StartProxy(cfg *Config) {
 	nb.Home.Add(".home", fmt.Sprintf("127.0.0.1:%v", rpPort))
 	nb.Home.Add("."+myAddr, fmt.Sprintf("127.0.0.1:%v", rpPort))
 
-	// // git
-	// gitPort := 3000 //TODO read from config
-	// nb.Home.Add("git.home", fmt.Sprintf("127.0.0.1:%v", gitPort))
-	// nb.Home.Add("git."+myAddr, fmt.Sprintf("127.0.0.1:%v", gitPort))
-
-	// termPort := 50022 //TODO read from config
-	// nb.Home.Add("term.home", fmt.Sprintf("127.0.0.1:%v", termPort))
-	// nb.Home.Add("term."+myAddr, fmt.Sprintf("127.0.0.1:%v", termPort))
-
-	// // switchboard
-	// nb.Home.Add("w3.sb.home", fmt.Sprintf("127.0.0.1:%v", sbAPIPort))
-
-	// for _, v := range cfg.Home {
-	// 	pa := strings.SplitN(v, "/", 2) // domain/host:port
-	// 	switch len(pa) {
-	// 	case 1:
-	// 		// invalid
-	// 	case 2:
-	// 		if pa[0] == "" {
-	// 			nb.Home.SetDefault(pa[1])
-	// 		} else {
-	// 			nb.Home.Add(pa[0], pa[1])
-	// 		}
-	// 	}
-	// }
-
 	//
 	port := cfg.Port
 	log.Printf("proxy/p2p port: %v\n", port)
