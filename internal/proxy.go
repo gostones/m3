@@ -275,11 +275,8 @@ func StartProxy(cfg *Config) {
 
 	// clean up old p2p connections
 	err := P2PCloseAll()
-	if err != nil {
-		//panic(err)
-	}
 
-	log.Printf("Configuration: %v\n", cfg)
+	logger.Printf("Configuration: %v", cfg)
 
 	nb := NewNeighborhood(cfg)
 
@@ -291,28 +288,11 @@ func StartProxy(cfg *Config) {
 
 		time.Sleep(1 * time.Second)
 	}
-	// if err != nil {
-	// 	panic(err)
-	// }
 	nb.My = &node
 
 	// web
 	w3Port := FreePort()
 	go W3Proxy(nb.My.ID, w3Port)
-
-	// sbPort := FreePort()
-	// sbAPIPort := FreePort()
-	// sbBackends := [][]string{[]string{"*" + nb.My.ID, fmt.Sprintf("127.0.0.1:%v", w3Port)}}
-
-	// for _, v := range cfg.Web {
-	// 	pid := ToPeerID(v)
-	// 	addr := nb.AddPeerProxy(pid)
-	// 	sbBackends = append(sbBackends, []string{pid, addr})
-	// }
-	// go sb.SwitchBoard(sbPort, sbAPIPort, sbBackends)
-
-	// nb.W3ProxyHost = fmt.Sprintf("127.0.0.1:%v", sbPort)
-
 	nb.W3ProxyHost = fmt.Sprintf("127.0.0.1:%v", w3Port)
 
 	//TODO external config
@@ -320,7 +300,7 @@ func StartProxy(cfg *Config) {
 	nb.Home = NewRouteRegistry()
 	nb.Home.SetDefault("127.0.0.1:80")
 
-	//
+	// reverse proxy
 	rpPort := FreePort()
 	rpSupport := FreePort()
 	go rp.Serve(base, nb.My.ID, rpPort, rpSupport)
@@ -330,31 +310,31 @@ func StartProxy(cfg *Config) {
 	nb.Home.Add(".home", fmt.Sprintf("127.0.0.1:%v", rpPort))
 	nb.Home.Add("."+myAddr, fmt.Sprintf("127.0.0.1:%v", rpPort))
 
-	// git
-	gitPort := 3000 //TODO read from config
-	nb.Home.Add("git.home", fmt.Sprintf("127.0.0.1:%v", gitPort))
-	nb.Home.Add("git."+myAddr, fmt.Sprintf("127.0.0.1:%v", gitPort))
+	// // git
+	// gitPort := 3000 //TODO read from config
+	// nb.Home.Add("git.home", fmt.Sprintf("127.0.0.1:%v", gitPort))
+	// nb.Home.Add("git."+myAddr, fmt.Sprintf("127.0.0.1:%v", gitPort))
 
-	termPort := 50022 //TODO read from config
-	nb.Home.Add("term.home", fmt.Sprintf("127.0.0.1:%v", termPort))
-	nb.Home.Add("term."+myAddr, fmt.Sprintf("127.0.0.1:%v", termPort))
+	// termPort := 50022 //TODO read from config
+	// nb.Home.Add("term.home", fmt.Sprintf("127.0.0.1:%v", termPort))
+	// nb.Home.Add("term."+myAddr, fmt.Sprintf("127.0.0.1:%v", termPort))
 
 	// // switchboard
 	// nb.Home.Add("w3.sb.home", fmt.Sprintf("127.0.0.1:%v", sbAPIPort))
 
-	for _, v := range cfg.Home {
-		pa := strings.SplitN(v, "/", 2) // domain/host:port
-		switch len(pa) {
-		case 1:
-			// invalid
-		case 2:
-			if pa[0] == "" {
-				nb.Home.SetDefault(pa[1])
-			} else {
-				nb.Home.Add(pa[0], pa[1])
-			}
-		}
-	}
+	// for _, v := range cfg.Home {
+	// 	pa := strings.SplitN(v, "/", 2) // domain/host:port
+	// 	switch len(pa) {
+	// 	case 1:
+	// 		// invalid
+	// 	case 2:
+	// 		if pa[0] == "" {
+	// 			nb.Home.SetDefault(pa[1])
+	// 		} else {
+	// 			nb.Home.Add(pa[0], pa[1])
+	// 		}
+	// 	}
+	// }
 
 	//
 	port := cfg.Port
