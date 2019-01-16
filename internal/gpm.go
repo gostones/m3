@@ -9,8 +9,8 @@ import (
 	"github.com/gostones/gpm"
 
 	"io/ioutil"
-	//"os"
-	// "os/signal"
+	"os"
+	"os/signal"
 )
 
 // ipfs, gogs, mirr
@@ -124,40 +124,16 @@ func (r *GPM) Run() {
 
 	defer cancel()
 
-	// signalChan := make(chan os.Signal, 1)
-	// signal.Notify(signalChan, os.Interrupt)
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, os.Interrupt)
 
 	select {
 	case err = <-done:
-		//cancel()
-		if err != nil {
-			logger.Println("Error running processes: ", err)
-		} else {
-			logger.Println("Processes completed")
-		}
-	// case <-signalChan:
-	// 	logger.Println("Got interrupt, stopping processes.")
-	// 	cancel()
-	// 	select {
-	// 	case err = <-done:
-	// 		if err != nil {
-	// 			logger.Println("Error while stopping processes: ", err)
-	// 		} else {
-	// 			logger.Println("All processes stopped without issues.")
-	// 		}
-	// 	}
+	case <-signalChan:
 	case <-r.signalChan:
-		logger.Println("Processes stopped")
-		// cancel()
-		// select {
-		// case err = <-done:
-		// 	if err != nil {
-		// 		logger.Println("Error while stopping processes: ", err)
-		// 	} else {
-		// 		logger.Println("All processes stopped without issues.")
-		// 	}
-		// }
 	}
+
+	logger.Println("Processes terminated")
 }
 
 // StartGPM runs gpm server

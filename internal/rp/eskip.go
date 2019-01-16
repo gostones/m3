@@ -43,7 +43,7 @@ matrix:
 matrixFederation:
     Host("^matrix.(home|%v):8448$")
     -> setRequestHeader("X-Skipper-Tag", "skipper")
-	-> "http://localhost:8008";
+	-> "http://localhost:8448";
 
 traefik: * -> setRequestHeader("X-Skipper-Tag", "skipper") -> "http://127.0.0.1:80"
 `
