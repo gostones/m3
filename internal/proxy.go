@@ -271,6 +271,8 @@ func HTTPProxy(port int, nb *Neighborhood) {
 
 // StartProxy starts proxy services
 func StartProxy(cfg *Config) {
+	base := GetDefaultBase()
+
 	// clean up old p2p connections
 	err := P2PCloseAll()
 	if err != nil {
@@ -321,7 +323,7 @@ func StartProxy(cfg *Config) {
 	//
 	rpPort := FreePort()
 	rpSupport := FreePort()
-	go rp.Serve(rpPort, rpSupport)
+	go rp.Serve(base, nb.My.ID, rpPort, rpSupport)
 
 	// reverse proxy
 	myAddr := ToPeerAddr(nb.My.ID)

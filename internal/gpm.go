@@ -5,9 +5,11 @@ import (
 	"path/filepath"
 
 	"fmt"
+	"github.com/dhnt/m3/internal/misc"
 	"github.com/gostones/gpm"
+
 	"io/ioutil"
-	"os"
+	//"os"
 	// "os/signal"
 )
 
@@ -41,28 +43,9 @@ var gpmConfigJSON = `
 ]
 `
 
-// createDir returns true if dir does not exist and was created successfully
-// or false if it already exists; otherwise error
-func createDir(dir string) (bool, error) {
-	src, err := os.Stat(dir)
-
-	if os.IsNotExist(err) {
-		if errDir := os.MkdirAll(dir, 0755); errDir != nil {
-			return false, errDir
-		}
-		return true, nil
-	}
-
-	if src.Mode().IsRegular() {
-		return false, fmt.Errorf("%v exists as file", dir)
-	}
-
-	return false, nil
-}
-
 func readOrCreateConf(base string) (string, error) {
 	cf := filepath.Join(base, "etc/gpm.json")
-	if _, err := createDir(filepath.Dir(cf)); err != nil {
+	if _, err := misc.CreateDir(filepath.Dir(cf)); err != nil {
 		panic(err)
 	}
 	logger.Println("GPM config file: ", cf)
@@ -114,7 +97,7 @@ func (r *GPM) Run() {
 	logger.Println("DHNT base:", base)
 
 	// ensure base exist
-	if _, err := createDir(base); err != nil {
+	if _, err := misc.CreateDir(base); err != nil {
 		logger.Println(err)
 		return
 	}

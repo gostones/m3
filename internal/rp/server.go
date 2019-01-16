@@ -503,8 +503,9 @@ func parseDurationFlag(ds string) (time.Duration, error) {
 // 	return result, nil
 // }
 
-// Server starts skipper reverse proxy
-func Serve(port, support int) {
+// Serve starts skipper reverse proxy
+func Serve(base, myid string, port, support int) {
+
 	// if printVersion {
 	// 	fmt.Printf(
 	// 		"Skipper version %s (commit: %s)\n",
@@ -679,7 +680,11 @@ func Serve(port, support int) {
 
 	address = fmt.Sprintf(":%v", port)
 	supportListener = fmt.Sprintf(":%v", support)
-	inlineRoutes = routes
+	//inlineRoutes = routes
+	routesFile, err := checkOrCreateEskip(base, myid)
+	if err != nil {
+		panic(err)
+	}
 
 	options := skipper.Options{
 		// generic:
@@ -742,8 +747,8 @@ func Serve(port, support int) {
 		//InnkeeperAuthToken:        innkeeperAuthToken,
 		//InnkeeperPreRouteFilters:  innkeeperPreRouteFilters,
 		//InnkeeperPostRouteFilters: innkeeperPostRouteFilters,
-		//WatchRoutesFile:           routesFile,
-		InlineRoutes:      inlineRoutes,
+		WatchRoutesFile: routesFile,
+		//InlineRoutes:      inlineRoutes,
 		SourcePollTimeout: time.Duration(defaultSourcePollTimeout) * time.Millisecond,
 		//WaitFirstRouteLoad:        waitFirstRouteLoad,
 
@@ -828,23 +833,3 @@ func Serve(port, support int) {
 
 	log.Fatal(skipper.Run(options))
 }
-
-// TODO Dataclients https://github.com/zalando/skipper/blob/master/docs/tutorials/development.md
-var routes = `
-riot:
-    Host("^riot.(home|92114bmb5wjn6hfz0qb2jdr1qc2a5j3hqcr7efsfe2gj09yjmj5eg8)$")
-    -> setRequestHeader("X-Skipper-Tag", "skipper")
-    -> "http://localhost:8080";
-
-matrix:
-    Host("^matrix.(home|92114bmb5wjn6hfz0qb2jdr1qc2a5j3hqcr7efsfe2gj09yjmj5eg8)(:8008)?$")
-    -> setRequestHeader("X-Skipper-Tag", "skipper")
-    -> "http://localhost:8008";
-
-matrixFederation:
-    Host("^matrix.(home|92114bmb5wjn6hfz0qb2jdr1qc2a5j3hqcr7efsfe2gj09yjmj5eg8):8448$")
-    -> setRequestHeader("X-Skipper-Tag", "skipper")
-	-> "http://localhost:8008";
-
-traefik: * -> setRequestHeader("X-Skipper-Tag", "skipper") -> "http://127.0.0.1:80"
-`
