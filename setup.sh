@@ -39,7 +39,7 @@ function install_ipfs() {
     cd go-ipfs
     
     #clean/reset
-    git pull
+    git full
     make clean
     git reset --hard
 
@@ -65,7 +65,8 @@ function install_gogs() {
         echo "Git repo exists?"
     fi
     cd gogs
-    git checkout -b v0.11.79
+    git fetch && git fetch --tags
+    git checkout v0.11.79
 
     go install -tags "sqlite pam cert"
 
@@ -103,7 +104,7 @@ function install_traefik() {
         echo "Git repo exists?"
     fi
     cd traefik
-    git checkout -b v1.7
+    git checkout v1.7
 
     go get github.com/containous/go-bindata/...
     go generate
@@ -116,6 +117,18 @@ function install_traefik() {
 
     mkdir -p $DHNT_BASE/home/traefik
     cp -R $GOPATH/src/github.com/containous/traefik/static $DHNT_BASE/home/traefik
+}
+
+function install_all() {
+    install_ipfs
+
+    install_gogs
+
+    install_gotty
+
+    install_traefik
+
+    install_m3
 }
 
 ## setup
@@ -137,16 +150,31 @@ export GOPATH=~/dhnt/go
 # export PATH=$GOPATH/bin:$PATH
 
 #
-
-install_ipfs
-
-install_gogs
-
-install_gotty
-
-install_traefik
-
-install_m3
+case "$1" in
+        ipfs)
+            install_ipfs
+            ;;
+         
+        gogs)
+            install_gogs
+            ;;
+         
+        gotty)
+            install_gotty            
+            ;;
+        traefik)
+            install_traefik
+            ;;
+        m3)
+            install_m3
+            ;;
+        help)
+            echo $"Usage: $0 {ipfs|gogs|gotty|traefik|m3|help|_all_}"
+            exit 1
+            ;;
+        *)
+            install_all
+esac
 
 chmod -R 755 $GOPATH/bin/
 
