@@ -2,13 +2,9 @@
 package internal
 
 import (
-	//"crypto/tls"
 	"fmt"
 	"github.com/elazarl/goproxy"
 	//"github.com/elazarl/goproxy/ext/auth"
-	//"github.com/dhnt/m3/internal/lb"
-	"github.com/dhnt/m3/internal/rp"
-	//"github.com/dhnt/m3/internal/sb"
 
 	"bytes"
 	"io/ioutil"
@@ -271,7 +267,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 
 // StartProxy starts proxy services
 func StartProxy(cfg *Config) {
-	base := GetDefaultBase()
+	// base := GetDefaultBase()
 
 	// clean up old p2p connections
 	err := P2PCloseAll()
@@ -301,9 +297,7 @@ func StartProxy(cfg *Config) {
 	nb.Home.SetDefault("127.0.0.1:80")
 
 	// reverse proxy
-	rpPort := FreePort()
-	rpSupport := FreePort()
-	go rp.Serve(base, nb.My.ID, rpPort, rpSupport)
+	rpPort := 28080 //FreePort()
 
 	// reverse proxy
 	myAddr := ToPeerAddr(nb.My.ID)

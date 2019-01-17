@@ -1,0 +1,20 @@
+# rules.toml
+[frontends]
+    [frontends.ipfs]
+        backend = "ipfs"
+        passHostHeader = true
+        entrypoints = ["http"]
+        [frontends.ipfs.routes]
+            [frontends.ipfs.routes.route1]
+            rule = "Host: ipfs.home"
+
+[backends]
+    [backends.ipfs]
+        [backends.ipfs.LoadBalancer]
+            method = "drr"
+            [backends.ipfs.loadbalancer.stickiness]
+        [backends.ipfs.servers] 
+            [backends.ipfs.servers.server1]
+            url = "http://127.0.0.1:5001"
+            weight = 1
+##

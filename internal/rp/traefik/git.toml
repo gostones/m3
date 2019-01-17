@@ -1,0 +1,20 @@
+# rules.toml
+[frontends]
+    [frontends.git]
+        backend = "git"
+        passHostHeader = true
+        entrypoints = ["http"]
+        [frontends.git.routes]
+            [frontends.git.routes.route1]
+            rule = "Host: git.home"
+
+[backends]
+    [backends.git]
+        [backends.git.LoadBalancer]
+            method = "drr"
+            [backends.git.loadbalancer.stickiness]
+        [backends.git.servers] 
+            [backends.git.servers.server1]
+            url = "http://127.0.0.1:3000"
+            weight = 1
+##

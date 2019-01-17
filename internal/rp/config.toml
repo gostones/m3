@@ -1,0 +1,23 @@
+# traefik.toml
+logLevel = "DEBUG"
+
+insecureSkipVerify = true
+defaultEntryPoints = ["http", "ws"]
+
+[entryPoints]
+    [entryPoints.http]
+    address = ":28080"
+    [entryPoints.traefik]
+    address = ":28081"
+
+[api]
+    entryPoint = "traefik"
+    dashboard = true
+
+[ping]
+    entryPoint = "http"
+
+[file]
+    directory = "traefik/"
+    watch = true
+##

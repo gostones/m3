@@ -10,7 +10,7 @@ function set_env() {
 
     #
     export IPFS_PATH=$DHNT_BASE/home/ipfs
-    export GOGS_WORK_DIR=$DHNT_BASE/var/gogs
+    export GOGS_WORK_DIR=$DHNT_BASE/home/gogs
 }
 ##
 function install_m3() {
@@ -65,15 +65,14 @@ function install_gogs() {
         echo "Git repo exists?"
     fi
     cd gogs
-    git pull
+    git checkout -b v0.11.79
 
     go install -tags "sqlite pam cert"
 
     #
-    export GOGS_WORK_DIR=~/dhnt/var/gogs
-
     mkdir -p $GOGS_WORK_DIR
     cp -R $GOPATH/src/github.com/gogs/gogs/templates $GOGS_WORK_DIR
+    cp -R $GOPATH/src/github.com/gogs/gogs/public $GOGS_WORK_DIR
     #
 }
 
@@ -104,7 +103,7 @@ function install_traefik() {
         echo "Git repo exists?"
     fi
     cd traefik
-    git pull
+    git checkout -b v1.7
 
     go get github.com/containous/go-bindata/...
     go generate
@@ -114,6 +113,9 @@ function install_traefik() {
     cd $GOPATH/src/github.com/containous/traefik/webui
     yarn install
     yarn run build
+
+    mkdir -p $DHNT_BASE/home/traefik
+    cp -R $GOPATH/src/github.com/containous/traefik/static $DHNT_BASE/home/traefik
 }
 
 ## setup

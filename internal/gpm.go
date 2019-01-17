@@ -33,7 +33,13 @@ var gpmConfigJSON = `
 		"command": "gotty --port 50022 --permit-write login",
 		"autoRestart": true,
 		"workDir": "%v/go/src/github.com/yudai/gotty"
-  	},
+	  },
+	{
+		"name": "traefik",
+		"command": "traefik -c %v/etc/traefik/config.toml --file.directory=%v/etc/traefik",
+		"autoRestart": true,
+		"workDir": "%v/go/src/github.com/containous/traefik"
+	},
 	{
 		"name": "mirr",
 		"command": "mirr --port 18080",
@@ -55,7 +61,7 @@ func readOrCreateConf(base string) (string, error) {
 		return string(data), nil
 	}
 
-	data = []byte(fmt.Sprintf(gpmConfigJSON, base, base, base, base))
+	data = []byte(fmt.Sprintf(gpmConfigJSON, base, base, base, base, base, base, base))
 	if err := ioutil.WriteFile(cf, data, 0644); err != nil {
 		return "", err
 	}
