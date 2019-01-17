@@ -80,7 +80,7 @@ function install_gogs() {
 # web terminal
 function install_gotty() {
     export GOPATH=~/dhnt/go
-    export GO111MODULE=on
+    export GO111MODULE=off
 
     mkdir -p $GOPATH/src/github.com/yudai
     cd $GOPATH/src/github.com/yudai
@@ -91,6 +91,29 @@ function install_gotty() {
     git pull
 
     go install
+}
+
+# traefik
+function install_traefik() {
+    export GOPATH=~/dhnt/go
+    export GO111MODULE=off
+
+    mkdir -p $GOPATH/src/github.com/containous
+    cd $GOPATH/src/github.com/containous
+    git clone https://github.com/containous/traefik.git; if [ $? -ne 0 ]; then
+        echo "Git repo exists?"
+    fi
+    cd traefik
+    git pull
+
+    go get github.com/containous/go-bindata/...
+    go generate
+    go install ./cmd/traefik
+
+    #web ui
+    cd $GOPATH/src/github.com/containous/traefik/webui
+    yarn install
+    yarn run build
 }
 
 ## setup
@@ -118,6 +141,8 @@ install_ipfs
 install_gogs
 
 install_gotty
+
+install_traefik
 
 install_m3
 
