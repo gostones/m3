@@ -89,6 +89,7 @@ func (service *Service) Manage() (string, error) {
 	}
 
 	stdlog.Printf("Manage set up args: %v len: %v", os.Args, len(os.Args))
+	internal.DumpEnv()
 
 	base := internal.GetDefaultBase()
 	if base == "" {
@@ -113,7 +114,7 @@ func (service *Service) Manage() (string, error) {
 
 	// Set up pm
 	port := internal.GetDaemonPort()
-	s := pm.NewServer("", port)
+	s := pm.NewServer(base, "", port)
 
 	defer s.Stop()
 	s.Start()

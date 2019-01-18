@@ -11,13 +11,13 @@ import (
 )
 
 type Etcd struct {
-	base string
+	base       string
 	signalChan chan bool
 }
 
 func NewEtcd(base string) *Etcd {
 	return &Etcd{
-		base: base,
+		base:       base,
 		signalChan: make(chan bool, 1),
 	}
 }
@@ -58,7 +58,7 @@ func (r *Etcd) Run() {
 		logger.Fatal(err)
 	}
 	defer e.Close()
-	
+
 	// wait for etcd to start
 	select {
 	case <-e.Server.ReadyNotify():

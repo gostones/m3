@@ -79,6 +79,7 @@ func (r *Handler) Status(req Request, res *Response) error {
 // Server holds the configuration used to initiate
 // an RPC server.
 type Server struct {
+	base string
 	Host string
 	Port int
 
@@ -112,7 +113,7 @@ func (r *Server) Run() (err error) {
 	//internal.DumpEnv()
 
 	handler := &Handler{
-		gpm: internal.NewGPM(),
+		gpm: internal.NewGPM(r.base),
 	}
 	err = rpc.Register(handler)
 	if err != nil {
@@ -136,21 +137,22 @@ func (r *Server) Run() (err error) {
 }
 
 // NewServer creates rpc server
-func NewServer(host string, port int) *Server {
+func NewServer(base string, host string, port int) *Server {
 	return &Server{
+		base: base,
 		Host: host,
 		Port: port,
 	}
 }
 
 // StartServer runs pm server
-func StartServer(host string, port int) {
+func StartServer(base, host string, port int) {
 
-	s := NewServer(host, port)
+	s := NewServer(base, host, port)
 
 	defer s.Stop()
 
-	logger.Printf("starting: %v\n", s)
+	logger.Printf("starting: %v %v %v", base, host, port)
 
 	s.Run()
 

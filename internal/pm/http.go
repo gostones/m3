@@ -22,9 +22,9 @@ type HTTPServer struct {
 	address  string
 }
 
-func NewHTTPServer(ep string) *HTTPServer {
+func NewHTTPServer(base, ep string) *HTTPServer {
 	return &HTTPServer{
-		gpm:      internal.NewGPM(),
+		gpm:      internal.NewGPM(base),
 		endpoint: ep,
 	}
 }
@@ -65,10 +65,10 @@ func (r *HTTPServer) Stop() func(http.ResponseWriter, *http.Request) {
 	}
 }
 
-func StartHTTPServer(port, m3port int) {
+func StartHTTPServer(base string, port, m3port int) {
 	endpoint := fmt.Sprintf("http://localhost:%v", m3port)
 	address := fmt.Sprintf(":%v", port)
-	s := NewHTTPServer(endpoint)
+	s := NewHTTPServer(base, endpoint)
 
 	http.HandleFunc("/status", s.Status())
 	http.HandleFunc("/start", s.Start())
