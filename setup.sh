@@ -27,7 +27,7 @@ function install_m3() {
 
     #traefik config
     mkdir -p $DHNT_BASE/etc
-    cp -R $DHNT_BASE/m3/rp/traefik $DHNT_BASE/etc
+    cp -R $DHNT_BASE/m3/internal/rp/traefik $DHNT_BASE/etc
 }
 
 # p2p
