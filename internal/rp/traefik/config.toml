@@ -20,4 +20,10 @@ defaultEntryPoints = ["http", "ws"]
 [file]
     directory = "traefik/"
     watch = true
+
+[etcd]
+    endpoint = "127.0.0.1:2379"
+    watch = true
+    prefix = "/traefik"
+    useAPIV3 = true
 ##

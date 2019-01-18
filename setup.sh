@@ -16,14 +16,18 @@ function set_env() {
 function install_m3() {
     export GO111MODULE=on
 
-    mkdir -p ~/dhnt
-    cd ~/dhnt
+    mkdir -p $DHNT_BASE
+    cd $DHNT_BASE
     git clone https://github.com/dhnt/m3.git; if [ $? -ne 0 ]; then
         echo "Git repo exists?"
     fi
     cd m3
     #no auto pull here
     ./build.sh
+
+    #traefik config
+    mkdir -p $DHNT_BASE/etc
+    cp -R $DHNT_BASE/m3/rp/traefik $DHNT_BASE/etc
 }
 
 # p2p
