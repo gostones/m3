@@ -90,6 +90,13 @@ func (service *Service) Manage() (string, error) {
 
 	stdlog.Printf("Manage set up args: %v len: %v", os.Args, len(os.Args))
 
+	base := internal.GetDefaultBase()
+	if base == "" {
+		return "", fmt.Errorf("No DHNT base set")
+	}
+	stdlog.Println("DHNT base:", base)
+
+	//
 	signal.Ignore(syscall.SIGHUP)
 
 	// Set up channel on which to send signal notifications.
@@ -99,7 +106,12 @@ func (service *Service) Manage() (string, error) {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
 
-	// Set up listener for defined host and port
+	// Set up etcd
+	es := internal.NewEtcd(base)
+	defer es.Stop()
+	es.Start()
+
+	// Set up pm
 	port := internal.GetDaemonPort()
 	s := pm.NewServer("", port)
 
@@ -114,6 +126,7 @@ func (service *Service) Manage() (string, error) {
 			stdlog.Println("Got signal:", killSignal)
 			stdlog.Println("Stoping listening on ", s.Addr())
 			s.Stop()
+			es.Stop()
 
 			if killSignal == os.Interrupt {
 				return "Daemon was interruped by system signal", nil
@@ -121,9 +134,6 @@ func (service *Service) Manage() (string, error) {
 			return "Daemon was killed", nil
 		}
 	}
-
-	// never happen, but need to complete code
-	// return usage, nil
 }
 
 // Run daemon service

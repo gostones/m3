@@ -4,14 +4,41 @@ import (
 	"github.com/coreos/etcd/embed"
 	"github.com/dhnt/m3/internal/misc"
 	"io/ioutil"
+	"os"
+	"os/signal"
 	"path/filepath"
 	"time"
 )
 
-// EtcdServe starts etcd service
-func EtcdServe(base string) {
-	file := filepath.Join(base, "etc/etcd.conf.yml")
-	dir := filepath.Join(base, "var/default.etcd")
+type Etcd struct {
+	base string
+	signalChan chan bool
+}
+
+func NewEtcd(base string) *Etcd {
+	return &Etcd{
+		base: base,
+		signalChan: make(chan bool, 1),
+	}
+}
+
+// Stop signals to stop etcd
+func (r *Etcd) Stop() {
+	r.signalChan <- true
+}
+
+// Start starts etcd
+func (r *Etcd) Start() {
+	go r.Run()
+}
+
+// Run starts etcd service
+func (r *Etcd) Run() {
+	logger.Println("running etcd:", r.base)
+
+	//
+	file := filepath.Join(r.base, "etc/etcd.conf.yml")
+	dir := filepath.Join(r.base, "var/default.etcd")
 	logger.Println("etcd config file: ", file)
 
 	if err := checkOrCreateEtcdConf(file); err != nil {
@@ -31,14 +58,25 @@ func EtcdServe(base string) {
 		logger.Fatal(err)
 	}
 	defer e.Close()
+	
+	// wait for etcd to start
 	select {
 	case <-e.Server.ReadyNotify():
 		logger.Printf("Etcd server is ready!")
 	case <-time.After(180 * time.Second):
-		e.Server.Stop()
-		logger.Printf("Etcd server took too long to start!")
+		logger.Fatal("Etcd server took too long to start!")
 	}
-	logger.Fatal(<-e.Err())
+
+	//
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, os.Interrupt)
+
+	select {
+	case <-signalChan:
+	case <-r.signalChan:
+	}
+
+	logger.Println("Etcd terminated")
 }
 
 func checkOrCreateEtcdConf(cf string) error {
