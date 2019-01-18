@@ -54,7 +54,8 @@ function install_ipfs() {
     #ipfs config Addresses
     ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/9001
     #ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
-
+    ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["http://ipfs.home", "http://127.0.0.1:5001", "https://webui.ipfs.io"]'
+    ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
     #$GOPATH/bin/ipfs
 }
 
