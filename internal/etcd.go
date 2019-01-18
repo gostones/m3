@@ -58,6 +58,7 @@ func (r *Etcd) Run() {
 		logger.Fatal(err)
 	}
 	defer e.Close()
+	defer e.Server.Stop()
 
 	// wait for etcd to start
 	select {

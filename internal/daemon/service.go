@@ -119,21 +119,17 @@ func (service *Service) Manage() (string, error) {
 	defer s.Stop()
 	s.Start()
 
-	// loop work cycle with accept connections or interrupt
-	// by system signal
-	for {
-		select {
-		case killSignal := <-interrupt:
-			stdlog.Println("Got signal:", killSignal)
-			stdlog.Println("Stoping listening on ", s.Addr())
-			s.Stop()
-			es.Stop()
+	select {
+	case killSignal := <-interrupt:
+		stdlog.Println("Got signal:", killSignal)
+		stdlog.Println("Stoping listening on ", s.Addr())
+		s.Stop()
+		es.Stop()
 
-			if killSignal == os.Interrupt {
-				return "Daemon was interruped by system signal", nil
-			}
-			return "Daemon was killed", nil
+		if killSignal == os.Interrupt {
+			return "Daemon was interruped by system signal", nil
 		}
+		return "Daemon was killed", nil
 	}
 }
 
