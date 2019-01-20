@@ -51,7 +51,7 @@ var gpmConfigJSON = `
 		"name": "mirr",
 		"command": "mirr --port 18080",
 		"autoRestart": true,
-		"workDir": "${DHNT_BASE}/m3"
+		"workDir": "${DHNT_BASE}/home/m3"
 	}
 ]
 `
