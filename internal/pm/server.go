@@ -2,11 +2,13 @@ package pm
 
 import (
 	"fmt"
+	"github.com/dhnt/m3/internal"
 	"net"
 	"net/rpc"
+	"os"
+	"os/signal"
 	"sync"
-
-	"github.com/dhnt/m3/internal"
+	"syscall"
 )
 
 var logger = internal.Stdlog
@@ -129,7 +131,22 @@ func (r *Server) Run() (err error) {
 
 	logger.Println("RPC Serve accepting ...")
 
-	rpc.Accept(r.listener)
+	done := make(chan error, 1)
+	go func() {
+		rpc.Accept(r.listener)
+		done <- fmt.Errorf("rpc accept exited")
+	}()
+
+	signalChan := make(chan os.Signal, 1)
+	// signal.Notify(signalChan, os.Interrupt)
+	signal.Notify(signalChan, os.Interrupt, os.Kill, syscall.SIGTERM)
+
+	select {
+	case err = <-done:
+		logger.Println("error:", err)
+	case <-signalChan:
+		// case <-r.signalChan:
+	}
 
 	logger.Println("RPC Serve exited.")
 

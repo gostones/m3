@@ -9,9 +9,9 @@ You may run setup.sh to have all the required projects set up automatically as f
 wget -O - https://raw.githubusercontent.com/dhnt/m3/master/setup.sh | bash
 
 #
-source ~/dhnt/m3/env.sh
+<!-- source ~/dhnt/m3/env.sh -->
 
-sudo m3d install
+sudo m3d install --base ~/dhnt
 sudo m3d start
 
 systray
