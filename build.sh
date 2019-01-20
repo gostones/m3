@@ -34,22 +34,24 @@ function build() {
     fi
 
     #bin
-    go build $FLAG -buildmode=exe -o $GOPATH/bin/mirr ./cmd/mirr; if [ $? -ne 0 ]; then
-        return 1
-    fi
-    go build $FLAG -buildmode=exe -o $GOPATH/bin/hexid ./cmd/hexid; if [ $? -ne 0 ]; then
-        return 1
-    fi
-    go build $FLAG -buildmode=exe -o $GOPATH/bin/systray ./cmd/systray; if [ $? -ne 0 ]; then
-        return 1
-    fi
-    go build $FLAG -buildmode=exe -o $GOPATH/bin/m3d ./cmd/m3d; if [ $? -ne 0 ]; then
-        return 1
-    fi
-    go build $FLAG -buildmode=exe -o $GOPATH/bin/m3ctl ./cmd/m3ctl; if [ $? -ne 0 ]; then
-        return 1
-    fi
+    # go build $FLAG -buildmode=exe -o $GOPATH/bin/mirr ./cmd/mirr; if [ $? -ne 0 ]; then
+    #     return 1
+    # fi
+    # go build $FLAG -buildmode=exe -o $GOPATH/bin/hexid ./cmd/hexid; if [ $? -ne 0 ]; then
+    #     return 1
+    # fi
+    # go build $FLAG -buildmode=exe -o $GOPATH/bin/systray ./cmd/systray; if [ $? -ne 0 ]; then
+    #     return 1
+    # fi
+    # go build $FLAG -buildmode=exe -o $GOPATH/bin/m3d ./cmd/m3d; if [ $? -ne 0 ]; then
+    #     return 1
+    # fi
+    # go build $FLAG -buildmode=exe -o $GOPATH/bin/m3ctl ./cmd/m3ctl; if [ $? -ne 0 ]; then
+    #     return 1
+    # fi
 
+    go install $FLAG ./cmd/...
+    
     echo "## Tidying up modules ..."
     go mod tidy
 }

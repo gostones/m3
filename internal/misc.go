@@ -155,15 +155,6 @@ func IsHome(host string) bool {
 		localHomeRE.MatchString(host)
 }
 
-// // ConvertTLD changes tld to home
-// func ConvertTLD(host string) (string, string) {
-// 	sa := strings.Split(host, ".")
-// 	le := len(sa)
-// 	tld := sa[le-1]
-// 	sa[le-1] = "home"
-// 	return strings.Join(sa, "."), tld
-// }
-
 // GetDefaultBase returns $DHNT_BASE or $HOME/dhnt if not found
 func GetDefaultBase() string {
 	return getBase()
@@ -228,13 +219,13 @@ func ToTimestamp(d time.Time) int64 {
 }
 
 // Execute sets up env and runs file
-func Execute(base, file string) error {
+func Execute(base, file string, args ...string) error {
 	// binary, err := exec.LookPath(file)
 	// if err != nil {
 	// 	return err
 	// }
 	binary := filepath.Join(base, file)
-	cmd := exec.Command(binary)
+	cmd := exec.Command(binary, args...)
 
 	//
 	cmd.Env = DefaultEnviron(base)
@@ -242,28 +233,23 @@ func Execute(base, file string) error {
 	//
 	// cmdOut, err := cmd.StdoutPipe()
 	// cmdErr, _ := cmd.StderrPipe()
-	// read stdout and stderr
-	// stdOutput, _ := ioutil.ReadAll(cmdOut)
-	// errOutput, _ := ioutil.ReadAll(cmdErr)
-	// fmt.Printf("STDOUT: %s\n", stdOutput)
-	// fmt.Printf("ERROUT: %s\n", errOutput)
 
 	cmdOut, err := cmd.StdoutPipe()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "error creating stdout", err)
+		logger.Println("error creating stdout", err)
 		return err
 	}
 
 	scanner := bufio.NewScanner(cmdOut)
 	go func() {
 		for scanner.Scan() {
-			fmt.Printf("> %s\n", scanner.Text())
+			logger.Println(">", scanner.Text())
 		}
 	}()
 
 	err = cmd.Start()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "error starting cmd", err)
+		logger.Println("error starting cmd", err)
 		return err
 	}
 

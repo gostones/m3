@@ -1,13 +1,14 @@
 package daemon
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 
 	"github.com/dhnt/m3/internal"
-	"github.com/dhnt/m3/internal/pm"
 	"github.com/takama/daemon"
 )
 
@@ -28,12 +29,12 @@ type Service struct {
 	daemon.Daemon
 }
 
-// // Install the service into the system
-// func (service *Service) Install(args ...string) (string, error) {
-// 	stdlog.Printf("calling super Install os.Args: %v len: %v", os.Args, len(os.Args))
+// Install the service into the system
+func (service *Service) Install(args ...string) (string, error) {
+	stdlog.Printf("calling super Install os.Args: %v len: %v args: %v", os.Args, len(os.Args), args)
 
-// 	return service.Daemon.Install()
-// }
+	return service.Daemon.Install(args...)
+}
 
 // Remove uninstalls the service and all corresponding files from the system
 func (service *Service) Remove() (string, error) {
@@ -67,35 +68,66 @@ func (service *Service) Start() (string, error) {
 func (service *Service) Manage() (string, error) {
 	stdlog.Printf("Manage args: %v len: %v", os.Args, len(os.Args))
 
-	usage := "Usage: m3d install | uninstall | start | stop | status"
+	usage := "Usage: m3d install --base <dhnt_base>| uninstall | start | stop | status"
+	if len(os.Args) < 2 {
+		return usage, nil
+	}
+	installCmd := flag.NewFlagSet("install", flag.ExitOnError)
+	runCmd := flag.NewFlagSet("run", flag.ExitOnError)
 
-	// if received any kind of command, do it
-	if len(os.Args) > 1 {
-		command := os.Args[1]
-		switch command {
-		case "install":
-			return service.Install()
-		case "uninstall":
-			return service.Remove()
-		case "start":
-			return service.Start()
-		case "stop":
-			return service.Stop()
-		case "status":
-			return service.Status()
-		default:
+	command := os.Args[1]
+	switch command {
+	case "install":
+		bp := installCmd.String("base", "", "dhnt base")
+		installCmd.Parse(os.Args[2:])
+		if *bp == "" {
 			return usage, nil
 		}
+		os.Args[1] = "run"
+		return service.Install(os.Args[1:]...)
+	case "uninstall":
+		return service.Remove()
+	case "start":
+		return service.Start()
+	case "stop":
+		return service.Stop()
+	case "status":
+		return service.Status()
+	case "run":
+		break
+	default:
+		return usage, nil
 	}
+	// if received any kind of command, do it
+	// if len(os.Args) > 1 {
+	// 	command := os.Args[1]
+	// 	switch command {
+	// 	case "install":
+	// 		return service.Install(os.Args[2:]...)
+	// 	case "uninstall":
+	// 		return service.Remove()
+	// 	case "start":
+	// 		return service.Start()
+	// 	case "stop":
+	// 		return service.Stop()
+	// 	case "status":
+	// 		return service.Status()
+	// 	default:
+	// 		return usage, nil
+	// 	}
+	// }
 
 	stdlog.Printf("Manage set up args: %v len: %v", os.Args, len(os.Args))
-	internal.DumpEnv()
+	// internal.DumpEnv()
 
-	base := internal.GetDefaultBase()
-	if base == "" {
-		return "", fmt.Errorf("No DHNT base set")
+	//
+	bp := runCmd.String("base", "", "dhnt base")
+	runCmd.Parse(os.Args[2:])
+	if *bp == "" {
+		return usage, nil
 	}
-	stdlog.Println("DHNT base:", base)
+	base := *bp
+	stdlog.Println("dhnt base:", base)
 
 	//
 	signal.Ignore(syscall.SIGHUP)
@@ -107,27 +139,34 @@ func (service *Service) Manage() (string, error) {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
 
-	// Set up etcd
-	es := internal.NewEtcd(base)
-	defer es.Stop()
-	es.Start()
+	// // Set up etcd
+	// es := internal.NewEtcd(base)
+	// defer es.Stop()
+	// es.Start()
 
-	// Set up pm
-	port := internal.GetDaemonPort()
-	s := pm.NewServer(base, "", port)
+	// // Set up pm
+	// port := internal.GetDaemonPort()
+	// s := pm.NewServer(base, "", port)
 
-	defer s.Stop()
-	s.Start()
+	// defer s.Stop()
+	// s.Start()
+	script := filepath.Join(base, "etc/init.sh")
+	done := make(chan error, 1)
+	go func() {
+		done <- internal.Execute(base, "go/bin/gsh", script)
+	}()
 
 	select {
+	case err := <-done:
+		return fmt.Sprintf("script exited: %v", script), err
 	case killSignal := <-interrupt:
 		stdlog.Println("Got signal:", killSignal)
-		stdlog.Println("Stoping listening on ", s.Addr())
-		s.Stop()
-		es.Stop()
+		// stdlog.Println("Stoping listening on ", s.Addr())
+		// s.Stop()
+		// es.Stop()
 
 		if killSignal == os.Interrupt {
-			return "Daemon was interruped by system signal", nil
+			return "Daemon was interupted by system signal", nil
 		}
 		return "Daemon was killed", nil
 	}
@@ -135,7 +174,7 @@ func (service *Service) Manage() (string, error) {
 
 // Run daemon service
 func Run() {
-	stdlog.Printf("Daemon run args: %v", os.Args)
+	stdlog.Printf("Run args: %v len: %v", os.Args, len(os.Args))
 
 	srv, err := daemon.New(name, description, dependencies...)
 	if err != nil {
@@ -146,7 +185,7 @@ func Run() {
 		Daemon: srv,
 	}
 
-	stdlog.Printf("Calling Manage. service: %v", service)
+	stdlog.Printf("Calling Manage service: %v", service)
 
 	status, err := service.Manage()
 	if err != nil {

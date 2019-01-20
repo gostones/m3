@@ -11,11 +11,18 @@ import (
 	"io/ioutil"
 	"os"
 	"os/signal"
+	"syscall"
 )
 
 // ipfs, gogs, mirr
 var gpmConfigJSON = `
 [
+	{
+		"name": "etcd",
+		"command": "etcd --base ${DHNT_BASE}",
+		"autoRestart": true,
+		"workDir": "${DHNT_BASE}/home/etcd"
+	},
 	{
 		"name": "ipfs",
 		"command": "gsh ${DHNT_BASE}/etc/ipfs/rc.sh",
@@ -24,7 +31,7 @@ var gpmConfigJSON = `
 	},
 	{
 		"name": "gogs",
-		"command": "gogs web --port 3000",
+		"command": "gsh ${DHNT_BASE}/etc/gogs/rc.sh",
 		"autoRestart": true,
 		"workDir": "${DHNT_BASE}/home/gogs"
 	},
@@ -136,10 +143,12 @@ func (r *GPM) Run() {
 	defer cancel()
 
 	signalChan := make(chan os.Signal, 1)
-	signal.Notify(signalChan, os.Interrupt)
+	// signal.Notify(signalChan, os.Interrupt)
+	signal.Notify(signalChan, os.Interrupt, os.Kill, syscall.SIGTERM)
 
 	select {
 	case err = <-done:
+		logger.Println("error:", err)
 	case <-signalChan:
 	case <-r.signalChan:
 	}

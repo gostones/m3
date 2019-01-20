@@ -33,8 +33,8 @@ func DefaultEnviron(base string) []string {
 		fmt.Sprintf("HOME=%v", home),
 		fmt.Sprintf("DHNT_BASE=%v", base),
 		fmt.Sprintf("GOPATH=%v/go", base),
-		fmt.Sprintf("IPFS_PATH=%v/home/ipfs", base),
-		fmt.Sprintf("GOGS_WORK_DIR=%v/home/gogs", base),
+		// fmt.Sprintf("IPFS_PATH=%v/home/ipfs", base),
+		// fmt.Sprintf("GOGS_WORK_DIR=%v/home/gogs", base),
 		fmt.Sprintf("PATH=%v", AddPath(os.Getenv("PATH"), []string{
 			fmt.Sprintf("%v/go/bin", base),
 			fmt.Sprintf("%v/bin", base),

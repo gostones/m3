@@ -3,20 +3,21 @@ package main
 import (
 	"github.com/dhnt/m3/internal"
 	"github.com/dhnt/m3/internal/daemon"
+	"os"
 )
 
 var logger = internal.Stdlog
 
 func main() {
-	logger.Println("starting daemon")
+	// logger.Println("starting daemon a")
 
-	base := internal.GetDefaultBase()
+	// base := internal.GetDefaultBase()
 
-	logger.Println("base:", base)
+	logger.Println("main os.Args:", os.Args)
 
-	internal.SetDefaultEnviron(base)
+	// internal.SetDefaultEnviron(base)
 
-	internal.DumpEnv()
+	// internal.DumpEnv()
 
 	daemon.Run()
 }
