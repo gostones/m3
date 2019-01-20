@@ -4,7 +4,7 @@ import (
 	"context"
 	"path/filepath"
 
-	"fmt"
+	//"fmt"
 	"github.com/dhnt/m3/internal/misc"
 	"github.com/gostones/gpm"
 
@@ -20,31 +20,31 @@ var gpmConfigJSON = `
 		"name": "ipfs",
 		"command": "ipfs daemon",
 		"autoRestart": true,
-		"workDir": "%v/go/src/github.com/ipfs/go-ipfs"
+		"workDir": "${DHNT_BASE}/home/ipfs"
 	},
 	{
 		"name": "gogs",
 		"command": "gogs web --port 3000",
 		"autoRestart": true,
-		"workDir": "%v/go/src/github.com/gogs/gogs"
+		"workDir": "${DHNT_BASE}/home/gogs"
 	},
 	{
 		"name": "gotty",
 		"command": "gotty --port 50022 --permit-write login",
 		"autoRestart": true,
-		"workDir": "%v/go/src/github.com/yudai/gotty"
+		"workDir": "${DHNT_BASE}/home/gotty"
 	  },
 	{
 		"name": "traefik",
-		"command": "traefik -c %v/etc/traefik/config.toml --file.directory=%v/etc/traefik",
+		"command": "traefik -c ${DHNT_BASE}/etc/traefik/config.toml --file.directory=${DHNT_BASE}/etc/traefik",
 		"autoRestart": true,
-		"workDir": "%v/go/src/github.com/containous/traefik"
+		"workDir": "${DHNT_BASE}/home/traefik"
 	},
 	{
 		"name": "mirr",
 		"command": "mirr --port 18080",
 		"autoRestart": true,
-		"workDir": "%v/m3"
+		"workDir": "${DHNT_BASE}/m3"
 	}
 ]
 `
@@ -61,7 +61,15 @@ func readOrCreateConf(base string) (string, error) {
 		return string(data), nil
 	}
 
-	data = []byte(fmt.Sprintf(gpmConfigJSON, base, base, base, base, base, base, base))
+	mapper := func(placeholder string) string {
+		switch placeholder {
+		case "DHNT_BASE":
+			return base
+		}
+		return ""
+	}
+
+	data = []byte(os.Expand(gpmConfigJSON, mapper))
 	if err := ioutil.WriteFile(cf, data, 0644); err != nil {
 		return "", err
 	}
@@ -97,6 +105,10 @@ func (r *GPM) Run() {
 
 	// ensure base exist
 	if _, err := misc.CreateDir(r.base); err != nil {
+		logger.Println(err)
+		return
+	}
+	if err := os.Chdir(r.base); err != nil {
 		logger.Println(err)
 		return
 	}
