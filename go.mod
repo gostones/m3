@@ -36,6 +36,8 @@ require (
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
+	github.com/michaelmacinnis/adapted v0.0.0-20171216080906-993520cda764 // indirect
+	github.com/michaelmacinnis/oh v0.0.0-20180701231441-735487d5ef2a
 	github.com/minio/blake2b-simd v0.0.0-20160723061019-3f5f724cb5b1 // indirect
 	github.com/minio/sha256-simd v0.0.0-20181005183134-51976451ce19 // indirect
 	github.com/mitchellh/go-homedir v1.0.0
@@ -44,6 +46,7 @@ require (
 	github.com/multiformats/go-multihash v1.0.8
 	github.com/oxtoacart/bpool v0.0.0-20150712133111-4e1c5567d7c2 // indirect
 	github.com/parnurzeal/gorequest v0.2.15
+	github.com/peterh/liner v1.1.0
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/prometheus/client_golang v0.9.2 // indirect
 	github.com/prometheus/client_model v0.0.0-20190115171406-56726106282f // indirect

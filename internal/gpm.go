@@ -18,7 +18,7 @@ var gpmConfigJSON = `
 [
 	{
 		"name": "ipfs",
-		"command": "ipfs daemon",
+		"command": "gsh ${DHNT_BASE}/etc/ipfs/rc.sh",
 		"autoRestart": true,
 		"workDir": "${DHNT_BASE}/home/ipfs"
 	},
