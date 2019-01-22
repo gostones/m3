@@ -162,7 +162,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 	proxy.Tr.Dial = dial
 	proxy.Tr.DialTLS = nil
 	proxy.Tr.Proxy = nil
-	proxy.NonproxyHandler = HealthHandlerFunc(fmt.Sprintf("http://127.0.0.1:%v", port))
+	proxy.NonproxyHandler = MuxHandlerFunc(fmt.Sprintf("http://127.0.0.1:%v", port))
 
 	//
 	proxy.Verbose = true

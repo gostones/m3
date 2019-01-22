@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"net/url"
 	"sync"
 	"time"
 )
@@ -71,4 +72,33 @@ func pingProxy(proxy string) bool {
 	})
 
 	return err == nil
+}
+
+const pacFile = `
+function FindProxyForURL(url, host) {
+	return "PROXY %v";
+}
+`
+
+// PACHandlerFunc handles PAC file request
+func PACHandlerFunc(proxyURL string) http.HandlerFunc {
+	URL, _ := url.Parse(proxyURL)
+	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Set("Content-Type", "application/x-ns-proxy-autoconfig")
+		s := fmt.Sprintf(pacFile, URL.Host)
+		w.Write([]byte(s))
+	})
+}
+
+// MuxHandlerFunc multiplexes requests
+func MuxHandlerFunc(proxyURL string) http.HandlerFunc {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/proxy.pac", PACHandlerFunc(proxyURL))
+	mux.HandleFunc("/health", HealthHandlerFunc(proxyURL))
+	fs := http.FileServer(http.Dir("public"))
+	mux.Handle("/", fs)
+
+	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		mux.ServeHTTP(w, req)
+	})
 }
