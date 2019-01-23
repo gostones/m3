@@ -124,15 +124,15 @@ function install_traefik() {
     cp -R $GOPATH/src/github.com/containous/traefik/static $DHNT_BASE/home/traefik
 }
 
-function install_all() {
+function install_no_m3() {
     install_ipfs
-
     install_gogs
-
     install_gotty
-
     install_traefik
+}
 
+function install_all() {
+    install_no_m3
     install_m3
 }
 
@@ -159,16 +159,17 @@ case "$1" in
         ipfs)
             install_ipfs
             ;;
-         
         gogs)
             install_gogs
-            ;;
-         
+            ;;  
         gotty)
             install_gotty            
             ;;
         traefik)
             install_traefik
+            ;;
+        no_m3)
+            install_no_m3
             ;;
         m3)
             install_m3
