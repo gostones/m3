@@ -10,13 +10,6 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/elazarl/goproxy v0.0.0-20181111060418-2ce16c963a8a
 	github.com/fatih/color v1.7.0
-	github.com/getlantern/context v0.0.0-20181106182922-539649cc3118 // indirect
-	github.com/getlantern/errors v0.0.0-20180829142810-e24b7f4ff7c7 // indirect
-	github.com/getlantern/golog v0.0.0-20170508214112-cca714f7feb5 // indirect
-	github.com/getlantern/hex v0.0.0-20160523043825-083fba3033ad // indirect
-	github.com/getlantern/hidden v0.0.0-20160523043807-d52a649ab33a // indirect
-	github.com/getlantern/ops v0.0.0-20170904182230-37353306c908 // indirect
-	github.com/getlantern/systray v0.0.0-20181206010516-eaad7114094d
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/gogo/protobuf v1.2.0 // indirect
 	github.com/golang/groupcache v0.0.0-20181024230925-c65c006176ff // indirect
@@ -44,7 +37,6 @@ require (
 	github.com/moul/http2curl v1.0.0 // indirect
 	github.com/mr-tron/base58 v1.1.0 // indirect
 	github.com/multiformats/go-multihash v1.0.8
-	github.com/oxtoacart/bpool v0.0.0-20150712133111-4e1c5567d7c2 // indirect
 	github.com/parnurzeal/gorequest v0.2.15
 	github.com/peterh/liner v1.1.0
 	github.com/pkg/errors v0.8.1 // indirect
@@ -53,7 +45,6 @@ require (
 	github.com/prometheus/common v0.0.0-20190107103113-2998b132700a // indirect
 	github.com/prometheus/procfs v0.0.0-20190117184657-bf6a532e95b1 // indirect
 	github.com/sirupsen/logrus v1.3.0 // indirect
-	github.com/skratchdot/open-golang v0.0.0-20190104022628-a2dfa6d0dab6
 	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d // indirect
 	github.com/smartystreets/goconvey v0.0.0-20181108003508-044398e4856c // indirect
 	github.com/soheilhy/cmux v0.1.4 // indirect

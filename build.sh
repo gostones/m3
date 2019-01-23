@@ -29,7 +29,7 @@ function build() {
 #        return 1
 #    fi
 
-    go build $FLAG ./...; if [ $? -ne 0 ]; then
+    go build $FLAG -a -tags netgo -ldflags '-w -extldflags "-static"' ./...; if [ $? -ne 0 ]; then
         return 1
     fi
 
