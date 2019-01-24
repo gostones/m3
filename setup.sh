@@ -111,7 +111,9 @@ function install_traefik() {
     cd traefik
     git checkout v1.7
 
-    go get github.com/containous/go-bindata/...
+    # go-bindata needs to be executable on the build system
+    (GOOS=  GOARCH= go get github.com/containous/go-bindata/...)
+
     go generate
     go install -a -ldflags '-w -extldflags "-static"' ./cmd/traefik
 
