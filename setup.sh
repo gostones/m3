@@ -73,7 +73,7 @@ function install_gogs() {
     git fetch && git fetch --tags
     git checkout v0.11.79
 
-    go install -tags "sqlite pam cert"
+    go install -tags "sqlite pam cert" -a -ldflags '-w -extldflags "-static"'
 
     #
     mkdir -p $GOGS_WORK_DIR
@@ -95,7 +95,7 @@ function install_gotty() {
     cd gotty
     git pull
 
-    go install
+    go install -a -ldflags '-w -extldflags "-static"'
 }
 
 # traefik
@@ -113,7 +113,7 @@ function install_traefik() {
 
     go get github.com/containous/go-bindata/...
     go generate
-    go install ./cmd/traefik
+    go install -a -ldflags '-w -extldflags "-static"' ./cmd/traefik
 
     #web ui
     cd $GOPATH/src/github.com/containous/traefik/webui

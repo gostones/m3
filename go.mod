@@ -1,8 +1,7 @@
 module github.com/dhnt/m3
 
 require (
-	github.com/boltdb/bolt v1.3.1 // indirect
-	github.com/coreos/bbolt v1.3.0 // indirect
+	github.com/coreos/bbolt v1.3.1-coreos.6 // indirect
 	github.com/coreos/etcd v3.3.11+incompatible
 	github.com/coreos/go-semver v0.2.0 // indirect
 	github.com/coreos/go-systemd v0.0.0-20181031085051-9002847aa142 // indirect
