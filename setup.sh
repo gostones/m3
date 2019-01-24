@@ -9,8 +9,8 @@ function set_env() {
     export PATH=$GOPATH/bin:$DHNT_BASE/bin:$PATH
 
     #
-    export IPFS_PATH=$DHNT_BASE/home/ipfs
-    export GOGS_WORK_DIR=$DHNT_BASE/home/gogs
+    # export IPFS_PATH=$DHNT_BASE/home/ipfs
+    # export GOGS_WORK_DIR=$DHNT_BASE/home/gogs
 }
 ##
 function install_m3() {
@@ -49,14 +49,14 @@ function install_ipfs() {
 
     make install
 
-    ipfs init 
-    #optional - change default ports
-    #ipfs config Addresses
-    ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/9001
-    #ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
-    ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["http://ipfs.home", "http://127.0.0.1:5001", "https://webui.ipfs.io"]'
-    ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
-    #$GOPATH/bin/ipfs
+    # ipfs init 
+    # #optional - change default ports
+    # #ipfs config Addresses
+    # ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/9001
+    # #ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
+    # ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["http://ipfs.home", "http://127.0.0.1:5001", "https://webui.ipfs.io"]'
+    # ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
+    # #$GOPATH/bin/ipfs
 }
 
 # git server
@@ -73,12 +73,14 @@ function install_gogs() {
     git fetch && git fetch --tags
     git checkout v0.11.79
 
-    go install -tags "sqlite pam cert" -a -ldflags '-w -extldflags "-static"'
+    CGO_ENABLED=1 go install -tags "sqlite cert netgo" -a -ldflags '-w -linkmode external -extldflags "-static"'
 
     #
-    mkdir -p $GOGS_WORK_DIR
-    cp -R $GOPATH/src/github.com/gogs/gogs/templates $GOGS_WORK_DIR
-    cp -R $GOPATH/src/github.com/gogs/gogs/public $GOGS_WORK_DIR
+    mkdir -p $DHNT_BASE/home/gogs
+    rm -rf $DHNT_BASE/home/gogs/templates
+    rm -rf $DHNT_BASE/home/gogs/public
+    cp -R $GOPATH/src/github.com/gogs/gogs/templates $DHNT_BASE/home/gogs
+    cp -R $GOPATH/src/github.com/gogs/gogs/public $DHNT_BASE/home/gogs
     #
 }
 
@@ -123,6 +125,7 @@ function install_traefik() {
     yarn run build
 
     mkdir -p $DHNT_BASE/home/traefik
+    rm -rf $DHNT_BASE/home/traefik/*
     cp -R $GOPATH/src/github.com/containous/traefik/static $DHNT_BASE/home/traefik
 }
 

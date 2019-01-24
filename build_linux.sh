@@ -13,6 +13,9 @@ export SKIP_TEST=true
 fi
 
 #
+export CC=x86_64-linux-musl-gcc
+export CXX=x86_64-linux-musl-g++ 
+#
 ./setup.sh no_m3
 
 #workaround
