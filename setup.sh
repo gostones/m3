@@ -73,7 +73,18 @@ function install_gogs() {
     git fetch && git fetch --tags
     git checkout v0.11.79
 
-    CGO_ENABLED=1 go install -tags "sqlite cert netgo" -a -ldflags '-w -linkmode external -extldflags "-static"'
+    #
+    case "$GOOS" in
+        darwin)
+            go install -tags "sqlite cert netgo" -a
+            ;;
+        linux)
+            CGO_ENABLED=1 go install -tags "sqlite cert netgo" -a -ldflags '-w -linkmode external -extldflags "-static"'
+            ;;
+        *)
+            echo "not supported"
+            exit 1
+    esac
 
     #
     mkdir -p $DHNT_BASE/home/gogs
