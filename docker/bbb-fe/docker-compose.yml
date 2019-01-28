@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  app:
+    labels:
+      - traefik.backend=app
+      - traefik.docker.network=web
+      - traefik.default.protocol=http
+      - traefik.frontend.passHostHeader=true
+      # - traefik.frontend.rule=Host:fe.bbb.home,fe.bbb.921sm3fxr9v5wwh08d7nvnks5a37px0tdj8qd8e0cc60acy514r61r
+      - traefik.frontend.rule=Host:fe.bbb.home
+      - traefik.port=80
+      - traefik.enable=true
+    networks:
+      - web
+    hostname: fe.bbb.home
+    entrypoint: [bin/start]
+    image: bigbluebutton/greenlight
+    container_name: greenlight-v2
+    env_file: env
+    restart: always
+    ports:
+      - 5000:80
+    volumes:
+      - ./db/production:/usr/src/app/db/production
+      - ./log:/usr/src/app/log
+#    logging:
+#      driver: $LOG_DRIVER
+#      options:
+#        syslog-address: $LOG_ADDRESS
+#        tag: $LOG_TAG
+networks:
+  web:
+    external: true

@@ -1,0 +1,1019 @@
+D, [2019-01-28T02:09:39.745750 #12] DEBUG -- :   [1m[35m (17.8ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+D, [2019-01-28T02:09:39.773707 #12] DEBUG -- :   [1m[35m (17.8ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+D, [2019-01-28T02:09:39.803431 #12] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (2.5ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+I, [2019-01-28T02:09:39.811242 #12]  INFO -- : Migrating to CreateUsers (20180504131648)
+D, [2019-01-28T02:09:39.814638 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T02:09:39.822647 #12] DEBUG -- :   [1m[35m (5.9ms)[0m  [1m[35mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "room_id" integer, "provider" varchar, "uid" varchar, "name" varchar, "username" varchar, "email" varchar, "social_uid" varchar, "image" varchar, "password_digest" varchar, "accepted_terms" boolean DEFAULT 'f', "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+D, [2019-01-28T02:09:39.823673 #12] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[34mselect sqlite_version(*)[0m
+D, [2019-01-28T02:09:39.825001 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[35mCREATE  INDEX "index_users_on_room_id" ON "users" ("room_id")[0m
+D, [2019-01-28T02:09:39.825946 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_users_on_room_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_users_on_room_id' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.828219 #12] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_password_digest" ON "users" ("password_digest")[0m
+D, [2019-01-28T02:09:39.835521 #12] DEBUG -- :   [1m[35mSQL (4.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20180504131648"]]
+D, [2019-01-28T02:09:39.843284 #12] DEBUG -- :   [1m[35m (6.7ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T02:09:39.843806 #12]  INFO -- : Migrating to CreateRooms (20180504131705)
+D, [2019-01-28T02:09:39.845213 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T02:09:39.854482 #12] DEBUG -- :   [1m[35m (8.0ms)[0m  [1m[35mCREATE TABLE "rooms" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "name" varchar, "uid" varchar, "bbb_id" varchar, "sessions" integer DEFAULT 0, "last_session" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+D, [2019-01-28T02:09:39.855748 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[35mCREATE  INDEX "index_rooms_on_user_id" ON "rooms" ("user_id")[0m
+D, [2019-01-28T02:09:39.858351 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_user_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_user_id' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.859331 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[35mCREATE  INDEX "index_rooms_on_name" ON "rooms" ("name")[0m
+D, [2019-01-28T02:09:39.860317 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_name' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_name' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.861043 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_user_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_user_id' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.861894 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[35mCREATE  INDEX "index_rooms_on_uid" ON "rooms" ("uid")[0m
+D, [2019-01-28T02:09:39.863122 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_uid' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_uid' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.863863 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_name' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_name' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.864728 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_user_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_user_id' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.865908 #12] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[35mCREATE  INDEX "index_rooms_on_bbb_id" ON "rooms" ("bbb_id")[0m
+D, [2019-01-28T02:09:39.869205 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_bbb_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_bbb_id' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.870120 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_uid' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_uid' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.871208 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_name' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_name' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.872004 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_user_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_user_id' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.872911 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[35mCREATE  INDEX "index_rooms_on_sessions" ON "rooms" ("sessions")[0m
+D, [2019-01-28T02:09:39.875405 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_sessions' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_sessions' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.876372 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_bbb_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_bbb_id' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.878789 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_uid' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_uid' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.879798 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_name' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_name' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.880701 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rooms_on_user_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rooms_on_user_id' AND type='index'
+[0m
+D, [2019-01-28T02:09:39.881872 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[35mCREATE  INDEX "index_rooms_on_last_session" ON "rooms" ("last_session")[0m
+D, [2019-01-28T02:09:39.885167 #12] DEBUG -- :   [1m[35mSQL (2.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20180504131705"]]
+D, [2019-01-28T02:09:39.892928 #12] DEBUG -- :   [1m[35m (7.1ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T02:09:39.893386 #12]  INFO -- : Migrating to AddEmailVerifiedToUser (20180920193451)
+D, [2019-01-28T02:09:39.896409 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T02:09:39.905902 #12] DEBUG -- :   [1m[35m (8.2ms)[0m  [1m[35mALTER TABLE "users" ADD "email_verified" boolean DEFAULT 'f'[0m
+D, [2019-01-28T02:09:39.910397 #12] DEBUG -- :   [1m[35mSQL (2.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20180920193451"]]
+D, [2019-01-28T02:09:39.918570 #12] DEBUG -- :   [1m[35m (7.4ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T02:09:39.919018 #12]  INFO -- : Migrating to AddLanguageToUser (20181113174230)
+D, [2019-01-28T02:09:39.920144 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T02:09:39.927822 #12] DEBUG -- :   [1m[35m (6.7ms)[0m  [1m[35mALTER TABLE "users" ADD "language" varchar DEFAULT 'default'[0m
+D, [2019-01-28T02:09:39.931747 #12] DEBUG -- :   [1m[35mSQL (2.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20181113174230"]]
+D, [2019-01-28T02:09:39.936871 #12] DEBUG -- :   [1m[35m (4.4ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T02:09:39.938632 #12]  INFO -- : Migrating to AddResetToUsers (20181217142710)
+D, [2019-01-28T02:09:39.940723 #12] DEBUG -- :   [1m[35m (0.4ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T02:09:39.950465 #12] DEBUG -- :   [1m[35m (8.5ms)[0m  [1m[35mALTER TABLE "users" ADD "reset_digest" varchar[0m
+D, [2019-01-28T02:09:39.951471 #12] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[35mALTER TABLE "users" ADD "reset_sent_at" datetime[0m
+D, [2019-01-28T02:09:39.955302 #12] DEBUG -- :   [1m[35mSQL (2.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20181217142710"]]
+D, [2019-01-28T02:09:39.960961 #12] DEBUG -- :   [1m[35m (4.5ms)[0m  [1m[36mcommit transaction[0m
+D, [2019-01-28T02:09:39.969811 #12] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (1.3ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T02:09:39.975983 #12] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T02:09:39.986153 #12] DEBUG -- :   [1m[35mSQL (8.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "production"], ["created_at", "2019-01-28 02:09:39.976714"], ["updated_at", "2019-01-28 02:09:39.976714"]]
+D, [2019-01-28T02:09:39.993566 #12] DEBUG -- :   [1m[35m (6.6ms)[0m  [1m[36mcommit transaction[0m
+D, [2019-01-28T02:52:00.014122 #11] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (2.4ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T02:52:00.043756 #11] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (2.4ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T02:52:00.048827 #11] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T02:52:00.055907 #11] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T03:11:04.935701 #1]  INFO -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e] Started GET "/b" for 172.19.0.1 at 2019-01-28 03:11:04 +0000
+I, [2019-01-28T03:11:05.072360 #1]  INFO -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e] Processing by MainController#index as HTML
+D, [2019-01-28T03:11:05.183402 #1] DEBUG -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e]   [1m[36mUser Load (39.4ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:11:05.237416 #1]  INFO -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T03:11:05.440934 #1]  INFO -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e]   Rendered shared/_features.html.erb (2.7ms)
+I, [2019-01-28T03:11:05.444642 #1]  INFO -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e]   Rendered main/index.html.erb within layouts/application (206.1ms)
+D, [2019-01-28T03:11:05.471013 #1] DEBUG -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:11:05.487660 #1] DEBUG -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:11:05.504546 #1]  INFO -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e]   Rendered shared/modals/_login_modal.html.erb (14.3ms)
+I, [2019-01-28T03:11:05.505477 #1]  INFO -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e]   Rendered shared/_header.html.erb (45.3ms)
+D, [2019-01-28T03:11:05.517144 #1] DEBUG -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e]   [1m[36mCACHE (0.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:11:05.521907 #1]  INFO -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e]   Rendered shared/_footer.html.erb (0.9ms)
+I, [2019-01-28T03:11:05.523512 #1]  INFO -- : [453c58f3-a4cc-40f9-ab65-c78ae847774e] Completed 200 OK in 442ms (Views: 297.1ms | ActiveRecord: 52.5ms)
+I, [2019-01-28T03:16:38.519666 #1]  INFO -- : [b7609ddc-c776-487d-b069-622c499100d5] Started GET "/b/signup" for 172.19.0.1 at 2019-01-28 03:16:38 +0000
+I, [2019-01-28T03:16:38.546495 #1]  INFO -- : [b7609ddc-c776-487d-b069-622c499100d5] Processing by UsersController#new as HTML
+D, [2019-01-28T03:16:38.579627 #1] DEBUG -- : [b7609ddc-c776-487d-b069-622c499100d5]   [1m[36mUser Load (14.8ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:16:38.583737 #1] DEBUG -- : [b7609ddc-c776-487d-b069-622c499100d5]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:16:38.743157 #1]  INFO -- : [b7609ddc-c776-487d-b069-622c499100d5]   Rendering users/new.html.erb within layouts/application
+I, [2019-01-28T03:16:38.762861 #1]  INFO -- : [b7609ddc-c776-487d-b069-622c499100d5]   Rendered users/new.html.erb within layouts/application (16.7ms)
+D, [2019-01-28T03:16:38.766592 #1] DEBUG -- : [b7609ddc-c776-487d-b069-622c499100d5]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:16:38.768562 #1] DEBUG -- : [b7609ddc-c776-487d-b069-622c499100d5]   [1m[36mCACHE (0.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:16:38.772816 #1]  INFO -- : [b7609ddc-c776-487d-b069-622c499100d5]   Rendered shared/modals/_login_modal.html.erb (1.9ms)
+I, [2019-01-28T03:16:38.773955 #1]  INFO -- : [b7609ddc-c776-487d-b069-622c499100d5]   Rendered shared/_header.html.erb (8.0ms)
+D, [2019-01-28T03:16:38.776255 #1] DEBUG -- : [b7609ddc-c776-487d-b069-622c499100d5]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:16:38.777585 #1]  INFO -- : [b7609ddc-c776-487d-b069-622c499100d5]   Rendered shared/_footer.html.erb (0.4ms)
+I, [2019-01-28T03:16:38.778678 #1]  INFO -- : [b7609ddc-c776-487d-b069-622c499100d5] Completed 200 OK in 224ms (Views: 43.7ms | ActiveRecord: 41.5ms)
+I, [2019-01-28T03:17:00.431348 #1]  INFO -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2] Started POST "/b/signup" for 172.19.0.1 at 2019-01-28 03:17:00 +0000
+I, [2019-01-28T03:17:00.451583 #1]  INFO -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2] Processing by UsersController#create as HTML
+I, [2019-01-28T03:17:00.454936 #1]  INFO -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   Parameters: {"utf8"=>"✓", "authenticity_token"=>"iSBiWNzUY3uttVQoh9U/Qa5boipkGUIK5Z/qakQlnnB4WtU8tfBhodCt3gfdz2hpeD6tTJC0WZ+Ag3+ILWmDwg==", "user"=>{"name"=>"Qiang Li", "email"=>"liqiang+bbb@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Sign up"}
+D, [2019-01-28T03:17:00.480020 #1] DEBUG -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   [1m[36mUser Load (3.8ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:17:00.504660 #1] DEBUG -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   [1m[36mCACHE (0.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:17:00.665008 #1] DEBUG -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T03:17:00.699924 #1] DEBUG -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   [1m[36mUser Exists (6.7ms)[0m  [1m[34mSELECT  1 AS one FROM "users" WHERE LOWER("users"."email") = LOWER(?) AND "users"."provider" = ? LIMIT ?[0m  [["email", "liqiang+bbb@gmail.com"], ["provider", "greenlight"], ["LIMIT", 1]]
+D, [2019-01-28T03:17:00.716259 #1] DEBUG -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   [1m[35m (0.2ms)[0m  [1m[31mrollback transaction[0m
+I, [2019-01-28T03:17:00.723019 #1]  INFO -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   Rendering users/new.html.erb within layouts/application
+I, [2019-01-28T03:17:00.734677 #1]  INFO -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   Rendered users/new.html.erb within layouts/application (8.8ms)
+D, [2019-01-28T03:17:00.761301 #1] DEBUG -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   [1m[36mUser Load (12.7ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:17:00.766423 #1] DEBUG -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:17:00.780321 #1]  INFO -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   Rendered shared/modals/_login_modal.html.erb (9.1ms)
+I, [2019-01-28T03:17:00.783091 #1]  INFO -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   Rendered shared/_header.html.erb (39.0ms)
+D, [2019-01-28T03:17:00.788377 #1] DEBUG -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:17:00.797152 #1]  INFO -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2]   Rendered shared/_footer.html.erb (3.0ms)
+I, [2019-01-28T03:17:00.798908 #1]  INFO -- : [dc6bf066-469e-48ae-a1e5-c94e6375a2a2] Completed 200 OK in 335ms (Views: 65.4ms | ActiveRecord: 24.0ms)
+I, [2019-01-28T03:17:13.304272 #1]  INFO -- : [24428987-74e4-4671-89bb-a40b8eaffe81] Started POST "/b/signup" for 172.19.0.1 at 2019-01-28 03:17:13 +0000
+I, [2019-01-28T03:17:13.331152 #1]  INFO -- : [24428987-74e4-4671-89bb-a40b8eaffe81] Processing by UsersController#create as HTML
+I, [2019-01-28T03:17:13.332024 #1]  INFO -- : [24428987-74e4-4671-89bb-a40b8eaffe81]   Parameters: {"utf8"=>"✓", "authenticity_token"=>"inAoH2V6vutHASFkIfMtj4hLvMvwnd6jOJLOSdzv+bd7Cp97DF68MToZq0t76XqnXi6zrQQwxTZdjlurtaPkBQ==", "user"=>{"name"=>"Qiang Li", "email"=>"liqiang+bbb@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Sign up"}
+D, [2019-01-28T03:17:13.342050 #1] DEBUG -- : [24428987-74e4-4671-89bb-a40b8eaffe81]   [1m[36mUser Load (6.4ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:17:13.361951 #1] DEBUG -- : [24428987-74e4-4671-89bb-a40b8eaffe81]   [1m[36mCACHE (0.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:17:13.525282 #1] DEBUG -- : [24428987-74e4-4671-89bb-a40b8eaffe81]   [1m[35m (0.9ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T03:17:13.551776 #1] DEBUG -- : [24428987-74e4-4671-89bb-a40b8eaffe81]   [1m[36mUser Exists (17.3ms)[0m  [1m[34mSELECT  1 AS one FROM "users" WHERE LOWER("users"."email") = LOWER(?) AND "users"."provider" = ? LIMIT ?[0m  [["email", "liqiang+bbb@gmail.com"], ["provider", "greenlight"], ["LIMIT", 1]]
+D, [2019-01-28T03:17:13.613556 #1] DEBUG -- : [24428987-74e4-4671-89bb-a40b8eaffe81]   [1m[35mSQL (44.9ms)[0m  [1m[32mINSERT INTO "users" ("provider", "name", "email", "password_digest", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["provider", "greenlight"], ["name", "Qiang Li"], ["email", "liqiang+bbb@gmail.com"], ["password_digest", "$2a$10$WcTPM9PgdUopX5KUZx2zmu8zfZjosyuNUTKYGiF5qtxT6D7EGKAqa"], ["created_at", "2019-01-28 03:17:13.553425"], ["updated_at", "2019-01-28 03:17:13.553425"]]
+D, [2019-01-28T03:17:14.220492 #1] DEBUG -- : [24428987-74e4-4671-89bb-a40b8eaffe81]   [1m[35mSQL (33.6ms)[0m  [1m[32mINSERT INTO "rooms" ("user_id", "name", "uid", "bbb_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["user_id", 1], ["name", "Home Room"], ["uid", "qia-r2z-ywp"], ["bbb_id", "461c942bafc06a6cb500ae966fc1816548f9888b"], ["created_at", "2019-01-28 03:17:13.686624"], ["updated_at", "2019-01-28 03:17:13.686624"]]
+D, [2019-01-28T03:17:14.230664 #1] DEBUG -- : [24428987-74e4-4671-89bb-a40b8eaffe81]   [1m[36mUser Exists (0.7ms)[0m  [1m[34mSELECT  1 AS one FROM "users" WHERE LOWER("users"."email") = LOWER(?) AND ("users"."id" != ?) AND "users"."provider" = ? LIMIT ?[0m  [["email", "liqiang+bbb@gmail.com"], ["id", 1], ["provider", "greenlight"], ["LIMIT", 1]]
+D, [2019-01-28T03:17:14.236294 #1] DEBUG -- : [24428987-74e4-4671-89bb-a40b8eaffe81]   [1m[35mSQL (0.2ms)[0m  [1m[33mUPDATE "users" SET "id" = ?, "room_id" = ?, "provider" = ?, "uid" = ?, "name" = ?, "email" = ?, "password_digest" = ?, "created_at" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["id", 1], ["room_id", 1], ["provider", "greenlight"], ["uid", "gl-fllikftuzszz"], ["name", "Qiang Li"], ["email", "liqiang+bbb@gmail.com"], ["password_digest", "$2a$10$WcTPM9PgdUopX5KUZx2zmu8zfZjosyuNUTKYGiF5qtxT6D7EGKAqa"], ["created_at", "2019-01-28 03:17:13.553425"], ["updated_at", "2019-01-28 03:17:13.553425"], ["id", 1]]
+D, [2019-01-28T03:17:14.281625 #1] DEBUG -- : [24428987-74e4-4671-89bb-a40b8eaffe81]   [1m[35m (36.6ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T03:17:14.283605 #1]  INFO -- : [24428987-74e4-4671-89bb-a40b8eaffe81] Redirected to http://localhost:5000/b/qia-r2z-ywp
+I, [2019-01-28T03:17:14.284537 #1]  INFO -- : [24428987-74e4-4671-89bb-a40b8eaffe81] Completed 302 Found in 952ms (ActiveRecord: 143.6ms)
+I, [2019-01-28T03:17:14.299249 #1]  INFO -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 03:17:14 +0000
+I, [2019-01-28T03:17:14.332070 #1]  INFO -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f] Processing by RoomsController#show as HTML
+I, [2019-01-28T03:17:14.332745 #1]  INFO -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T03:17:14.350738 #1] DEBUG -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   [1m[36mUser Load (2.5ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T03:17:14.401407 #1] DEBUG -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   [1m[36mRoom Load (26.4ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T03:17:14.518662 #1] DEBUG -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   [1m[36mRoom Exists (15.0ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T03:17:17.207455 #1]  INFO -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   Rendering rooms/show.html.erb within layouts/application
+D, [2019-01-28T03:17:17.239180 #1] DEBUG -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   [1m[36mRoom Load (13.4ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T03:17:17.272291 #1] DEBUG -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   [1m[36mRoom Load (14.3ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."user_id" = ?[0m  [["user_id", 1]]
+I, [2019-01-28T03:17:17.290396 #1]  INFO -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   Rendered shared/components/_subtitle.html.erb (1.1ms)
+I, [2019-01-28T03:17:17.306059 #1]  INFO -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   Rendered shared/_sessions.html.erb (31.5ms)
+I, [2019-01-28T03:17:17.307166 #1]  INFO -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   Rendered rooms/show.html.erb within layouts/application (98.9ms)
+I, [2019-01-28T03:17:17.323485 #1]  INFO -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   Rendered shared/_header.html.erb (14.4ms)
+I, [2019-01-28T03:17:17.356223 #1]  INFO -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   Rendered shared/modals/_create_room_modal.html.erb (30.4ms)
+I, [2019-01-28T03:17:17.359033 #1]  INFO -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f]   Rendered shared/_footer.html.erb (0.5ms)
+I, [2019-01-28T03:17:17.363308 #1]  INFO -- : [be2ea9bf-aacb-4435-9ef4-c27d0a89899f] Completed 200 OK in 3029ms (Views: 140.7ms | ActiveRecord: 71.6ms)
+I, [2019-01-28T03:17:25.213574 #1]  INFO -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb] Started POST "/b/qia-r2z-ywp/start" for 172.19.0.1 at 2019-01-28 03:17:25 +0000
+I, [2019-01-28T03:17:25.232354 #1]  INFO -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb] Processing by RoomsController#start as HTML
+I, [2019-01-28T03:17:25.233091 #1]  INFO -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb]   Parameters: {"authenticity_token"=>"CBovIl/8NcBhPppFGcfqNr4m6JxPVqu2ajT50Y/XywT5YJhGNtg3GhwmEGpD3b0eaEPn+rv7sCMPKGwz5pvWtg==", "room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T03:17:25.250036 #1] DEBUG -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb]   [1m[36mUser Load (13.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T03:17:25.272584 #1] DEBUG -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb]   [1m[36mRoom Load (16.4ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T03:17:25.286075 #1] DEBUG -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb]   [1m[36mRoom Exists (4.1ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T03:17:25.378446 #1] DEBUG -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb]   [1m[35m (0.7ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T03:17:25.392498 #1] DEBUG -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb]   [1m[36mCACHE (1.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T03:17:25.429875 #1] DEBUG -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb]   [1m[35mSQL (30.5ms)[0m  [1m[33mUPDATE "rooms" SET "sessions" = ?, "last_session" = ?, "updated_at" = ? WHERE "rooms"."id" = ?[0m  [["sessions", 1], ["last_session", "2019-01-28 03:17:25.376014"], ["updated_at", "2019-01-28 03:17:25.397719"], ["id", 1]]
+D, [2019-01-28T03:17:25.449193 #1] DEBUG -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb]   [1m[35m (16.6ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T03:17:53.252221 #1]  INFO -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb] Redirected to http://192.168.0.111/bigbluebutton/api/join?fullName=Qiang+Li&meetingID=461c942bafc06a6cb500ae966fc1816548f9888b&password=tVlycNIxrfaB&userID=gl-fllikftuzszz&checksum=773d64e298ce308ad1d730ef679fba7e7b615c62
+I, [2019-01-28T03:17:53.313281 #1]  INFO -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb] [ActiveJob] Enqueued NotifyUserWaitingJob (Job ID: f731ca94-0f6c-460d-8a68-b1a93f979d5c) to Async(default) at 2019-01-28 03:17:58 UTC with arguments: #<GlobalID:0x000055dbc41f2e30 @uri=#<URI::GID gid://greenlight/Room/1>>
+I, [2019-01-28T03:17:53.331312 #1]  INFO -- : [17b95fc0-dc32-48a6-804e-5c14cc7f7fdb] Completed 302 Found in 28097ms (ActiveRecord: 82.5ms)
+D, [2019-01-28T03:17:58.361990 #1] DEBUG -- :   [1m[36mRoom Load (6.8ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T03:17:58.365308 #1]  INFO -- : [ActiveJob] [NotifyUserWaitingJob] [f731ca94-0f6c-460d-8a68-b1a93f979d5c] Performing NotifyUserWaitingJob from Async(default) with arguments: #<GlobalID:0x000055dbc41ba148 @uri=#<URI::GID gid://greenlight/Room/1>>
+I, [2019-01-28T03:17:58.366668 #1]  INFO -- : [ActiveJob] [NotifyUserWaitingJob] [f731ca94-0f6c-460d-8a68-b1a93f979d5c] [ActionCable] Broadcasting to qia-r2z-ywp_waiting_channel: {:action=>"started"}
+I, [2019-01-28T03:17:58.619568 #1]  INFO -- : [ActiveJob] [NotifyUserWaitingJob] [f731ca94-0f6c-460d-8a68-b1a93f979d5c] Performed NotifyUserWaitingJob from Async(default) in 252.64ms
+I, [2019-01-28T03:18:17.821332 #1]  INFO -- : [dcd77765-02f5-49a3-8205-e5b369ccab22] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 03:18:17 +0000
+I, [2019-01-28T03:18:17.826941 #1]  INFO -- : [dcd77765-02f5-49a3-8205-e5b369ccab22] Processing by RoomsController#show as HTML
+I, [2019-01-28T03:18:17.827697 #1]  INFO -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T03:18:17.836071 #1] DEBUG -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   [1m[36mUser Load (5.7ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:18:17.839895 #1] DEBUG -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   [1m[36mRoom Load (2.1ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T03:18:17.841556 #1] DEBUG -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:18:17.845358 #1]  INFO -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   Rendering rooms/join.html.erb within layouts/application
+D, [2019-01-28T03:18:17.871497 #1] DEBUG -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   [1m[36mUser Load (18.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T03:18:17.874534 #1] DEBUG -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:18:17.877249 #1] DEBUG -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:18:17.940831 #1]  INFO -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   Rendered shared/components/_subtitle.html.erb (0.1ms)
+I, [2019-01-28T03:18:17.955950 #1]  INFO -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   Rendered shared/_sessions.html.erb (15.7ms)
+I, [2019-01-28T03:18:17.957132 #1]  INFO -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   Rendered shared/_room_event.html.erb (106.2ms)
+I, [2019-01-28T03:18:17.958112 #1]  INFO -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   Rendered rooms/join.html.erb within layouts/application (111.6ms)
+D, [2019-01-28T03:18:17.961565 #1] DEBUG -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:18:17.963933 #1] DEBUG -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:18:17.967062 #1]  INFO -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   Rendered shared/modals/_login_modal.html.erb (0.9ms)
+I, [2019-01-28T03:18:17.967819 #1]  INFO -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   Rendered shared/_header.html.erb (7.2ms)
+D, [2019-01-28T03:18:17.969280 #1] DEBUG -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:18:17.970494 #1]  INFO -- : [dcd77765-02f5-49a3-8205-e5b369ccab22]   Rendered shared/_footer.html.erb (0.3ms)
+I, [2019-01-28T03:18:17.971712 #1]  INFO -- : [dcd77765-02f5-49a3-8205-e5b369ccab22] Completed 200 OK in 143ms (Views: 110.7ms | ActiveRecord: 26.1ms)
+I, [2019-01-28T03:18:25.638342 #1]  INFO -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c] Started POST "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 03:18:25 +0000
+I, [2019-01-28T03:18:25.646481 #1]  INFO -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c] Processing by RoomsController#join as HTML
+I, [2019-01-28T03:18:25.647620 #1]  INFO -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   Parameters: {"utf8"=>"✓", "authenticity_token"=>"H+JbLhprLMJuIZsvV+qwa7/IKw/PvDpKFopfE33QrehU/UxfMGU/oi1lPs8fFvTLvsGNPO6BMuOIR4Eb//v2Aw==", "/b/qia-r2z-ywp"=>{"join_name"=>"guest"}, "commit"=>"Join", "room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T03:18:25.653829 #1] DEBUG -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   [1m[36mUser Load (4.5ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:18:25.657580 #1] DEBUG -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   [1m[36mRoom Load (2.2ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T03:18:25.660023 #1] DEBUG -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:18:25.724273 #1]  INFO -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   Rendering rooms/wait.html.erb within layouts/application
+D, [2019-01-28T03:18:25.736087 #1] DEBUG -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   [1m[36mUser Load (7.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T03:18:25.777735 #1]  INFO -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   Rendered shared/components/_subtitle.html.erb (0.1ms)
+I, [2019-01-28T03:18:25.779395 #1]  INFO -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   Rendered shared/_sessions.html.erb (2.2ms)
+I, [2019-01-28T03:18:25.780091 #1]  INFO -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   Rendered shared/_room_event.html.erb (53.2ms)
+I, [2019-01-28T03:18:25.781065 #1]  INFO -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   Rendered rooms/wait.html.erb within layouts/application (55.2ms)
+D, [2019-01-28T03:18:25.786285 #1] DEBUG -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:18:25.788167 #1] DEBUG -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:18:25.790273 #1]  INFO -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   Rendered shared/modals/_login_modal.html.erb (0.7ms)
+I, [2019-01-28T03:18:25.791414 #1]  INFO -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   Rendered shared/_header.html.erb (7.9ms)
+D, [2019-01-28T03:18:25.793764 #1] DEBUG -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:18:25.799283 #1]  INFO -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c]   Rendered shared/_footer.html.erb (3.8ms)
+I, [2019-01-28T03:18:25.800858 #1]  INFO -- : [068e1166-d9a4-42d6-a4e8-3c01f1c1e06c] Completed 200 OK in 152ms (Views: 71.4ms | ActiveRecord: 14.0ms)
+I, [2019-01-28T03:18:25.956778 #1]  INFO -- : [6200be9b-f5f6-41f7-9915-e19a5f8d091d] Started GET "/b/cable" for 172.19.0.1 at 2019-01-28 03:18:25 +0000
+I, [2019-01-28T03:18:25.991954 #1]  INFO -- : [6200be9b-f5f6-41f7-9915-e19a5f8d091d] Started GET "/b/cable/" [WebSocket] for 172.19.0.1 at 2019-01-28 03:18:25 +0000
+I, [2019-01-28T03:18:25.992791 #1]  INFO -- : [6200be9b-f5f6-41f7-9915-e19a5f8d091d] Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+I, [2019-01-28T03:18:26.048360 #1]  INFO -- : WaitingChannel is transmitting the subscription confirmation
+I, [2019-01-28T03:18:26.049880 #1]  INFO -- : WaitingChannel is streaming from qia-r2z-ywp_waiting_channel
+I, [2019-01-28T03:21:14.838512 #1]  INFO -- : Finished "/b/cable/" [WebSocket] for 172.19.0.1 at 2019-01-28 03:21:14 +0000
+I, [2019-01-28T03:21:14.974793 #1]  INFO -- : WaitingChannel stopped streaming from qia-r2z-ywp_waiting_channel
+I, [2019-01-28T03:21:28.597741 #1]  INFO -- : [c28221ad-e00d-45b1-92bc-4742f971152f] Started GET "/b/cable" for 172.19.0.1 at 2019-01-28 03:21:28 +0000
+I, [2019-01-28T03:21:28.662546 #1]  INFO -- : [c28221ad-e00d-45b1-92bc-4742f971152f] Started GET "/b/cable/" [WebSocket] for 172.19.0.1 at 2019-01-28 03:21:28 +0000
+I, [2019-01-28T03:21:28.680379 #1]  INFO -- : [c28221ad-e00d-45b1-92bc-4742f971152f] Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+I, [2019-01-28T03:21:28.779935 #1]  INFO -- : WaitingChannel is transmitting the subscription confirmation
+I, [2019-01-28T03:21:28.781202 #1]  INFO -- : WaitingChannel is streaming from qia-r2z-ywp_waiting_channel
+I, [2019-01-28T03:22:29.901523 #1]  INFO -- : Finished "/b/cable/" [WebSocket] for 172.19.0.1 at 2019-01-28 03:22:29 +0000
+I, [2019-01-28T03:22:29.919451 #1]  INFO -- : WaitingChannel stopped streaming from qia-r2z-ywp_waiting_channel
+I, [2019-01-28T03:22:37.073642 #1]  INFO -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 03:22:37 +0000
+I, [2019-01-28T03:22:37.133394 #1]  INFO -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7] Processing by RoomsController#show as HTML
+I, [2019-01-28T03:22:37.134265 #1]  INFO -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T03:22:37.170830 #1] DEBUG -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   [1m[36mUser Load (10.9ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:22:37.203760 #1] DEBUG -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   [1m[36mRoom Load (26.0ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T03:22:37.212492 #1] DEBUG -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:22:37.216607 #1]  INFO -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   Rendering rooms/join.html.erb within layouts/application
+D, [2019-01-28T03:22:37.326111 #1] DEBUG -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   [1m[36mUser Load (31.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T03:22:37.350806 #1] DEBUG -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:22:37.354097 #1] DEBUG -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:22:37.489819 #1]  INFO -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   Rendered shared/components/_subtitle.html.erb (0.1ms)
+I, [2019-01-28T03:22:37.509434 #1]  INFO -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   Rendered shared/_sessions.html.erb (20.7ms)
+I, [2019-01-28T03:22:37.510513 #1]  INFO -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   Rendered shared/_room_event.html.erb (290.8ms)
+I, [2019-01-28T03:22:37.512545 #1]  INFO -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   Rendered rooms/join.html.erb within layouts/application (293.8ms)
+D, [2019-01-28T03:22:37.574061 #1] DEBUG -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:22:37.595468 #1] DEBUG -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:22:37.598859 #1]  INFO -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   Rendered shared/modals/_login_modal.html.erb (1.7ms)
+I, [2019-01-28T03:22:37.599976 #1]  INFO -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   Rendered shared/_header.html.erb (27.1ms)
+D, [2019-01-28T03:22:37.601276 #1] DEBUG -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:22:37.605341 #1]  INFO -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7]   Rendered shared/_footer.html.erb (2.0ms)
+I, [2019-01-28T03:22:37.606884 #1]  INFO -- : [fc5b5181-bea6-4e2d-97ec-95c8acf2f5c7] Completed 200 OK in 472ms (Views: 360.9ms | ActiveRecord: 68.4ms)
+I, [2019-01-28T03:22:41.919917 #1]  INFO -- : [2493b2af-9620-4f96-a3fb-66510177d83d] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 03:22:41 +0000
+I, [2019-01-28T03:22:41.948840 #1]  INFO -- : [2493b2af-9620-4f96-a3fb-66510177d83d] Processing by RoomsController#show as HTML
+I, [2019-01-28T03:22:41.956419 #1]  INFO -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T03:22:41.983534 #1] DEBUG -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   [1m[36mUser Load (16.6ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:22:41.995873 #1] DEBUG -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   [1m[36mRoom Load (7.6ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T03:22:42.011684 #1] DEBUG -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:22:42.028464 #1]  INFO -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   Rendering rooms/join.html.erb within layouts/application
+D, [2019-01-28T03:22:42.046456 #1] DEBUG -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   [1m[36mUser Load (9.7ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T03:22:42.055319 #1] DEBUG -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:22:42.058104 #1] DEBUG -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:22:42.119446 #1]  INFO -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   Rendered shared/components/_subtitle.html.erb (0.1ms)
+I, [2019-01-28T03:22:42.127532 #1]  INFO -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   Rendered shared/_sessions.html.erb (8.4ms)
+I, [2019-01-28T03:22:42.128559 #1]  INFO -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   Rendered shared/_room_event.html.erb (98.0ms)
+I, [2019-01-28T03:22:42.129658 #1]  INFO -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   Rendered rooms/join.html.erb within layouts/application (99.9ms)
+D, [2019-01-28T03:22:42.139407 #1] DEBUG -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:22:42.141526 #1] DEBUG -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:22:42.176366 #1]  INFO -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   Rendered shared/modals/_login_modal.html.erb (28.1ms)
+I, [2019-01-28T03:22:42.177074 #1]  INFO -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   Rendered shared/_header.html.erb (45.3ms)
+D, [2019-01-28T03:22:42.178884 #1] DEBUG -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:22:42.180413 #1]  INFO -- : [2493b2af-9620-4f96-a3fb-66510177d83d]   Rendered shared/_footer.html.erb (0.6ms)
+I, [2019-01-28T03:22:42.181926 #1]  INFO -- : [2493b2af-9620-4f96-a3fb-66510177d83d] Completed 200 OK in 216ms (Views: 144.4ms | ActiveRecord: 34.3ms)
+I, [2019-01-28T03:22:48.818623 #1]  INFO -- : [e62ee1a1-6d79-402d-bccd-55ef6f00045f] Started POST "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 03:22:48 +0000
+I, [2019-01-28T03:22:48.879384 #1]  INFO -- : [e62ee1a1-6d79-402d-bccd-55ef6f00045f] Processing by RoomsController#join as HTML
+I, [2019-01-28T03:22:48.881030 #1]  INFO -- : [e62ee1a1-6d79-402d-bccd-55ef6f00045f]   Parameters: {"utf8"=>"✓", "authenticity_token"=>"6BWpQKxwnSwkHw+UurtSF8O1YOmKcCqdCY5QV3nslQe6sjHAyYfzIl1O6MNRhmHWQFYEhPSTpIvkxXrpHIDzBQ==", "/b/qia-r2z-ywp"=>{"join_name"=>"guest"}, "commit"=>"Join", "room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T03:22:48.893932 #1] DEBUG -- : [e62ee1a1-6d79-402d-bccd-55ef6f00045f]   [1m[36mUser Load (10.9ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:22:49.011340 #1] DEBUG -- : [e62ee1a1-6d79-402d-bccd-55ef6f00045f]   [1m[36mRoom Load (11.4ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T03:22:49.013727 #1] DEBUG -- : [e62ee1a1-6d79-402d-bccd-55ef6f00045f]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:22:49.061717 #1] DEBUG -- : [e62ee1a1-6d79-402d-bccd-55ef6f00045f]   [1m[36mCACHE (0.7ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T03:22:49.064068 #1] DEBUG -- : [e62ee1a1-6d79-402d-bccd-55ef6f00045f]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T03:22:49.242820 #1]  INFO -- : [e62ee1a1-6d79-402d-bccd-55ef6f00045f] Redirected to http://192.168.0.111/bigbluebutton/api/join?fullName=guest&meetingID=461c942bafc06a6cb500ae966fc1816548f9888b&password=OurHytklymTt&checksum=9d1a02fa717e072aa204ee57c72474594fe65fe8
+I, [2019-01-28T03:22:49.243884 #1]  INFO -- : [e62ee1a1-6d79-402d-bccd-55ef6f00045f] Completed 302 Found in 362ms (ActiveRecord: 23.1ms)
+I, [2019-01-28T05:47:51.514281 #1]  INFO -- : [95623222-c32d-4c67-97f2-c409e5166eda] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 05:47:51 +0000
+I, [2019-01-28T05:47:52.005877 #1]  INFO -- : [95623222-c32d-4c67-97f2-c409e5166eda] Processing by RoomsController#show as HTML
+I, [2019-01-28T05:47:52.007113 #1]  INFO -- : [95623222-c32d-4c67-97f2-c409e5166eda]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T05:47:52.416660 #1] DEBUG -- : [95623222-c32d-4c67-97f2-c409e5166eda]   [1m[36mUser Load (68.8ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T05:47:52.503519 #1] DEBUG -- : [95623222-c32d-4c67-97f2-c409e5166eda]   [1m[36mRoom Load (16.8ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T05:47:52.535929 #1] DEBUG -- : [95623222-c32d-4c67-97f2-c409e5166eda]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T05:47:52.622478 #1]  INFO -- : [95623222-c32d-4c67-97f2-c409e5166eda]   Rendering rooms/join.html.erb within layouts/application
+D, [2019-01-28T05:47:52.817580 #1] DEBUG -- : [95623222-c32d-4c67-97f2-c409e5166eda]   [1m[36mUser Load (4.9ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T05:47:52.867372 #1] DEBUG -- : [95623222-c32d-4c67-97f2-c409e5166eda]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T05:47:52.870732 #1] DEBUG -- : [95623222-c32d-4c67-97f2-c409e5166eda]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T05:47:53.844401 #1]  INFO -- : [95623222-c32d-4c67-97f2-c409e5166eda]   Rendered shared/components/_subtitle.html.erb (1.1ms)
+I, [2019-01-28T05:47:53.849786 #1]  INFO -- : [95623222-c32d-4c67-97f2-c409e5166eda]   Rendered shared/_sessions.html.erb (15.6ms)
+I, [2019-01-28T05:47:53.850655 #1]  INFO -- : [95623222-c32d-4c67-97f2-c409e5166eda]   Rendered shared/_room_event.html.erb (1200.0ms)
+I, [2019-01-28T05:47:53.854004 #1]  INFO -- : [95623222-c32d-4c67-97f2-c409e5166eda]   Rendered rooms/join.html.erb within layouts/application (1228.7ms)
+D, [2019-01-28T05:47:53.893885 #1] DEBUG -- : [95623222-c32d-4c67-97f2-c409e5166eda]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T05:47:53.903439 #1] DEBUG -- : [95623222-c32d-4c67-97f2-c409e5166eda]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T05:47:53.919232 #1]  INFO -- : [95623222-c32d-4c67-97f2-c409e5166eda]   Rendered shared/modals/_login_modal.html.erb (11.4ms)
+I, [2019-01-28T05:47:53.919993 #1]  INFO -- : [95623222-c32d-4c67-97f2-c409e5166eda]   Rendered shared/_header.html.erb (29.1ms)
+D, [2019-01-28T05:47:53.923169 #1] DEBUG -- : [95623222-c32d-4c67-97f2-c409e5166eda]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T05:47:53.926790 #1]  INFO -- : [95623222-c32d-4c67-97f2-c409e5166eda]   Rendered shared/_footer.html.erb (2.8ms)
+I, [2019-01-28T05:47:53.940315 #1]  INFO -- : [95623222-c32d-4c67-97f2-c409e5166eda] Completed 200 OK in 1924ms (Views: 1380.7ms | ActiveRecord: 90.7ms)
+I, [2019-01-28T06:34:13.148164 #1]  INFO -- : [206bf048-3e40-456a-9de3-2e0591883a60] Started GET "/b" for 172.19.0.1 at 2019-01-28 06:34:13 +0000
+I, [2019-01-28T06:34:13.233372 #1]  INFO -- : [206bf048-3e40-456a-9de3-2e0591883a60] Processing by MainController#index as */*
+D, [2019-01-28T06:34:13.281840 #1] DEBUG -- : [206bf048-3e40-456a-9de3-2e0591883a60]   [1m[36mUser Load (18.8ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:34:13.352079 #1]  INFO -- : [206bf048-3e40-456a-9de3-2e0591883a60]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T06:34:13.442089 #1]  INFO -- : [206bf048-3e40-456a-9de3-2e0591883a60]   Rendered shared/_features.html.erb (10.6ms)
+I, [2019-01-28T06:34:13.443234 #1]  INFO -- : [206bf048-3e40-456a-9de3-2e0591883a60]   Rendered main/index.html.erb within layouts/application (89.7ms)
+D, [2019-01-28T06:34:13.479405 #1] DEBUG -- : [206bf048-3e40-456a-9de3-2e0591883a60]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T06:34:13.483023 #1] DEBUG -- : [206bf048-3e40-456a-9de3-2e0591883a60]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:34:13.505422 #1]  INFO -- : [206bf048-3e40-456a-9de3-2e0591883a60]   Rendered shared/modals/_login_modal.html.erb (13.1ms)
+I, [2019-01-28T06:34:13.507664 #1]  INFO -- : [206bf048-3e40-456a-9de3-2e0591883a60]   Rendered shared/_header.html.erb (49.8ms)
+D, [2019-01-28T06:34:13.513271 #1] DEBUG -- : [206bf048-3e40-456a-9de3-2e0591883a60]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:34:13.524608 #1]  INFO -- : [206bf048-3e40-456a-9de3-2e0591883a60]   Rendered shared/_footer.html.erb (3.9ms)
+I, [2019-01-28T06:34:13.527830 #1]  INFO -- : [206bf048-3e40-456a-9de3-2e0591883a60] Completed 200 OK in 293ms (Views: 179.2ms | ActiveRecord: 19.0ms)
+I, [2019-01-28T06:34:16.309694 #1]  INFO -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379] Started GET "/b/" for 172.19.0.1 at 2019-01-28 06:34:16 +0000
+I, [2019-01-28T06:34:16.319511 #1]  INFO -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379] Processing by MainController#index as */*
+D, [2019-01-28T06:34:16.326824 #1] DEBUG -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379]   [1m[36mUser Load (4.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:34:16.333751 #1]  INFO -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T06:34:16.341931 #1]  INFO -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379]   Rendered shared/_features.html.erb (2.0ms)
+I, [2019-01-28T06:34:16.342643 #1]  INFO -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379]   Rendered main/index.html.erb within layouts/application (7.9ms)
+D, [2019-01-28T06:34:16.351716 #1] DEBUG -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T06:34:16.372682 #1] DEBUG -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:34:16.380212 #1]  INFO -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379]   Rendered shared/modals/_login_modal.html.erb (3.8ms)
+I, [2019-01-28T06:34:16.381546 #1]  INFO -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379]   Rendered shared/_header.html.erb (36.6ms)
+D, [2019-01-28T06:34:16.384406 #1] DEBUG -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:34:16.385440 #1]  INFO -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379]   Rendered shared/_footer.html.erb (0.3ms)
+I, [2019-01-28T06:34:16.386244 #1]  INFO -- : [f0b59a3a-5045-42b9-acea-78f82c5b2379] Completed 200 OK in 65ms (Views: 53.4ms | ActiveRecord: 4.6ms)
+D, [2019-01-28T06:41:23.821024 #8] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (3.5ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T06:41:23.860987 #8] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (6.0ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T06:41:23.869841 #8] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T06:41:23.874883 #8] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T06:42:51.487186 #1]  INFO -- : [4286d2c7-75ac-40eb-8e2b-0533be823538] Started GET "/b/" for 172.19.0.1 at 2019-01-28 06:42:51 +0000
+I, [2019-01-28T06:42:51.543263 #1]  INFO -- : [4286d2c7-75ac-40eb-8e2b-0533be823538] Processing by MainController#index as */*
+D, [2019-01-28T06:42:51.574721 #1] DEBUG -- : [4286d2c7-75ac-40eb-8e2b-0533be823538]   [1m[36mUser Load (14.4ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:42:51.599897 #1]  INFO -- : [4286d2c7-75ac-40eb-8e2b-0533be823538]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T06:42:51.670770 #1]  INFO -- : [4286d2c7-75ac-40eb-8e2b-0533be823538]   Rendered shared/_features.html.erb (0.9ms)
+I, [2019-01-28T06:42:51.671631 #1]  INFO -- : [4286d2c7-75ac-40eb-8e2b-0533be823538]   Rendered main/index.html.erb within layouts/application (71.1ms)
+D, [2019-01-28T06:42:51.685392 #1] DEBUG -- : [4286d2c7-75ac-40eb-8e2b-0533be823538]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T06:42:51.687444 #1] DEBUG -- : [4286d2c7-75ac-40eb-8e2b-0533be823538]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:42:51.695839 #1]  INFO -- : [4286d2c7-75ac-40eb-8e2b-0533be823538]   Rendered shared/modals/_login_modal.html.erb (2.6ms)
+I, [2019-01-28T06:42:51.696819 #1]  INFO -- : [4286d2c7-75ac-40eb-8e2b-0533be823538]   Rendered shared/_header.html.erb (15.5ms)
+D, [2019-01-28T06:42:51.698177 #1] DEBUG -- : [4286d2c7-75ac-40eb-8e2b-0533be823538]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:42:51.706876 #1]  INFO -- : [4286d2c7-75ac-40eb-8e2b-0533be823538]   Rendered shared/_footer.html.erb (1.0ms)
+I, [2019-01-28T06:42:51.707956 #1]  INFO -- : [4286d2c7-75ac-40eb-8e2b-0533be823538] Completed 200 OK in 163ms (Views: 109.6ms | ActiveRecord: 23.8ms)
+I, [2019-01-28T06:43:54.339345 #1]  INFO -- : [2b871cb3-c4c3-400c-b085-dda194192366] Started GET "/b/" for 172.19.0.1 at 2019-01-28 06:43:54 +0000
+I, [2019-01-28T06:43:54.346194 #1]  INFO -- : [2b871cb3-c4c3-400c-b085-dda194192366] Processing by MainController#index as */*
+D, [2019-01-28T06:43:54.354687 #1] DEBUG -- : [2b871cb3-c4c3-400c-b085-dda194192366]   [1m[36mUser Load (4.7ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:43:54.356477 #1]  INFO -- : [2b871cb3-c4c3-400c-b085-dda194192366]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T06:43:54.359989 #1]  INFO -- : [2b871cb3-c4c3-400c-b085-dda194192366]   Rendered shared/_features.html.erb (0.4ms)
+I, [2019-01-28T06:43:54.361072 #1]  INFO -- : [2b871cb3-c4c3-400c-b085-dda194192366]   Rendered main/index.html.erb within layouts/application (3.2ms)
+D, [2019-01-28T06:43:54.372406 #1] DEBUG -- : [2b871cb3-c4c3-400c-b085-dda194192366]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T06:43:54.375733 #1] DEBUG -- : [2b871cb3-c4c3-400c-b085-dda194192366]   [1m[36mCACHE (0.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:43:54.390187 #1]  INFO -- : [2b871cb3-c4c3-400c-b085-dda194192366]   Rendered shared/modals/_login_modal.html.erb (3.8ms)
+I, [2019-01-28T06:43:54.391521 #1]  INFO -- : [2b871cb3-c4c3-400c-b085-dda194192366]   Rendered shared/_header.html.erb (23.9ms)
+D, [2019-01-28T06:43:54.393175 #1] DEBUG -- : [2b871cb3-c4c3-400c-b085-dda194192366]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:43:54.397264 #1]  INFO -- : [2b871cb3-c4c3-400c-b085-dda194192366]   Rendered shared/_footer.html.erb (1.1ms)
+I, [2019-01-28T06:43:54.398884 #1]  INFO -- : [2b871cb3-c4c3-400c-b085-dda194192366] Completed 200 OK in 50ms (Views: 42.4ms | ActiveRecord: 5.0ms)
+I, [2019-01-28T06:50:01.317375 #1]  INFO -- : [72726516-e626-45b3-8639-cb9e0d513ae1] Started GET "/b" for 172.19.0.1 at 2019-01-28 06:50:01 +0000
+I, [2019-01-28T06:50:01.344786 #1]  INFO -- : [72726516-e626-45b3-8639-cb9e0d513ae1] Processing by MainController#index as HTML
+D, [2019-01-28T06:50:01.362698 #1] DEBUG -- : [72726516-e626-45b3-8639-cb9e0d513ae1]   [1m[36mUser Load (4.4ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:50:01.369930 #1]  INFO -- : [72726516-e626-45b3-8639-cb9e0d513ae1]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T06:50:01.393710 #1]  INFO -- : [72726516-e626-45b3-8639-cb9e0d513ae1]   Rendered shared/_features.html.erb (1.5ms)
+I, [2019-01-28T06:50:01.395052 #1]  INFO -- : [72726516-e626-45b3-8639-cb9e0d513ae1]   Rendered main/index.html.erb within layouts/application (21.2ms)
+D, [2019-01-28T06:50:01.406414 #1] DEBUG -- : [72726516-e626-45b3-8639-cb9e0d513ae1]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T06:50:01.409780 #1] DEBUG -- : [72726516-e626-45b3-8639-cb9e0d513ae1]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:50:01.413329 #1]  INFO -- : [72726516-e626-45b3-8639-cb9e0d513ae1]   Rendered shared/modals/_login_modal.html.erb (2.0ms)
+I, [2019-01-28T06:50:01.414974 #1]  INFO -- : [72726516-e626-45b3-8639-cb9e0d513ae1]   Rendered shared/_header.html.erb (15.3ms)
+D, [2019-01-28T06:50:01.417980 #1] DEBUG -- : [72726516-e626-45b3-8639-cb9e0d513ae1]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T06:50:01.421663 #1]  INFO -- : [72726516-e626-45b3-8639-cb9e0d513ae1]   Rendered shared/_footer.html.erb (0.7ms)
+I, [2019-01-28T06:50:01.422638 #1]  INFO -- : [72726516-e626-45b3-8639-cb9e0d513ae1] Completed 200 OK in 74ms (Views: 55.9ms | ActiveRecord: 4.5ms)
+D, [2019-01-28T06:57:07.150175 #10] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (3.7ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T06:57:07.187754 #10] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (5.4ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T06:57:07.195961 #10] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T06:57:07.199862 #10] DEBUG -- :   [1m[35m (0.3ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T07:02:38.864813 #1]  INFO -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60] Started GET "/b/" for 172.19.0.1 at 2019-01-28 07:02:38 +0000
+I, [2019-01-28T07:02:39.925102 #1]  INFO -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60] Processing by MainController#index as HTML
+D, [2019-01-28T07:02:40.514177 #1] DEBUG -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60]   [1m[36mUser Load (39.4ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:02:40.815977 #1]  INFO -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T07:02:41.293281 #1]  INFO -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60]   Rendered shared/_features.html.erb (4.9ms)
+I, [2019-01-28T07:02:41.293992 #1]  INFO -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60]   Rendered main/index.html.erb within layouts/application (477.3ms)
+D, [2019-01-28T07:02:41.366768 #1] DEBUG -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T07:02:41.383978 #1] DEBUG -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:02:41.429908 #1]  INFO -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60]   Rendered shared/modals/_login_modal.html.erb (42.9ms)
+I, [2019-01-28T07:02:41.430751 #1]  INFO -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60]   Rendered shared/_header.html.erb (75.1ms)
+D, [2019-01-28T07:02:41.432309 #1] DEBUG -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:02:41.435461 #1]  INFO -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60]   Rendered shared/_footer.html.erb (1.7ms)
+I, [2019-01-28T07:02:41.445078 #1]  INFO -- : [8b2fdba1-2002-4f9f-a162-c7df73c1ba60] Completed 200 OK in 1514ms (Views: 724.4ms | ActiveRecord: 47.9ms)
+I, [2019-01-28T07:03:18.059460 #1]  INFO -- : [f8c7a235-726d-4c80-8524-07eb4a9c31a7] Started GET "/b/qia-r2z-ywp/logout" for 172.19.0.1 at 2019-01-28 07:03:18 +0000
+I, [2019-01-28T07:03:18.226120 #1]  INFO -- : [f8c7a235-726d-4c80-8524-07eb4a9c31a7] Processing by RoomsController#logout as HTML
+I, [2019-01-28T07:03:18.228712 #1]  INFO -- : [f8c7a235-726d-4c80-8524-07eb4a9c31a7]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:03:18.534219 #1] DEBUG -- : [f8c7a235-726d-4c80-8524-07eb4a9c31a7]   [1m[36mUser Load (53.4ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:03:19.679821 #1] DEBUG -- : [f8c7a235-726d-4c80-8524-07eb4a9c31a7]   [1m[36mRoom Load (28.5ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+I, [2019-01-28T07:03:20.168260 #1]  INFO -- : [f8c7a235-726d-4c80-8524-07eb4a9c31a7] Redirected to http://localhost:5000/b/qia-r2z-ywp
+I, [2019-01-28T07:03:20.182206 #1]  INFO -- : [f8c7a235-726d-4c80-8524-07eb4a9c31a7] Completed 302 Found in 1944ms (ActiveRecord: 448.9ms)
+I, [2019-01-28T07:03:20.271608 #1]  INFO -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 07:03:20 +0000
+I, [2019-01-28T07:03:20.423380 #1]  INFO -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9] Processing by RoomsController#show as HTML
+I, [2019-01-28T07:03:20.438985 #1]  INFO -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:03:20.490221 #1] DEBUG -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   [1m[36mUser Load (19.5ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:03:20.544726 #1] DEBUG -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   [1m[36mRoom Load (23.4ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T07:03:21.576372 #1] DEBUG -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   [1m[36mRoom Exists (10.6ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:03:30.087795 #1]  INFO -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   Rendering rooms/show.html.erb within layouts/application
+D, [2019-01-28T07:03:30.270170 #1] DEBUG -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   [1m[36mRoom Load (62.7ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:03:30.423321 #1] DEBUG -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   [1m[36mRoom Load (41.2ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."user_id" = ?[0m  [["user_id", 1]]
+I, [2019-01-28T07:03:30.606286 #1]  INFO -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   Rendered shared/components/_subtitle.html.erb (17.2ms)
+I, [2019-01-28T07:03:30.614958 #1]  INFO -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   Rendered shared/_sessions.html.erb (94.1ms)
+I, [2019-01-28T07:03:30.617219 #1]  INFO -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   Rendered rooms/show.html.erb within layouts/application (528.3ms)
+I, [2019-01-28T07:03:30.639069 #1]  INFO -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   Rendered shared/_header.html.erb (5.6ms)
+I, [2019-01-28T07:03:30.809315 #1]  INFO -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   Rendered shared/modals/_create_room_modal.html.erb (118.1ms)
+I, [2019-01-28T07:03:30.817518 #1]  INFO -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9]   Rendered shared/_footer.html.erb (2.0ms)
+I, [2019-01-28T07:03:30.821487 #1]  INFO -- : [530f8c16-6be1-4b28-a90f-7988c0d471a9] Completed 200 OK in 10364ms (Views: 726.8ms | ActiveRecord: 157.3ms)
+I, [2019-01-28T07:06:08.621415 #1]  INFO -- : [1d21e8eb-9550-44f8-89d7-7959fde517c5] Started POST "/b/u/login" for 172.19.0.1 at 2019-01-28 07:06:08 +0000
+I, [2019-01-28T07:06:08.643758 #1]  INFO -- : [1d21e8eb-9550-44f8-89d7-7959fde517c5] Processing by SessionsController#create as HTML
+I, [2019-01-28T07:06:08.645065 #1]  INFO -- : [1d21e8eb-9550-44f8-89d7-7959fde517c5]   Parameters: {"utf8"=>"✓", "authenticity_token"=>"HnT7vn3p+3otVV1P3yAy+IN7Em9jrrjeTdJJ8GRpPwoaAMu//YswH8myp546jwMNe+fpBFpD/sK1TQNzs7Pmsw==", "session"=>{"email"=>"liqiang+bbb@gmail.com", "password"=>"[FILTERED]"}, "commit"=>"Sign in"}
+D, [2019-01-28T07:06:08.654445 #1] DEBUG -- : [1d21e8eb-9550-44f8-89d7-7959fde517c5]   [1m[36mUser Load (4.5ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T07:06:08.685988 #1] DEBUG -- : [1d21e8eb-9550-44f8-89d7-7959fde517c5]   [1m[36mUser Load (2.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "liqiang+bbb@gmail.com"], ["LIMIT", 1]]
+D, [2019-01-28T07:06:08.799614 #1] DEBUG -- : [1d21e8eb-9550-44f8-89d7-7959fde517c5]   [1m[36mRoom Load (2.9ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:06:08.800791 #1]  INFO -- : [1d21e8eb-9550-44f8-89d7-7959fde517c5] Redirected to http://fe.bbb.home/b/qia-r2z-ywp
+I, [2019-01-28T07:06:08.801409 #1]  INFO -- : [1d21e8eb-9550-44f8-89d7-7959fde517c5] Completed 302 Found in 155ms (ActiveRecord: 9.5ms)
+I, [2019-01-28T07:06:08.809874 #1]  INFO -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 07:06:08 +0000
+I, [2019-01-28T07:06:08.813921 #1]  INFO -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4] Processing by RoomsController#show as HTML
+I, [2019-01-28T07:06:08.814493 #1]  INFO -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:06:08.818069 #1] DEBUG -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   [1m[36mUser Load (2.7ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:06:08.820432 #1] DEBUG -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   [1m[36mRoom Load (1.3ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T07:06:08.824349 #1] DEBUG -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   [1m[36mRoom Exists (1.3ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:06:09.001224 #1]  INFO -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   Rendering rooms/show.html.erb within layouts/application
+D, [2019-01-28T07:06:09.010104 #1] DEBUG -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   [1m[36mRoom Load (5.8ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:06:09.016651 #1] DEBUG -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   [1m[36mRoom Load (2.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."user_id" = ?[0m  [["user_id", 1]]
+I, [2019-01-28T07:06:09.017906 #1]  INFO -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   Rendered shared/components/_subtitle.html.erb (0.1ms)
+I, [2019-01-28T07:06:09.023439 #1]  INFO -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   Rendered shared/_sessions.html.erb (5.8ms)
+I, [2019-01-28T07:06:09.024171 #1]  INFO -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   Rendered rooms/show.html.erb within layouts/application (21.0ms)
+I, [2019-01-28T07:06:09.030703 #1]  INFO -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   Rendered shared/_header.html.erb (2.3ms)
+I, [2019-01-28T07:06:09.040965 #1]  INFO -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   Rendered shared/modals/_create_room_modal.html.erb (8.4ms)
+I, [2019-01-28T07:06:09.043370 #1]  INFO -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4]   Rendered shared/_footer.html.erb (1.4ms)
+I, [2019-01-28T07:06:09.044281 #1]  INFO -- : [678b3961-a867-42eb-8e3a-e4da2a4721c4] Completed 200 OK in 229ms (Views: 35.6ms | ActiveRecord: 13.1ms)
+I, [2019-01-28T07:07:21.982877 #1]  INFO -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a] Started POST "/b/qia-r2z-ywp/start" for 172.19.0.1 at 2019-01-28 07:07:21 +0000
+I, [2019-01-28T07:07:22.014097 #1]  INFO -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a] Processing by RoomsController#start as HTML
+I, [2019-01-28T07:07:22.016032 #1]  INFO -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a]   Parameters: {"authenticity_token"=>"4yqbAixhKBQ4LHTaf60B72fGdlOH0GaF+uBIVZ0vReTnXqsDrAPjcdzLjguaAjAan1qNOL49IJkCfwLWSvWcXQ==", "room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:07:22.028194 #1] DEBUG -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a]   [1m[36mUser Load (9.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:07:22.033918 #1] DEBUG -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a]   [1m[36mRoom Load (2.3ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T07:07:22.047416 #1] DEBUG -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a]   [1m[36mRoom Exists (2.6ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:07:22.156515 #1] DEBUG -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a]   [1m[35m (4.8ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T07:07:22.176349 #1] DEBUG -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:07:22.246083 #1] DEBUG -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a]   [1m[35mSQL (26.2ms)[0m  [1m[33mUPDATE "rooms" SET "sessions" = ?, "last_session" = ?, "updated_at" = ? WHERE "rooms"."id" = ?[0m  [["sessions", 2], ["last_session", "2019-01-28 07:07:22.096574"], ["updated_at", "2019-01-28 07:07:22.205817"], ["id", 1]]
+D, [2019-01-28T07:07:22.260495 #1] DEBUG -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a]   [1m[35m (12.2ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T07:07:30.282935 #1]  INFO -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a] Redirected to http://192.168.0.111/bigbluebutton/api/join?fullName=Qiang+Li&meetingID=461c942bafc06a6cb500ae966fc1816548f9888b&password=CEEZxVpYFgef&userID=gl-fllikftuzszz&checksum=8a5c3e4ff3c1f7309d7aeb6219bb8f16733bac0f
+I, [2019-01-28T07:07:30.441758 #1]  INFO -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a] [ActiveJob] Enqueued NotifyUserWaitingJob (Job ID: d4c7cb30-efd2-43cd-b724-57d785377742) to Async(default) at 2019-01-28 07:07:35 UTC with arguments: #<GlobalID:0x000056349c1d5a20 @uri=#<URI::GID gid://greenlight/Room/1>>
+I, [2019-01-28T07:07:30.452591 #1]  INFO -- : [5f570298-c9fe-4c2b-8c32-fdf0a83f383a] Completed 302 Found in 8435ms (ActiveRecord: 57.2ms)
+D, [2019-01-28T07:07:35.440498 #1] DEBUG -- :   [1m[36mRoom Load (15.9ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:07:35.453043 #1]  INFO -- : [ActiveJob] [NotifyUserWaitingJob] [d4c7cb30-efd2-43cd-b724-57d785377742] Performing NotifyUserWaitingJob from Async(default) with arguments: #<GlobalID:0x000056349c119578 @uri=#<URI::GID gid://greenlight/Room/1>>
+I, [2019-01-28T07:07:35.456485 #1]  INFO -- : [ActiveJob] [NotifyUserWaitingJob] [d4c7cb30-efd2-43cd-b724-57d785377742] [ActionCable] Broadcasting to qia-r2z-ywp_waiting_channel: {:action=>"started"}
+I, [2019-01-28T07:07:36.247165 #1]  INFO -- : [ActiveJob] [NotifyUserWaitingJob] [d4c7cb30-efd2-43cd-b724-57d785377742] Performed NotifyUserWaitingJob from Async(default) in 792.37ms
+I, [2019-01-28T07:19:25.303004 #1]  INFO -- : [00f4e981-1e98-43ea-ae7d-042aa18ee2c4] Started GET "/b/" for 172.19.0.1 at 2019-01-28 07:19:25 +0000
+I, [2019-01-28T07:19:25.532365 #1]  INFO -- : [00f4e981-1e98-43ea-ae7d-042aa18ee2c4] Processing by MainController#index as HTML
+D, [2019-01-28T07:19:25.591216 #1] DEBUG -- : [00f4e981-1e98-43ea-ae7d-042aa18ee2c4]   [1m[36mUser Load (14.6ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:19:25.671285 #1]  INFO -- : [00f4e981-1e98-43ea-ae7d-042aa18ee2c4]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T07:19:25.718005 #1]  INFO -- : [00f4e981-1e98-43ea-ae7d-042aa18ee2c4]   Rendered shared/_features.html.erb (6.3ms)
+I, [2019-01-28T07:19:25.718795 #1]  INFO -- : [00f4e981-1e98-43ea-ae7d-042aa18ee2c4]   Rendered main/index.html.erb within layouts/application (46.5ms)
+D, [2019-01-28T07:19:25.814093 #1] DEBUG -- : [00f4e981-1e98-43ea-ae7d-042aa18ee2c4]   [1m[36mRoom Load (4.5ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:19:25.855559 #1]  INFO -- : [00f4e981-1e98-43ea-ae7d-042aa18ee2c4]   Rendered shared/_header.html.erb (97.7ms)
+I, [2019-01-28T07:19:25.892770 #1]  INFO -- : [00f4e981-1e98-43ea-ae7d-042aa18ee2c4]   Rendered shared/modals/_create_room_modal.html.erb (34.0ms)
+I, [2019-01-28T07:19:25.898160 #1]  INFO -- : [00f4e981-1e98-43ea-ae7d-042aa18ee2c4]   Rendered shared/_footer.html.erb (2.0ms)
+I, [2019-01-28T07:19:25.904628 #1]  INFO -- : [00f4e981-1e98-43ea-ae7d-042aa18ee2c4] Completed 200 OK in 369ms (Views: 252.1ms | ActiveRecord: 19.1ms)
+I, [2019-01-28T07:20:54.999347 #1]  INFO -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 07:20:54 +0000
+I, [2019-01-28T07:20:55.053293 #1]  INFO -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2] Processing by RoomsController#show as HTML
+I, [2019-01-28T07:20:55.054141 #1]  INFO -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:20:55.061595 #1] DEBUG -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   [1m[36mUser Load (3.4ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:20:55.077661 #1] DEBUG -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   [1m[36mRoom Load (4.0ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T07:20:55.121417 #1] DEBUG -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   [1m[36mRoom Exists (4.0ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:20:55.637899 #1]  INFO -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   Rendering rooms/show.html.erb within layouts/application
+D, [2019-01-28T07:20:55.656906 #1] DEBUG -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   [1m[36mRoom Load (2.8ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:20:56.333958 #1] DEBUG -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   [1m[36mRoom Load (2.8ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."user_id" = ?[0m  [["user_id", 1]]
+I, [2019-01-28T07:20:56.339144 #1]  INFO -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   Rendered shared/components/_subtitle.html.erb (0.9ms)
+I, [2019-01-28T07:20:56.341616 #1]  INFO -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   Rendered shared/_sessions.html.erb (5.0ms)
+I, [2019-01-28T07:20:56.342345 #1]  INFO -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   Rendered rooms/show.html.erb within layouts/application (703.8ms)
+I, [2019-01-28T07:20:56.345570 #1]  INFO -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   Rendered shared/_header.html.erb (1.6ms)
+I, [2019-01-28T07:20:56.349470 #1]  INFO -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   Rendered shared/modals/_create_room_modal.html.erb (3.1ms)
+I, [2019-01-28T07:20:56.350353 #1]  INFO -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2]   Rendered shared/_footer.html.erb (0.2ms)
+I, [2019-01-28T07:20:56.352444 #1]  INFO -- : [07152531-d63f-4979-ad7e-ac8b4925d5a2] Completed 200 OK in 1298ms (Views: 715.5ms | ActiveRecord: 17.0ms)
+I, [2019-01-28T07:21:08.058218 #1]  INFO -- : [b6559156-1e52-459c-8de7-0626f8583c34] Started POST "/b/qia-r2z-ywp/start" for 172.19.0.1 at 2019-01-28 07:21:08 +0000
+I, [2019-01-28T07:21:08.073935 #1]  INFO -- : [b6559156-1e52-459c-8de7-0626f8583c34] Processing by RoomsController#start as HTML
+I, [2019-01-28T07:21:08.074834 #1]  INFO -- : [b6559156-1e52-459c-8de7-0626f8583c34]   Parameters: {"authenticity_token"=>"1IN9iDYyvw+lCkyRoptUxZKD1C9zpRhFGhRNApVA4vvQ902JtlB0akHttkBHNGUwah8vREpIXlniiweBQpo7Qg==", "room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:21:08.081088 #1] DEBUG -- : [b6559156-1e52-459c-8de7-0626f8583c34]   [1m[36mUser Load (5.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:21:08.087101 #1] DEBUG -- : [b6559156-1e52-459c-8de7-0626f8583c34]   [1m[36mRoom Load (1.5ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T07:21:08.099910 #1] DEBUG -- : [b6559156-1e52-459c-8de7-0626f8583c34]   [1m[36mRoom Exists (3.8ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:21:08.239600 #1] DEBUG -- : [b6559156-1e52-459c-8de7-0626f8583c34]   [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T07:21:08.244122 #1] DEBUG -- : [b6559156-1e52-459c-8de7-0626f8583c34]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:21:08.280561 #1] DEBUG -- : [b6559156-1e52-459c-8de7-0626f8583c34]   [1m[35mSQL (16.3ms)[0m  [1m[33mUPDATE "rooms" SET "sessions" = ?, "last_session" = ?, "updated_at" = ? WHERE "rooms"."id" = ?[0m  [["sessions", 3], ["last_session", "2019-01-28 07:21:08.190334"], ["updated_at", "2019-01-28 07:21:08.257695"], ["id", 1]]
+D, [2019-01-28T07:21:08.290896 #1] DEBUG -- : [b6559156-1e52-459c-8de7-0626f8583c34]   [1m[35m (9.2ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T07:21:08.632945 #1]  INFO -- : [b6559156-1e52-459c-8de7-0626f8583c34] Redirected to http://fe.bbb.home/b/qia-r2z-ywp
+I, [2019-01-28T07:21:08.665529 #1]  INFO -- : [b6559156-1e52-459c-8de7-0626f8583c34] [ActiveJob] Enqueued NotifyUserWaitingJob (Job ID: ffa3d822-b851-419b-b2a9-e471cdf2d1fe) to Async(default) at 2019-01-28 07:21:13 UTC with arguments: #<GlobalID:0x00007ff3102d4668 @uri=#<URI::GID gid://greenlight/Room/1>>
+I, [2019-01-28T07:21:08.668497 #1]  INFO -- : [b6559156-1e52-459c-8de7-0626f8583c34] Completed 302 Found in 593ms (ActiveRecord: 36.0ms)
+I, [2019-01-28T07:21:08.678875 #1]  INFO -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 07:21:08 +0000
+I, [2019-01-28T07:21:08.689772 #1]  INFO -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2] Processing by RoomsController#show as HTML
+I, [2019-01-28T07:21:08.691294 #1]  INFO -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:21:08.695699 #1] DEBUG -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   [1m[36mUser Load (2.7ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:21:08.701158 #1] DEBUG -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   [1m[36mRoom Load (2.7ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T07:21:08.715495 #1] DEBUG -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   [1m[36mRoom Exists (4.2ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:21:08.824948 #1]  INFO -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   Rendering rooms/show.html.erb within layouts/application
+I, [2019-01-28T07:21:08.839602 #1]  INFO -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   Rendered shared/_error_banner.html.erb (9.3ms)
+D, [2019-01-28T07:21:08.845587 #1] DEBUG -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   [1m[36mRoom Load (2.7ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:21:08.850756 #1] DEBUG -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   [1m[36mRoom Load (2.2ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."user_id" = ?[0m  [["user_id", 1]]
+I, [2019-01-28T07:21:08.860012 #1]  INFO -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   Rendered shared/components/_subtitle.html.erb (0.1ms)
+I, [2019-01-28T07:21:08.861134 #1]  INFO -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   Rendered shared/_sessions.html.erb (9.6ms)
+I, [2019-01-28T07:21:08.861701 #1]  INFO -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   Rendered rooms/show.html.erb within layouts/application (35.7ms)
+I, [2019-01-28T07:21:08.867455 #1]  INFO -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   Rendered shared/_header.html.erb (2.4ms)
+I, [2019-01-28T07:21:08.872678 #1]  INFO -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   Rendered shared/modals/_create_room_modal.html.erb (3.0ms)
+I, [2019-01-28T07:21:08.873611 #1]  INFO -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2]   Rendered shared/_footer.html.erb (0.2ms)
+I, [2019-01-28T07:21:08.874538 #1]  INFO -- : [0b38398b-dc84-446f-9f1b-2ca8c6bff9a2] Completed 200 OK in 182ms (Views: 45.8ms | ActiveRecord: 14.5ms)
+D, [2019-01-28T07:21:13.665449 #1] DEBUG -- :   [1m[36mRoom Load (5.8ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:21:13.666386 #1]  INFO -- : [ActiveJob] [NotifyUserWaitingJob] [ffa3d822-b851-419b-b2a9-e471cdf2d1fe] Performing NotifyUserWaitingJob from Async(default) with arguments: #<GlobalID:0x000056349d9e25a0 @uri=#<URI::GID gid://greenlight/Room/1>>
+I, [2019-01-28T07:21:13.666980 #1]  INFO -- : [ActiveJob] [NotifyUserWaitingJob] [ffa3d822-b851-419b-b2a9-e471cdf2d1fe] [ActionCable] Broadcasting to qia-r2z-ywp_waiting_channel: {:action=>"started"}
+I, [2019-01-28T07:21:13.667572 #1]  INFO -- : [ActiveJob] [NotifyUserWaitingJob] [ffa3d822-b851-419b-b2a9-e471cdf2d1fe] Performed NotifyUserWaitingJob from Async(default) in 0.64ms
+I, [2019-01-28T07:22:26.719660 #1]  INFO -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67] Started POST "/b/qia-r2z-ywp/start" for 172.19.0.1 at 2019-01-28 07:22:26 +0000
+I, [2019-01-28T07:22:26.733636 #1]  INFO -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67] Processing by RoomsController#start as HTML
+I, [2019-01-28T07:22:26.736723 #1]  INFO -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67]   Parameters: {"authenticity_token"=>"Ka0NqqGWnYMbTxvL5wR35z0MMteRrHkwFpD/x7V6XTYt2T2rIfRW5v+o4RoCq0YSxZDJvKhBPyzuD7VEYqCEjw==", "room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:22:26.794113 #1] DEBUG -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67]   [1m[36mUser Load (42.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:22:26.799294 #1] DEBUG -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67]   [1m[36mRoom Load (2.6ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T07:22:26.805644 #1] DEBUG -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67]   [1m[36mRoom Exists (2.3ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:22:26.849428 #1] DEBUG -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67]   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T07:22:26.851535 #1] DEBUG -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:22:26.874860 #1] DEBUG -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67]   [1m[35mSQL (19.8ms)[0m  [1m[33mUPDATE "rooms" SET "sessions" = ?, "last_session" = ?, "updated_at" = ? WHERE "rooms"."id" = ?[0m  [["sessions", 4], ["last_session", "2019-01-28 07:22:26.848750"], ["updated_at", "2019-01-28 07:22:26.852692"], ["id", 1]]
+D, [2019-01-28T07:22:26.883679 #1] DEBUG -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67]   [1m[35m (7.5ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T07:22:27.571437 #1]  INFO -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67] Redirected to http://192.168.0.111/bigbluebutton/api/join?fullName=Qiang+Li&meetingID=461c942bafc06a6cb500ae966fc1816548f9888b&password=vUtIbnCaapLo&userID=gl-fllikftuzszz&checksum=7df6196fb34023e23a18171043a6d0d01e09d6e6
+I, [2019-01-28T07:22:27.578160 #1]  INFO -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67] [ActiveJob] Enqueued NotifyUserWaitingJob (Job ID: 0cd04596-a378-4671-a04e-c4de3b081f48) to Async(default) at 2019-01-28 07:22:32 UTC with arguments: #<GlobalID:0x000056349d814138 @uri=#<URI::GID gid://greenlight/Room/1>>
+I, [2019-01-28T07:22:27.578918 #1]  INFO -- : [75509b6c-e6f5-4ed7-949d-8f0c0bf02f67] Completed 302 Found in 831ms (ActiveRecord: 74.5ms)
+D, [2019-01-28T07:22:32.586245 #1] DEBUG -- :   [1m[36mRoom Load (3.3ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:22:32.589386 #1]  INFO -- : [ActiveJob] [NotifyUserWaitingJob] [0cd04596-a378-4671-a04e-c4de3b081f48] Performing NotifyUserWaitingJob from Async(default) with arguments: #<GlobalID:0x000056349d7db1d0 @uri=#<URI::GID gid://greenlight/Room/1>>
+I, [2019-01-28T07:22:32.590077 #1]  INFO -- : [ActiveJob] [NotifyUserWaitingJob] [0cd04596-a378-4671-a04e-c4de3b081f48] [ActionCable] Broadcasting to qia-r2z-ywp_waiting_channel: {:action=>"started"}
+I, [2019-01-28T07:22:32.590692 #1]  INFO -- : [ActiveJob] [NotifyUserWaitingJob] [0cd04596-a378-4671-a04e-c4de3b081f48] Performed NotifyUserWaitingJob from Async(default) in 0.65ms
+D, [2019-01-28T07:38:00.066485 #10] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (4.3ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T07:38:00.097744 #10] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (1.9ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T07:38:00.108045 #10] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T07:38:00.119852 #10] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T07:42:17.391351 #1]  INFO -- : [49c82ec3-aa5e-4b34-acfa-53c3543e4574] Started GET "/b/" for 172.19.0.1 at 2019-01-28 07:42:17 +0000
+I, [2019-01-28T07:42:18.880836 #1]  INFO -- : [49c82ec3-aa5e-4b34-acfa-53c3543e4574] Processing by MainController#index as HTML
+D, [2019-01-28T07:42:20.587128 #1] DEBUG -- : [49c82ec3-aa5e-4b34-acfa-53c3543e4574]   [1m[36mUser Load (17.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:42:21.239525 #1]  INFO -- : [49c82ec3-aa5e-4b34-acfa-53c3543e4574]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T07:42:21.936796 #1]  INFO -- : [49c82ec3-aa5e-4b34-acfa-53c3543e4574]   Rendered shared/_features.html.erb (7.7ms)
+I, [2019-01-28T07:42:21.937514 #1]  INFO -- : [49c82ec3-aa5e-4b34-acfa-53c3543e4574]   Rendered main/index.html.erb within layouts/application (697.3ms)
+D, [2019-01-28T07:42:22.168949 #1] DEBUG -- : [49c82ec3-aa5e-4b34-acfa-53c3543e4574]   [1m[36mRoom Load (5.0ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:42:22.285003 #1]  INFO -- : [49c82ec3-aa5e-4b34-acfa-53c3543e4574]   Rendered shared/_header.html.erb (274.3ms)
+I, [2019-01-28T07:42:22.355902 #1]  INFO -- : [49c82ec3-aa5e-4b34-acfa-53c3543e4574]   Rendered shared/modals/_create_room_modal.html.erb (65.8ms)
+I, [2019-01-28T07:42:22.363676 #1]  INFO -- : [49c82ec3-aa5e-4b34-acfa-53c3543e4574]   Rendered shared/_footer.html.erb (5.1ms)
+I, [2019-01-28T07:42:22.374283 #1]  INFO -- : [49c82ec3-aa5e-4b34-acfa-53c3543e4574] Completed 200 OK in 3490ms (Views: 1279.0ms | ActiveRecord: 160.1ms)
+I, [2019-01-28T07:42:41.698146 #1]  INFO -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7] Started POST "/b/" for 172.19.0.1 at 2019-01-28 07:42:41 +0000
+I, [2019-01-28T07:42:41.726912 #1]  INFO -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7] Processing by RoomsController#create as HTML
+I, [2019-01-28T07:42:41.727659 #1]  INFO -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   Parameters: {"utf8"=>"✓", "authenticity_token"=>"Uef5lAyaHS+Tu/d853Gr5cLxSE7CPeU/jENDn+fe1EZVk8mVjPjWSndcDa0C3poQOm2zJfvQoyN03AkcMAQN/w==", "room"=>{"name"=>"math 101", "auto_join"=>"1"}, "commit"=>"Create Room"}
+D, [2019-01-28T07:42:41.746904 #1] DEBUG -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   [1m[36mUser Load (15.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:42:41.814274 #1] DEBUG -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   [1m[35m (13.2ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T07:42:43.061388 #1] DEBUG -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   [1m[35mSQL (40.1ms)[0m  [1m[32mINSERT INTO "rooms" ("user_id", "name", "uid", "bbb_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["user_id", 1], ["name", "math 101"], ["uid", "qia-6n9-h2f"], ["bbb_id", "e78b936eba2d9767681fba978a138459e03d94b8"], ["created_at", "2019-01-28 07:42:41.845476"], ["updated_at", "2019-01-28 07:42:41.845476"]]
+D, [2019-01-28T07:42:43.079063 #1] DEBUG -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   [1m[35m (16.4ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T07:43:03.503908 #1]  INFO -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7] Completed 500 Internal Server Error in 21775ms (ActiveRecord: 84.9ms)
+F, [2019-01-28T07:43:03.509712 #1] FATAL -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   
+F, [2019-01-28T07:43:03.510538 #1] FATAL -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7] ActionController::UrlGenerationError (No route matches {:action=>"show", :controller=>"rooms"} missing required keys: [:room_uid]):
+F, [2019-01-28T07:43:03.512814 #1] FATAL -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   
+F, [2019-01-28T07:43:03.514405 #1] FATAL -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7] app/controllers/rooms_controller.rb:112:in `rescue in start'
+[595c3d64-0610-402b-bdba-9c1763b0f0d7] app/controllers/rooms_controller.rb:109:in `start'
+[595c3d64-0610-402b-bdba-9c1763b0f0d7] app/controllers/rooms_controller.rb:36:in `create'
+I, [2019-01-28T07:43:03.528107 #1]  INFO -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7] Processing by ErrorsController#internal_error as HTML
+I, [2019-01-28T07:43:03.528839 #1]  INFO -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   Parameters: {"utf8"=>"✓", "authenticity_token"=>"Uef5lAyaHS+Tu/d853Gr5cLxSE7CPeU/jENDn+fe1EZVk8mVjPjWSndcDa0C3poQOm2zJfvQoyN03AkcMAQN/w==", "room"=>{"name"=>"math 101", "auto_join"=>"1"}, "commit"=>"Create Room"}
+D, [2019-01-28T07:43:03.532741 #1] DEBUG -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   [1m[36mUser Load (2.4ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:43:03.541589 #1]  INFO -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   Rendering errors/internal_error.html.erb within layouts/application
+I, [2019-01-28T07:43:03.543141 #1]  INFO -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   Rendered errors/internal_error.html.erb within layouts/application (1.0ms)
+D, [2019-01-28T07:43:03.551565 #1] DEBUG -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   [1m[36mRoom Load (5.4ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:43:03.553990 #1]  INFO -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   Rendered shared/_header.html.erb (9.4ms)
+I, [2019-01-28T07:43:03.556923 #1]  INFO -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   Rendered shared/modals/_create_room_modal.html.erb (1.8ms)
+I, [2019-01-28T07:43:03.558242 #1]  INFO -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7]   Rendered shared/_footer.html.erb (0.3ms)
+I, [2019-01-28T07:43:03.561976 #1]  INFO -- : [595c3d64-0610-402b-bdba-9c1763b0f0d7] Completed 500 Internal Server Error in 32ms (Views: 21.4ms | ActiveRecord: 7.9ms)
+I, [2019-01-28T07:43:23.806540 #1]  INFO -- : [028687f8-09bb-43bb-8982-bca4bad852b6] Started GET "/b/" for 172.19.0.1 at 2019-01-28 07:43:23 +0000
+I, [2019-01-28T07:43:23.812512 #1]  INFO -- : [028687f8-09bb-43bb-8982-bca4bad852b6] Processing by MainController#index as */*
+D, [2019-01-28T07:43:23.822293 #1] DEBUG -- : [028687f8-09bb-43bb-8982-bca4bad852b6]   [1m[36mUser Load (2.4ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:43:23.830056 #1]  INFO -- : [028687f8-09bb-43bb-8982-bca4bad852b6]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T07:43:23.837746 #1]  INFO -- : [028687f8-09bb-43bb-8982-bca4bad852b6]   Rendered shared/_features.html.erb (2.5ms)
+I, [2019-01-28T07:43:23.838263 #1]  INFO -- : [028687f8-09bb-43bb-8982-bca4bad852b6]   Rendered main/index.html.erb within layouts/application (7.6ms)
+D, [2019-01-28T07:43:23.845870 #1] DEBUG -- : [028687f8-09bb-43bb-8982-bca4bad852b6]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T07:43:23.848017 #1] DEBUG -- : [028687f8-09bb-43bb-8982-bca4bad852b6]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:43:23.854094 #1]  INFO -- : [028687f8-09bb-43bb-8982-bca4bad852b6]   Rendered shared/modals/_login_modal.html.erb (1.7ms)
+I, [2019-01-28T07:43:23.855145 #1]  INFO -- : [028687f8-09bb-43bb-8982-bca4bad852b6]   Rendered shared/_header.html.erb (12.5ms)
+D, [2019-01-28T07:43:23.856475 #1] DEBUG -- : [028687f8-09bb-43bb-8982-bca4bad852b6]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:43:23.862610 #1]  INFO -- : [028687f8-09bb-43bb-8982-bca4bad852b6]   Rendered shared/_footer.html.erb (0.8ms)
+I, [2019-01-28T07:43:23.863510 #1]  INFO -- : [028687f8-09bb-43bb-8982-bca4bad852b6] Completed 200 OK in 48ms (Views: 33.9ms | ActiveRecord: 2.5ms)
+I, [2019-01-28T07:45:23.828794 #1]  INFO -- : [b31de092-48b2-4548-8e54-60a769570298] Started GET "/b/" for 172.19.0.1 at 2019-01-28 07:45:23 +0000
+I, [2019-01-28T07:45:23.833069 #1]  INFO -- : [b31de092-48b2-4548-8e54-60a769570298] Processing by MainController#index as HTML
+D, [2019-01-28T07:45:23.843578 #1] DEBUG -- : [b31de092-48b2-4548-8e54-60a769570298]   [1m[36mUser Load (6.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:45:23.853527 #1]  INFO -- : [b31de092-48b2-4548-8e54-60a769570298]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T07:45:23.861018 #1]  INFO -- : [b31de092-48b2-4548-8e54-60a769570298]   Rendered shared/_features.html.erb (1.1ms)
+I, [2019-01-28T07:45:23.862087 #1]  INFO -- : [b31de092-48b2-4548-8e54-60a769570298]   Rendered main/index.html.erb within layouts/application (3.3ms)
+D, [2019-01-28T07:45:23.869112 #1] DEBUG -- : [b31de092-48b2-4548-8e54-60a769570298]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T07:45:23.871248 #1] DEBUG -- : [b31de092-48b2-4548-8e54-60a769570298]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:45:23.877531 #1]  INFO -- : [b31de092-48b2-4548-8e54-60a769570298]   Rendered shared/modals/_login_modal.html.erb (1.9ms)
+I, [2019-01-28T07:45:23.878108 #1]  INFO -- : [b31de092-48b2-4548-8e54-60a769570298]   Rendered shared/_header.html.erb (13.2ms)
+D, [2019-01-28T07:45:23.879187 #1] DEBUG -- : [b31de092-48b2-4548-8e54-60a769570298]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:45:23.880757 #1]  INFO -- : [b31de092-48b2-4548-8e54-60a769570298]   Rendered shared/_footer.html.erb (0.5ms)
+I, [2019-01-28T07:45:23.884877 #1]  INFO -- : [b31de092-48b2-4548-8e54-60a769570298] Completed 200 OK in 48ms (Views: 32.9ms | ActiveRecord: 6.3ms)
+I, [2019-01-28T07:45:39.914330 #1]  INFO -- : [3ff20262-ffe9-45c2-a34a-1fec15fb7618] Started POST "/b/u/login" for 172.19.0.1 at 2019-01-28 07:45:39 +0000
+I, [2019-01-28T07:45:39.927275 #1]  INFO -- : [3ff20262-ffe9-45c2-a34a-1fec15fb7618] Processing by SessionsController#create as HTML
+I, [2019-01-28T07:45:39.930987 #1]  INFO -- : [3ff20262-ffe9-45c2-a34a-1fec15fb7618]   Parameters: {"utf8"=>"✓", "authenticity_token"=>"8k0Ti3MxJUtAGyFnDyvRsilhbzQeSPr6w4vIGiWmvfLYpT7UFu5gflYLFC4dQPblftWalcUqiqpXQ6EprNc9UQ==", "session"=>{"email"=>"liqiang+bbb@gmail.com", "password"=>"[FILTERED]"}, "commit"=>"Sign in"}
+D, [2019-01-28T07:45:39.947241 #1] DEBUG -- : [3ff20262-ffe9-45c2-a34a-1fec15fb7618]   [1m[36mUser Load (9.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T07:45:39.952633 #1] DEBUG -- : [3ff20262-ffe9-45c2-a34a-1fec15fb7618]   [1m[36mUser Load (2.7ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "liqiang+bbb@gmail.com"], ["LIMIT", 1]]
+D, [2019-01-28T07:45:40.044344 #1] DEBUG -- : [3ff20262-ffe9-45c2-a34a-1fec15fb7618]   [1m[36mRoom Load (4.6ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:45:40.050250 #1]  INFO -- : [3ff20262-ffe9-45c2-a34a-1fec15fb7618] Redirected to http://fe.bbb.921sm3fxr9v5wwh08d7nvnks5a37px0tdj8qd8e0cc60acy514r61r/b/qia-r2z-ywp
+I, [2019-01-28T07:45:40.051141 #1]  INFO -- : [3ff20262-ffe9-45c2-a34a-1fec15fb7618] Completed 302 Found in 116ms (ActiveRecord: 16.4ms)
+I, [2019-01-28T07:45:40.060953 #1]  INFO -- : [b206452f-c548-40b4-86c4-936a0890b317] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 07:45:40 +0000
+I, [2019-01-28T07:45:40.065676 #1]  INFO -- : [b206452f-c548-40b4-86c4-936a0890b317] Processing by RoomsController#show as HTML
+I, [2019-01-28T07:45:40.066608 #1]  INFO -- : [b206452f-c548-40b4-86c4-936a0890b317]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:45:40.072062 #1] DEBUG -- : [b206452f-c548-40b4-86c4-936a0890b317]   [1m[36mUser Load (3.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:45:40.077987 #1] DEBUG -- : [b206452f-c548-40b4-86c4-936a0890b317]   [1m[36mRoom Load (3.1ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T07:45:40.146956 #1] DEBUG -- : [b206452f-c548-40b4-86c4-936a0890b317]   [1m[36mRoom Exists (2.7ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:46:00.159813 #1]  INFO -- : [b206452f-c548-40b4-86c4-936a0890b317] Completed 500 Internal Server Error in 20091ms (ActiveRecord: 9.0ms)
+F, [2019-01-28T07:46:00.161839 #1] FATAL -- : [b206452f-c548-40b4-86c4-936a0890b317]   
+F, [2019-01-28T07:46:00.162404 #1] FATAL -- : [b206452f-c548-40b4-86c4-936a0890b317] BigBlueButton::BigBlueButtonException (Timeout error. Your server is probably down: "http://bbb.home/bigbluebutton/api". Error: Net::ReadTimeout):
+F, [2019-01-28T07:46:00.162972 #1] FATAL -- : [b206452f-c548-40b4-86c4-936a0890b317]   
+F, [2019-01-28T07:46:00.163511 #1] FATAL -- : [b206452f-c548-40b4-86c4-936a0890b317] app/models/room.rb:118:in `recordings'
+[b206452f-c548-40b4-86c4-936a0890b317] app/controllers/rooms_controller.rb:46:in `show'
+I, [2019-01-28T07:46:00.165055 #1]  INFO -- : [b206452f-c548-40b4-86c4-936a0890b317] Processing by ErrorsController#internal_error as HTML
+I, [2019-01-28T07:46:00.165774 #1]  INFO -- : [b206452f-c548-40b4-86c4-936a0890b317]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:46:00.166802 #1] DEBUG -- : [b206452f-c548-40b4-86c4-936a0890b317]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:46:00.168373 #1]  INFO -- : [b206452f-c548-40b4-86c4-936a0890b317]   Rendering errors/internal_error.html.erb within layouts/application
+I, [2019-01-28T07:46:00.169506 #1]  INFO -- : [b206452f-c548-40b4-86c4-936a0890b317]   Rendered errors/internal_error.html.erb within layouts/application (0.4ms)
+D, [2019-01-28T07:46:00.177956 #1] DEBUG -- : [b206452f-c548-40b4-86c4-936a0890b317]   [1m[36mRoom Load (3.4ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:46:00.180109 #1]  INFO -- : [b206452f-c548-40b4-86c4-936a0890b317]   Rendered shared/_header.html.erb (6.4ms)
+I, [2019-01-28T07:46:00.182631 #1]  INFO -- : [b206452f-c548-40b4-86c4-936a0890b317]   Rendered shared/modals/_create_room_modal.html.erb (1.0ms)
+I, [2019-01-28T07:46:00.183811 #1]  INFO -- : [b206452f-c548-40b4-86c4-936a0890b317]   Rendered shared/_footer.html.erb (0.2ms)
+I, [2019-01-28T07:46:00.184750 #1]  INFO -- : [b206452f-c548-40b4-86c4-936a0890b317] Completed 500 Internal Server Error in 18ms (Views: 13.2ms | ActiveRecord: 3.4ms)
+I, [2019-01-28T07:46:20.137611 #1]  INFO -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 07:46:20 +0000
+I, [2019-01-28T07:46:20.153043 #1]  INFO -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8] Processing by RoomsController#show as HTML
+I, [2019-01-28T07:46:20.154702 #1]  INFO -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:46:20.164307 #1] DEBUG -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   [1m[36mUser Load (6.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:46:20.174485 #1] DEBUG -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   [1m[36mRoom Load (7.6ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T07:46:20.185223 #1] DEBUG -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   [1m[36mRoom Exists (4.0ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:46:31.962948 #1]  INFO -- : [d8188ff0-b2d9-4081-a93a-3561932ebebb] Started POST "/b/u/login" for 172.19.0.1 at 2019-01-28 07:46:31 +0000
+I, [2019-01-28T07:46:31.968840 #1]  INFO -- : [d8188ff0-b2d9-4081-a93a-3561932ebebb] Processing by SessionsController#create as HTML
+I, [2019-01-28T07:46:31.969791 #1]  INFO -- : [d8188ff0-b2d9-4081-a93a-3561932ebebb]   Parameters: {"utf8"=>"✓", "authenticity_token"=>"8k0Ti3MxJUtAGyFnDyvRsilhbzQeSPr6w4vIGiWmvfLYpT7UFu5gflYLFC4dQPblftWalcUqiqpXQ6EprNc9UQ==", "session"=>{"email"=>"liqiang+bbb@gmail.com", "password"=>"[FILTERED]"}, "commit"=>"Sign in"}
+D, [2019-01-28T07:46:32.011486 #1] DEBUG -- : [d8188ff0-b2d9-4081-a93a-3561932ebebb]   [1m[36mUser Load (24.6ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:46:32.018214 #1] DEBUG -- : [d8188ff0-b2d9-4081-a93a-3561932ebebb]   [1m[36mUser Load (2.8ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "liqiang+bbb@gmail.com"], ["LIMIT", 1]]
+D, [2019-01-28T07:46:32.103184 #1] DEBUG -- : [d8188ff0-b2d9-4081-a93a-3561932ebebb]   [1m[36mRoom Load (3.2ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:46:32.105233 #1]  INFO -- : [d8188ff0-b2d9-4081-a93a-3561932ebebb] Redirected to http://fe.bbb.921sm3fxr9v5wwh08d7nvnks5a37px0tdj8qd8e0cc60acy514r61r/b/qia-r2z-ywp
+I, [2019-01-28T07:46:32.106175 #1]  INFO -- : [d8188ff0-b2d9-4081-a93a-3561932ebebb] Completed 302 Found in 135ms (ActiveRecord: 30.6ms)
+I, [2019-01-28T07:46:32.116605 #1]  INFO -- : [71c71660-4ed2-4d46-a8d0-0145d122142e] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 07:46:32 +0000
+I, [2019-01-28T07:46:32.118839 #1]  INFO -- : [71c71660-4ed2-4d46-a8d0-0145d122142e] Processing by RoomsController#show as HTML
+I, [2019-01-28T07:46:32.119483 #1]  INFO -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:46:32.127202 #1] DEBUG -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   [1m[36mUser Load (6.6ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:46:32.134869 #1] DEBUG -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   [1m[36mRoom Load (4.6ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T07:46:32.139325 #1] DEBUG -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   [1m[36mRoom Exists (2.3ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:46:40.285911 #1]  INFO -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8] Completed 500 Internal Server Error in 20128ms (ActiveRecord: 17.7ms)
+F, [2019-01-28T07:46:40.287288 #1] FATAL -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   
+F, [2019-01-28T07:46:40.288314 #1] FATAL -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8] BigBlueButton::BigBlueButtonException (Timeout error. Your server is probably down: "http://bbb.home/bigbluebutton/api". Error: Net::ReadTimeout):
+F, [2019-01-28T07:46:40.288816 #1] FATAL -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   
+F, [2019-01-28T07:46:40.289301 #1] FATAL -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8] app/models/room.rb:118:in `recordings'
+[cd8b636c-1243-4493-a24b-9255ae49b9c8] app/controllers/rooms_controller.rb:46:in `show'
+I, [2019-01-28T07:46:40.290414 #1]  INFO -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8] Processing by ErrorsController#internal_error as HTML
+I, [2019-01-28T07:46:40.290843 #1]  INFO -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:46:40.292148 #1] DEBUG -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:46:40.294194 #1]  INFO -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   Rendering errors/internal_error.html.erb within layouts/application
+I, [2019-01-28T07:46:40.295105 #1]  INFO -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   Rendered errors/internal_error.html.erb within layouts/application (0.3ms)
+D, [2019-01-28T07:46:40.299919 #1] DEBUG -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   [1m[36mRoom Load (2.5ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:46:40.302372 #1]  INFO -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   Rendered shared/_header.html.erb (6.0ms)
+I, [2019-01-28T07:46:40.304087 #1]  INFO -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   Rendered shared/modals/_create_room_modal.html.erb (0.8ms)
+I, [2019-01-28T07:46:40.305336 #1]  INFO -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8]   Rendered shared/_footer.html.erb (0.4ms)
+I, [2019-01-28T07:46:40.306793 #1]  INFO -- : [cd8b636c-1243-4493-a24b-9255ae49b9c8] Completed 500 Internal Server Error in 15ms (Views: 10.3ms | ActiveRecord: 2.6ms)
+I, [2019-01-28T07:46:52.161146 #1]  INFO -- : [71c71660-4ed2-4d46-a8d0-0145d122142e] Completed 500 Internal Server Error in 20041ms (ActiveRecord: 13.6ms)
+F, [2019-01-28T07:46:52.163604 #1] FATAL -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   
+F, [2019-01-28T07:46:52.164177 #1] FATAL -- : [71c71660-4ed2-4d46-a8d0-0145d122142e] BigBlueButton::BigBlueButtonException (Timeout error. Your server is probably down: "http://bbb.home/bigbluebutton/api". Error: Net::ReadTimeout):
+F, [2019-01-28T07:46:52.164600 #1] FATAL -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   
+F, [2019-01-28T07:46:52.165030 #1] FATAL -- : [71c71660-4ed2-4d46-a8d0-0145d122142e] app/models/room.rb:118:in `recordings'
+[71c71660-4ed2-4d46-a8d0-0145d122142e] app/controllers/rooms_controller.rb:46:in `show'
+I, [2019-01-28T07:46:52.166197 #1]  INFO -- : [71c71660-4ed2-4d46-a8d0-0145d122142e] Processing by ErrorsController#internal_error as HTML
+I, [2019-01-28T07:46:52.166949 #1]  INFO -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:46:52.174345 #1] DEBUG -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:46:52.177569 #1]  INFO -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   Rendering errors/internal_error.html.erb within layouts/application
+I, [2019-01-28T07:46:52.178876 #1]  INFO -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   Rendered errors/internal_error.html.erb within layouts/application (0.6ms)
+D, [2019-01-28T07:46:52.183982 #1] DEBUG -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   [1m[36mRoom Load (2.8ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:46:52.185729 #1]  INFO -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   Rendered shared/_header.html.erb (5.4ms)
+I, [2019-01-28T07:46:52.188986 #1]  INFO -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   Rendered shared/modals/_create_room_modal.html.erb (1.9ms)
+I, [2019-01-28T07:46:52.189928 #1]  INFO -- : [71c71660-4ed2-4d46-a8d0-0145d122142e]   Rendered shared/_footer.html.erb (0.2ms)
+I, [2019-01-28T07:46:52.190673 #1]  INFO -- : [71c71660-4ed2-4d46-a8d0-0145d122142e] Completed 500 Internal Server Error in 17ms (Views: 10.6ms | ActiveRecord: 2.8ms)
+I, [2019-01-28T07:46:55.796243 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a] Started GET "/b/u/gl-fllikftuzszz/edit" for 172.19.0.1 at 2019-01-28 07:46:55 +0000
+I, [2019-01-28T07:46:55.804248 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a] Processing by UsersController#edit as HTML
+I, [2019-01-28T07:46:55.807353 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Parameters: {"user_uid"=>"gl-fllikftuzszz"}
+D, [2019-01-28T07:46:55.818203 #1] DEBUG -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   [1m[36mUser Load (5.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:46:55.824130 #1] DEBUG -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   [1m[36mUser Load (3.6ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."uid" = ? LIMIT ?[0m  [["uid", "gl-fllikftuzszz"], ["LIMIT", 1]]
+I, [2019-01-28T07:46:55.837943 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendering users/edit.html.erb within layouts/application
+I, [2019-01-28T07:46:55.848917 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/components/_subtitle.html.erb (0.7ms)
+I, [2019-01-28T07:46:55.875448 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/settings/_account.html.erb (19.6ms)
+I, [2019-01-28T07:46:55.876490 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/settings/_setting_view.html.erb (23.5ms)
+I, [2019-01-28T07:46:55.881001 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/settings/_password.html.erb (2.3ms)
+I, [2019-01-28T07:46:55.881746 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/settings/_setting_view.html.erb (4.2ms)
+I, [2019-01-28T07:46:55.884853 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/settings/_design.html.erb (0.8ms)
+I, [2019-01-28T07:46:55.886529 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/settings/_setting_view.html.erb (3.8ms)
+I, [2019-01-28T07:46:55.892990 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/modals/_delete_account_modal.html.erb (2.4ms)
+I, [2019-01-28T07:46:55.893742 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/settings/_delete.html.erb (5.0ms)
+I, [2019-01-28T07:46:55.894443 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/settings/_setting_view.html.erb (7.0ms)
+I, [2019-01-28T07:46:55.895003 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered users/edit.html.erb within layouts/application (53.8ms)
+D, [2019-01-28T07:46:55.901522 #1] DEBUG -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   [1m[36mRoom Load (2.8ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:46:55.903654 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/_header.html.erb (6.1ms)
+I, [2019-01-28T07:46:55.905340 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/modals/_create_room_modal.html.erb (0.8ms)
+I, [2019-01-28T07:46:55.906376 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a]   Rendered shared/_footer.html.erb (0.2ms)
+I, [2019-01-28T07:46:55.907138 #1]  INFO -- : [27a4b28d-38f8-4a80-b09a-bd7acc3c405a] Completed 200 OK in 95ms (Views: 68.2ms | ActiveRecord: 11.7ms)
+I, [2019-01-28T07:47:01.927700 #1]  INFO -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 07:47:01 +0000
+I, [2019-01-28T07:47:01.977520 #1]  INFO -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7] Processing by RoomsController#show as HTML
+I, [2019-01-28T07:47:01.978828 #1]  INFO -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:47:01.985628 #1] DEBUG -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   [1m[36mUser Load (4.6ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:47:02.029375 #1] DEBUG -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   [1m[36mRoom Load (29.2ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T07:47:02.037647 #1] DEBUG -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   [1m[36mRoom Exists (4.7ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:47:07.928123 #1]  INFO -- : [c862a497-7b1d-4797-ab10-bb9635b78c48] Started GET "/b/qia-r2z-ywp" for 172.19.0.1 at 2019-01-28 07:47:07 +0000
+I, [2019-01-28T07:47:07.956591 #1]  INFO -- : [c862a497-7b1d-4797-ab10-bb9635b78c48] Processing by RoomsController#show as HTML
+I, [2019-01-28T07:47:07.958252 #1]  INFO -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:47:07.972385 #1] DEBUG -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   [1m[36mUser Load (10.8ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+D, [2019-01-28T07:47:07.983955 #1] DEBUG -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   [1m[36mRoom Load (3.4ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."uid" = ? LIMIT ?[0m  [["uid", "qia-r2z-ywp"], ["LIMIT", 1]]
+D, [2019-01-28T07:47:07.990190 #1] DEBUG -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   [1m[36mRoom Exists (2.8ms)[0m  [1m[34mSELECT  1 AS one FROM "rooms" WHERE "rooms"."user_id" = ? AND "rooms"."id" = ? LIMIT ?[0m  [["user_id", 1], ["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:47:22.056372 #1]  INFO -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7] Completed 500 Internal Server Error in 20072ms (ActiveRecord: 38.6ms)
+F, [2019-01-28T07:47:22.061419 #1] FATAL -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   
+F, [2019-01-28T07:47:22.063395 #1] FATAL -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7] BigBlueButton::BigBlueButtonException (Timeout error. Your server is probably down: "http://bbb.home/bigbluebutton/api". Error: Net::ReadTimeout):
+F, [2019-01-28T07:47:22.064295 #1] FATAL -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   
+F, [2019-01-28T07:47:22.064932 #1] FATAL -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7] app/models/room.rb:118:in `recordings'
+[d0a070e8-f7eb-427d-8d7f-7c5910b46df7] app/controllers/rooms_controller.rb:46:in `show'
+I, [2019-01-28T07:47:22.066891 #1]  INFO -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7] Processing by ErrorsController#internal_error as HTML
+I, [2019-01-28T07:47:22.068085 #1]  INFO -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:47:22.069714 #1] DEBUG -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:47:22.075811 #1]  INFO -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   Rendering errors/internal_error.html.erb within layouts/application
+I, [2019-01-28T07:47:22.077964 #1]  INFO -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   Rendered errors/internal_error.html.erb within layouts/application (0.6ms)
+D, [2019-01-28T07:47:22.083989 #1] DEBUG -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   [1m[36mRoom Load (2.6ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:47:22.087063 #1]  INFO -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   Rendered shared/_header.html.erb (7.5ms)
+I, [2019-01-28T07:47:22.095072 #1]  INFO -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   Rendered shared/modals/_create_room_modal.html.erb (1.6ms)
+I, [2019-01-28T07:47:22.098695 #1]  INFO -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7]   Rendered shared/_footer.html.erb (0.4ms)
+I, [2019-01-28T07:47:22.100901 #1]  INFO -- : [d0a070e8-f7eb-427d-8d7f-7c5910b46df7] Completed 500 Internal Server Error in 32ms (Views: 23.0ms | ActiveRecord: 2.6ms)
+I, [2019-01-28T07:47:28.020607 #1]  INFO -- : [c862a497-7b1d-4797-ab10-bb9635b78c48] Completed 500 Internal Server Error in 20061ms (ActiveRecord: 17.0ms)
+F, [2019-01-28T07:47:28.022185 #1] FATAL -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   
+F, [2019-01-28T07:47:28.022696 #1] FATAL -- : [c862a497-7b1d-4797-ab10-bb9635b78c48] BigBlueButton::BigBlueButtonException (Timeout error. Your server is probably down: "http://bbb.home/bigbluebutton/api". Error: Net::ReadTimeout):
+F, [2019-01-28T07:47:28.023153 #1] FATAL -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   
+F, [2019-01-28T07:47:28.023556 #1] FATAL -- : [c862a497-7b1d-4797-ab10-bb9635b78c48] app/models/room.rb:118:in `recordings'
+[c862a497-7b1d-4797-ab10-bb9635b78c48] app/controllers/rooms_controller.rb:46:in `show'
+I, [2019-01-28T07:47:28.024519 #1]  INFO -- : [c862a497-7b1d-4797-ab10-bb9635b78c48] Processing by ErrorsController#internal_error as HTML
+I, [2019-01-28T07:47:28.025019 #1]  INFO -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   Parameters: {"room_uid"=>"qia-r2z-ywp"}
+D, [2019-01-28T07:47:28.025892 #1] DEBUG -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:47:28.027021 #1]  INFO -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   Rendering errors/internal_error.html.erb within layouts/application
+I, [2019-01-28T07:47:28.028003 #1]  INFO -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   Rendered errors/internal_error.html.erb within layouts/application (0.4ms)
+D, [2019-01-28T07:47:28.036911 #1] DEBUG -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   [1m[36mRoom Load (5.3ms)[0m  [1m[34mSELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+I, [2019-01-28T07:47:28.039251 #1]  INFO -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   Rendered shared/_header.html.erb (8.7ms)
+I, [2019-01-28T07:47:28.041213 #1]  INFO -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   Rendered shared/modals/_create_room_modal.html.erb (0.8ms)
+I, [2019-01-28T07:47:28.042037 #1]  INFO -- : [c862a497-7b1d-4797-ab10-bb9635b78c48]   Rendered shared/_footer.html.erb (0.2ms)
+I, [2019-01-28T07:47:28.042688 #1]  INFO -- : [c862a497-7b1d-4797-ab10-bb9635b78c48] Completed 500 Internal Server Error in 17ms (Views: 10.5ms | ActiveRecord: 5.3ms)
+I, [2019-01-28T07:52:37.800989 #1]  INFO -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c] Started GET "/b" for 172.19.0.1 at 2019-01-28 07:52:37 +0000
+I, [2019-01-28T07:52:37.806667 #1]  INFO -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c] Processing by MainController#index as */*
+D, [2019-01-28T07:52:37.825610 #1] DEBUG -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c]   [1m[36mUser Load (8.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:52:37.830966 #1]  INFO -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T07:52:37.835785 #1]  INFO -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c]   Rendered shared/_features.html.erb (1.3ms)
+I, [2019-01-28T07:52:37.837038 #1]  INFO -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c]   Rendered main/index.html.erb within layouts/application (5.2ms)
+D, [2019-01-28T07:52:37.842541 #1] DEBUG -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T07:52:37.845400 #1] DEBUG -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:52:37.849548 #1]  INFO -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c]   Rendered shared/modals/_login_modal.html.erb (1.5ms)
+I, [2019-01-28T07:52:37.850602 #1]  INFO -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c]   Rendered shared/_header.html.erb (9.2ms)
+D, [2019-01-28T07:52:37.851877 #1] DEBUG -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:52:37.852893 #1]  INFO -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c]   Rendered shared/_footer.html.erb (0.3ms)
+I, [2019-01-28T07:52:37.853875 #1]  INFO -- : [c8dbf40f-8c4a-4c31-bfe6-253f1418974c] Completed 200 OK in 43ms (Views: 23.4ms | ActiveRecord: 8.1ms)
+D, [2019-01-28T07:57:48.941818 #10] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (3.2ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T07:57:48.971732 #10] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (2.0ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T07:57:48.978677 #10] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T07:57:48.980365 #10] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T07:58:23.411467 #1]  INFO -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5] Started GET "/b" for 172.19.0.1 at 2019-01-28 07:58:23 +0000
+I, [2019-01-28T07:58:23.432026 #1]  INFO -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5] Processing by MainController#index as */*
+D, [2019-01-28T07:58:23.452761 #1] DEBUG -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5]   [1m[36mUser Load (5.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:58:23.466630 #1]  INFO -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T07:58:23.525069 #1]  INFO -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5]   Rendered shared/_features.html.erb (1.0ms)
+I, [2019-01-28T07:58:23.525865 #1]  INFO -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5]   Rendered main/index.html.erb within layouts/application (58.5ms)
+D, [2019-01-28T07:58:23.543980 #1] DEBUG -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T07:58:23.547193 #1] DEBUG -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:58:23.555961 #1]  INFO -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5]   Rendered shared/modals/_login_modal.html.erb (2.1ms)
+I, [2019-01-28T07:58:23.557461 #1]  INFO -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5]   Rendered shared/_header.html.erb (18.8ms)
+D, [2019-01-28T07:58:23.558692 #1] DEBUG -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T07:58:23.563099 #1]  INFO -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5]   Rendered shared/_footer.html.erb (0.9ms)
+I, [2019-01-28T07:58:23.564212 #1]  INFO -- : [c2230439-cd67-42f8-b4bc-9f813c5602d5] Completed 200 OK in 131ms (Views: 99.0ms | ActiveRecord: 9.1ms)
+D, [2019-01-28T08:01:14.493875 #8] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (3.5ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T08:01:14.520152 #8] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (2.4ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T08:01:14.527417 #8] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T08:01:14.529417 #8] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m
+D, [2019-01-28T08:26:52.772602 #9] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (2.9ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T08:26:52.795482 #9] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (1.8ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T08:26:52.802995 #9] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T08:26:52.805272 #9] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T08:27:51.961296 #1]  INFO -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb] Started GET "/b" for 172.19.0.1 at 2019-01-28 08:27:51 +0000
+I, [2019-01-28T08:27:51.976505 #1]  INFO -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb] Processing by MainController#index as */*
+D, [2019-01-28T08:27:51.995083 #1] DEBUG -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb]   [1m[36mUser Load (6.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:27:52.012933 #1]  INFO -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T08:27:52.071666 #1]  INFO -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb]   Rendered shared/_features.html.erb (1.1ms)
+I, [2019-01-28T08:27:52.072464 #1]  INFO -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb]   Rendered main/index.html.erb within layouts/application (58.8ms)
+D, [2019-01-28T08:27:52.086198 #1] DEBUG -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T08:27:52.088632 #1] DEBUG -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:27:52.098532 #1]  INFO -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb]   Rendered shared/modals/_login_modal.html.erb (3.2ms)
+I, [2019-01-28T08:27:52.099419 #1]  INFO -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb]   Rendered shared/_header.html.erb (16.1ms)
+D, [2019-01-28T08:27:52.100744 #1] DEBUG -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:27:52.107536 #1]  INFO -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb]   Rendered shared/_footer.html.erb (0.7ms)
+I, [2019-01-28T08:27:52.108662 #1]  INFO -- : [92dd0860-6873-4ecd-a2eb-9737aff7f3bb] Completed 200 OK in 131ms (Views: 97.3ms | ActiveRecord: 9.5ms)
+I, [2019-01-28T08:27:58.990127 #1]  INFO -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9] Started GET "/b" for 172.19.0.1 at 2019-01-28 08:27:58 +0000
+I, [2019-01-28T08:27:58.992686 #1]  INFO -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9] Processing by MainController#index as */*
+D, [2019-01-28T08:27:59.007649 #1] DEBUG -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9]   [1m[36mUser Load (12.9ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:27:59.009763 #1]  INFO -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T08:27:59.011966 #1]  INFO -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9]   Rendered shared/_features.html.erb (0.4ms)
+I, [2019-01-28T08:27:59.013161 #1]  INFO -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9]   Rendered main/index.html.erb within layouts/application (2.3ms)
+D, [2019-01-28T08:27:59.019665 #1] DEBUG -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T08:27:59.021015 #1] DEBUG -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:27:59.022820 #1]  INFO -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9]   Rendered shared/modals/_login_modal.html.erb (0.8ms)
+I, [2019-01-28T08:27:59.023519 #1]  INFO -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9]   Rendered shared/_header.html.erb (4.4ms)
+D, [2019-01-28T08:27:59.025356 #1] DEBUG -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:27:59.026764 #1]  INFO -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9]   Rendered shared/_footer.html.erb (0.3ms)
+I, [2019-01-28T08:27:59.027533 #1]  INFO -- : [10f4372d-8afd-42a7-bbfe-57dae67b36f9] Completed 200 OK in 34ms (Views: 17.9ms | ActiveRecord: 13.0ms)
+I, [2019-01-28T08:28:05.266400 #1]  INFO -- : [fb917422-1f95-4b3d-8930-daf7a3180191] Started GET "/b" for 172.19.0.1 at 2019-01-28 08:28:05 +0000
+I, [2019-01-28T08:28:05.270802 #1]  INFO -- : [fb917422-1f95-4b3d-8930-daf7a3180191] Processing by MainController#index as */*
+D, [2019-01-28T08:28:05.284213 #1] DEBUG -- : [fb917422-1f95-4b3d-8930-daf7a3180191]   [1m[36mUser Load (10.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:28:05.286704 #1]  INFO -- : [fb917422-1f95-4b3d-8930-daf7a3180191]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T08:28:05.289027 #1]  INFO -- : [fb917422-1f95-4b3d-8930-daf7a3180191]   Rendered shared/_features.html.erb (0.3ms)
+I, [2019-01-28T08:28:05.290207 #1]  INFO -- : [fb917422-1f95-4b3d-8930-daf7a3180191]   Rendered main/index.html.erb within layouts/application (2.5ms)
+D, [2019-01-28T08:28:05.294694 #1] DEBUG -- : [fb917422-1f95-4b3d-8930-daf7a3180191]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T08:28:05.299405 #1] DEBUG -- : [fb917422-1f95-4b3d-8930-daf7a3180191]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:28:05.302311 #1]  INFO -- : [fb917422-1f95-4b3d-8930-daf7a3180191]   Rendered shared/modals/_login_modal.html.erb (0.7ms)
+I, [2019-01-28T08:28:05.303498 #1]  INFO -- : [fb917422-1f95-4b3d-8930-daf7a3180191]   Rendered shared/_header.html.erb (10.5ms)
+D, [2019-01-28T08:28:05.304901 #1] DEBUG -- : [fb917422-1f95-4b3d-8930-daf7a3180191]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:28:05.306228 #1]  INFO -- : [fb917422-1f95-4b3d-8930-daf7a3180191]   Rendered shared/_footer.html.erb (0.6ms)
+I, [2019-01-28T08:28:05.306955 #1]  INFO -- : [fb917422-1f95-4b3d-8930-daf7a3180191] Completed 200 OK in 35ms (Views: 20.4ms | ActiveRecord: 10.4ms)
+I, [2019-01-28T08:28:14.909425 #1]  INFO -- : [8e8761a2-8920-432a-a13c-001c37e05cff] Started GET "/b" for 172.19.0.1 at 2019-01-28 08:28:14 +0000
+I, [2019-01-28T08:28:14.912405 #1]  INFO -- : [8e8761a2-8920-432a-a13c-001c37e05cff] Processing by MainController#index as */*
+D, [2019-01-28T08:28:14.918173 #1] DEBUG -- : [8e8761a2-8920-432a-a13c-001c37e05cff]   [1m[36mUser Load (2.4ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:28:14.919559 #1]  INFO -- : [8e8761a2-8920-432a-a13c-001c37e05cff]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T08:28:14.921230 #1]  INFO -- : [8e8761a2-8920-432a-a13c-001c37e05cff]   Rendered shared/_features.html.erb (0.3ms)
+I, [2019-01-28T08:28:14.923901 #1]  INFO -- : [8e8761a2-8920-432a-a13c-001c37e05cff]   Rendered main/index.html.erb within layouts/application (2.7ms)
+D, [2019-01-28T08:28:14.933052 #1] DEBUG -- : [8e8761a2-8920-432a-a13c-001c37e05cff]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T08:28:14.936915 #1] DEBUG -- : [8e8761a2-8920-432a-a13c-001c37e05cff]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:28:14.941392 #1]  INFO -- : [8e8761a2-8920-432a-a13c-001c37e05cff]   Rendered shared/modals/_login_modal.html.erb (1.0ms)
+I, [2019-01-28T08:28:14.943265 #1]  INFO -- : [8e8761a2-8920-432a-a13c-001c37e05cff]   Rendered shared/_header.html.erb (11.6ms)
+D, [2019-01-28T08:28:14.945088 #1] DEBUG -- : [8e8761a2-8920-432a-a13c-001c37e05cff]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:28:14.946274 #1]  INFO -- : [8e8761a2-8920-432a-a13c-001c37e05cff]   Rendered shared/_footer.html.erb (0.3ms)
+I, [2019-01-28T08:28:14.946983 #1]  INFO -- : [8e8761a2-8920-432a-a13c-001c37e05cff] Completed 200 OK in 32ms (Views: 27.4ms | ActiveRecord: 2.6ms)
+D, [2019-01-28T08:33:25.561584 #8] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (4.3ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T08:33:25.584938 #8] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (2.2ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T08:33:25.591242 #8] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T08:33:25.593516 #8] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m
+D, [2019-01-28T08:39:35.567898 #8] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (3.2ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T08:39:35.595178 #8] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (3.7ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T08:39:35.602119 #8] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T08:39:35.603701 #8] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T08:48:38.957021 #1]  INFO -- : [2a317152-ce73-45cb-a2ae-a736326ae52e] Started GET "/b" for 172.19.0.1 at 2019-01-28 08:48:38 +0000
+I, [2019-01-28T08:48:38.980867 #1]  INFO -- : [2a317152-ce73-45cb-a2ae-a736326ae52e] Processing by MainController#index as */*
+D, [2019-01-28T08:48:38.999023 #1] DEBUG -- : [2a317152-ce73-45cb-a2ae-a736326ae52e]   [1m[36mUser Load (5.6ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:48:38.994577 #1]  INFO -- : [2a317152-ce73-45cb-a2ae-a736326ae52e]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T08:48:39.063450 #1]  INFO -- : [2a317152-ce73-45cb-a2ae-a736326ae52e]   Rendered shared/_features.html.erb (1.2ms)
+I, [2019-01-28T08:48:39.064295 #1]  INFO -- : [2a317152-ce73-45cb-a2ae-a736326ae52e]   Rendered main/index.html.erb within layouts/application (68.9ms)
+D, [2019-01-28T08:48:39.073857 #1] DEBUG -- : [2a317152-ce73-45cb-a2ae-a736326ae52e]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T08:48:39.075793 #1] DEBUG -- : [2a317152-ce73-45cb-a2ae-a736326ae52e]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:48:39.083143 #1]  INFO -- : [2a317152-ce73-45cb-a2ae-a736326ae52e]   Rendered shared/modals/_login_modal.html.erb (2.0ms)
+I, [2019-01-28T08:48:39.083873 #1]  INFO -- : [2a317152-ce73-45cb-a2ae-a736326ae52e]   Rendered shared/_header.html.erb (12.3ms)
+D, [2019-01-28T08:48:39.085055 #1] DEBUG -- : [2a317152-ce73-45cb-a2ae-a736326ae52e]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T08:48:39.090920 #1]  INFO -- : [2a317152-ce73-45cb-a2ae-a736326ae52e]   Rendered shared/_footer.html.erb (1.4ms)
+I, [2019-01-28T08:48:39.091810 #1]  INFO -- : [2a317152-ce73-45cb-a2ae-a736326ae52e] Completed 200 OK in 110ms (Views: 102.6ms | ActiveRecord: 10.2ms)
+D, [2019-01-28T09:05:14.049352 #8] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (4.3ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T09:05:14.071069 #8] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (1.7ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T09:05:14.079520 #8] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T09:05:14.081304 #8] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T09:05:34.060585 #1]  INFO -- : [59632d50-a948-466f-8c05-63e7d62b2b03] Started GET "/b" for 172.20.0.1 at 2019-01-28 09:05:34 +0000
+I, [2019-01-28T09:05:34.081326 #1]  INFO -- : [59632d50-a948-466f-8c05-63e7d62b2b03] Processing by MainController#index as */*
+D, [2019-01-28T09:05:34.099744 #1] DEBUG -- : [59632d50-a948-466f-8c05-63e7d62b2b03]   [1m[36mUser Load (5.8ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T09:05:34.115525 #1]  INFO -- : [59632d50-a948-466f-8c05-63e7d62b2b03]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T09:05:34.166796 #1]  INFO -- : [59632d50-a948-466f-8c05-63e7d62b2b03]   Rendered shared/_features.html.erb (3.0ms)
+I, [2019-01-28T09:05:34.167653 #1]  INFO -- : [59632d50-a948-466f-8c05-63e7d62b2b03]   Rendered main/index.html.erb within layouts/application (51.5ms)
+D, [2019-01-28T09:05:34.187519 #1] DEBUG -- : [59632d50-a948-466f-8c05-63e7d62b2b03]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T09:05:34.190547 #1] DEBUG -- : [59632d50-a948-466f-8c05-63e7d62b2b03]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T09:05:34.202035 #1]  INFO -- : [59632d50-a948-466f-8c05-63e7d62b2b03]   Rendered shared/modals/_login_modal.html.erb (3.5ms)
+I, [2019-01-28T09:05:34.202978 #1]  INFO -- : [59632d50-a948-466f-8c05-63e7d62b2b03]   Rendered shared/_header.html.erb (23.5ms)
+D, [2019-01-28T09:05:34.204229 #1] DEBUG -- : [59632d50-a948-466f-8c05-63e7d62b2b03]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T09:05:34.211754 #1]  INFO -- : [59632d50-a948-466f-8c05-63e7d62b2b03]   Rendered shared/_footer.html.erb (1.2ms)
+I, [2019-01-28T09:05:34.212864 #1]  INFO -- : [59632d50-a948-466f-8c05-63e7d62b2b03] Completed 200 OK in 131ms (Views: 98.7ms | ActiveRecord: 12.3ms)
+I, [2019-01-28T09:06:33.265174 #1]  INFO -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae] Started GET "/b" for 172.20.0.1 at 2019-01-28 09:06:33 +0000
+I, [2019-01-28T09:06:33.269826 #1]  INFO -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae] Processing by MainController#index as */*
+D, [2019-01-28T09:06:33.279709 #1] DEBUG -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae]   [1m[36mUser Load (4.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T09:06:33.281009 #1]  INFO -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T09:06:33.283890 #1]  INFO -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae]   Rendered shared/_features.html.erb (1.0ms)
+I, [2019-01-28T09:06:33.286551 #1]  INFO -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae]   Rendered main/index.html.erb within layouts/application (4.7ms)
+D, [2019-01-28T09:06:33.294557 #1] DEBUG -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T09:06:33.296427 #1] DEBUG -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T09:06:33.299501 #1]  INFO -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae]   Rendered shared/modals/_login_modal.html.erb (1.4ms)
+I, [2019-01-28T09:06:33.300354 #1]  INFO -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae]   Rendered shared/_header.html.erb (7.2ms)
+D, [2019-01-28T09:06:33.303268 #1] DEBUG -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T09:06:33.305851 #1]  INFO -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae]   Rendered shared/_footer.html.erb (0.9ms)
+I, [2019-01-28T09:06:33.307157 #1]  INFO -- : [53f6cf6c-c95f-46ca-8b64-677e6c9056ae] Completed 200 OK in 34ms (Views: 26.1ms | ActiveRecord: 4.4ms)
+I, [2019-01-28T09:06:38.893876 #1]  INFO -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654] Started GET "/b" for 172.20.0.1 at 2019-01-28 09:06:38 +0000
+I, [2019-01-28T09:06:38.900455 #1]  INFO -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654] Processing by MainController#index as */*
+D, [2019-01-28T09:06:38.908323 #1] DEBUG -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654]   [1m[36mUser Load (4.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T09:06:38.912240 #1]  INFO -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T09:06:38.917962 #1]  INFO -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654]   Rendered shared/_features.html.erb (1.4ms)
+I, [2019-01-28T09:06:38.918902 #1]  INFO -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654]   Rendered main/index.html.erb within layouts/application (4.3ms)
+D, [2019-01-28T09:06:38.922104 #1] DEBUG -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T09:06:38.923796 #1] DEBUG -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T09:06:38.928092 #1]  INFO -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654]   Rendered shared/modals/_login_modal.html.erb (2.9ms)
+I, [2019-01-28T09:06:38.930937 #1]  INFO -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654]   Rendered shared/_header.html.erb (9.3ms)
+D, [2019-01-28T09:06:38.932682 #1] DEBUG -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T09:06:38.935027 #1]  INFO -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654]   Rendered shared/_footer.html.erb (0.8ms)
+I, [2019-01-28T09:06:38.936040 #1]  INFO -- : [b5044c6a-71b7-4ffe-a8e3-3bc70af77654] Completed 200 OK in 34ms (Views: 24.2ms | ActiveRecord: 4.2ms)
+D, [2019-01-28T09:09:36.737768 #8] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (3.5ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T09:09:36.763905 #8] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (2.8ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T09:09:36.769982 #8] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T09:09:36.771830 #8] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m
+D, [2019-01-28T09:12:46.232419 #9] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (2.4ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T09:12:46.263507 #9] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (2.1ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T09:12:46.273172 #9] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T09:12:46.274998 #9] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m
+I, [2019-01-28T09:13:09.935009 #1]  INFO -- : [8a11e770-9402-40d7-85db-48c7d277dfd8] Started GET "/b" for 172.20.0.1 at 2019-01-28 09:13:09 +0000
+I, [2019-01-28T09:13:09.954839 #1]  INFO -- : [8a11e770-9402-40d7-85db-48c7d277dfd8] Processing by MainController#index as */*
+D, [2019-01-28T09:13:09.975582 #1] DEBUG -- : [8a11e770-9402-40d7-85db-48c7d277dfd8]   [1m[36mUser Load (7.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T09:13:09.988813 #1]  INFO -- : [8a11e770-9402-40d7-85db-48c7d277dfd8]   Rendering main/index.html.erb within layouts/application
+I, [2019-01-28T09:13:10.044792 #1]  INFO -- : [8a11e770-9402-40d7-85db-48c7d277dfd8]   Rendered shared/_features.html.erb (0.7ms)
+I, [2019-01-28T09:13:10.045552 #1]  INFO -- : [8a11e770-9402-40d7-85db-48c7d277dfd8]   Rendered main/index.html.erb within layouts/application (55.9ms)
+D, [2019-01-28T09:13:10.059536 #1] DEBUG -- : [8a11e770-9402-40d7-85db-48c7d277dfd8]   [1m[36mCACHE (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+D, [2019-01-28T09:13:10.062574 #1] DEBUG -- : [8a11e770-9402-40d7-85db-48c7d277dfd8]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T09:13:10.072023 #1]  INFO -- : [8a11e770-9402-40d7-85db-48c7d277dfd8]   Rendered shared/modals/_login_modal.html.erb (1.8ms)
+I, [2019-01-28T09:13:10.072742 #1]  INFO -- : [8a11e770-9402-40d7-85db-48c7d277dfd8]   Rendered shared/_header.html.erb (16.3ms)
+D, [2019-01-28T09:13:10.073952 #1] DEBUG -- : [8a11e770-9402-40d7-85db-48c7d277dfd8]   [1m[36mCACHE (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+I, [2019-01-28T09:13:10.079351 #1]  INFO -- : [8a11e770-9402-40d7-85db-48c7d277dfd8]   Rendered shared/_footer.html.erb (0.7ms)
+I, [2019-01-28T09:13:10.080445 #1]  INFO -- : [8a11e770-9402-40d7-85db-48c7d277dfd8] Completed 200 OK in 125ms (Views: 93.2ms | ActiveRecord: 11.4ms)
+D, [2019-01-28T09:35:07.348437 #10] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (8.9ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T09:35:07.402143 #10] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (1.9ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T09:35:07.407525 #10] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T09:35:07.409377 #10] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m
+D, [2019-01-28T09:42:38.086196 #10] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (2.5ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T09:42:38.110968 #10] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (3.4ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T09:42:38.118164 #10] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T09:42:38.120166 #10] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m
+D, [2019-01-28T09:49:29.805975 #8] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (2.9ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+D, [2019-01-28T09:49:29.830534 #8] DEBUG -- :   [1m[36mActiveRecord::InternalMetadata Load (2.0ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+D, [2019-01-28T09:49:29.836056 #8] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2019-01-28T09:49:29.838032 #8] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m

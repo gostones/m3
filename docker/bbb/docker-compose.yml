@@ -1,0 +1,33 @@
+version: '3'
+# https://github.com/bigbluebutton/docker
+# docker run --rm -p 80:80/tcp -p 1935:1935 -p 3478:3478 -p 3478:3478/udp bigbluebutton -h 192.168.0.111
+# docker run --rm -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp bigbluebutton/bigbluebutton -h 192.168.0.111
+
+services:
+  bbb:
+    # labels:
+    #   # - "traefik.backend=bbb"
+    #   - "traefik.frontend.passHostHeader=true"
+    #   - "traefik.frontend.rule=Host:bbb.home, bbb.921sm3fxr9v5wwh08d7nvnks5a37px0tdj8qd8e0cc60acy514r61r"
+    #   - "traefik.port=80"
+    #   - "traefik.enable=true"
+    container_name: bbb
+    hostname: bbb.home
+    image: bigbluebutton/bigbluebutton
+    ports:
+      - 80:80/tcp
+      - 443:443/tcp
+      - 1935:1935/tcp
+      - 5066:5066/tcp
+      - 3478:3478/tcp
+      - 3478:3478/udp
+    #  - 32730-32768:32730-32768/udp
+    #  - 2202:2202
+    environment:
+     - HOST=bbb.home
+     - http_proxy=http://host.docker.internal:18080/
+     - https_proxy=http://host.docker.internal:18080/
+     - no_proxy=localhost,127.0.0.1
+#
+    cap_add:
+     - NET_ADMIN
