@@ -1,0 +1,71 @@
+##
+logLevel = "DEBUG"
+
+defaultEntryPoints = ["http"]
+
+# https://docs.traefik.io/user-guide/kv-config/#upload-the-configuration-in-the-key-value-store
+#
+# [entryPoints]
+#   [entryPoints.api]
+#     address = ":8081"
+#   [entryPoints.http]
+#   address = ":80"
+#   [entryPoints.https]
+#   address = ":443"
+
+#     [entryPoints.https.tls]
+#       [[entryPoints.https.tls.certificates]]
+#       certFile = "integration/fixtures/https/snitest.com.cert"
+#       keyFile = "integration/fixtures/https/snitest.com.key"
+#       [[entryPoints.https.tls.certificates]]
+#       certFile = """-----BEGIN CERTIFICATE-----
+#                       <cert file content>
+#                       -----END CERTIFICATE-----"""
+#       keyFile = """-----BEGIN PRIVATE KEY-----
+#                       <key file content>
+#                       -----END PRIVATE KEY-----"""
+#     [entryPoints.other-https]
+#     address = ":4443"
+#       [entryPoints.other-https.tls]
+# 
+[entryPoints]
+  [entryPoints.dashboard]
+    address = ":8080"
+    # [entryPoints.dashboard.auth]
+    #   [entryPoints.dashboard.auth.basic]
+    #     users = ["admin:$apr1$vmrjiFcz$S.liCeIvXD6TJzsxlbU6e0"]
+  [entryPoints.http]
+    address = ":80"
+      # [entryPoints.http.redirect]
+      #   entryPoint = "https"
+  # [entryPoints.https]
+  #   address = ":443"
+  #     [entryPoints.https.tls]
+  #       [[entryPoints.https.tls.certificates]]
+  #       certFile = "integration/fixtures/https/snitest.com.cert"
+  #       keyFile = "integration/fixtures/https/snitest.com.key"
+  #       [[entryPoints.https.tls.certificates]]
+  #       certFile = """
+  #                 """
+  #       keyFile = """-----BEGIN PRIVATE KEY-----
+  #                       <key file content>
+  #                       -----END PRIVATE KEY-----"""
+
+[api]
+  entrypoint="dashboard"
+
+# [acme]
+# email = "your_email@your_domain"
+# storage = "acme.json"
+# entryPoint = "https"
+# onHostRule = true
+#   [acme.httpChallenge]
+#   entryPoint = "http"
+
+[docker]
+  domain = "home"
+  watch = true
+  network = "web"
+
+# htpasswd -nb admin password 
+# docker network create web

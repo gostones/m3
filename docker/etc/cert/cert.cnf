@@ -1,0 +1,24 @@
+[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+
+[req_distinguished_name]
+countryName = US
+countryName_default = US
+stateOrProvinceName = CA
+stateOrProvinceName_default = CA
+localityName = Bay Area
+localityName_default = Bay Area
+organizationalUnitName = M3
+organizationalUnitName_default = M3
+commonName = *.home
+commonName_max = 64
+
+[v3_req]
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = home
+DNS.2 = *.home
