@@ -31,6 +31,7 @@ openssl genrsa -out cert.key 2048
 openssl req -new -out cert.csr -key cert.key -config cert.cnf
 openssl x509 -req -days 3650 -in cert.csr -signkey cert.key -out cert.pem -extensions v3_req -extfile cert.cnf
 
+#---
 # #
 # SSL_DIR="./etc/ssl/xip.io"
 
@@ -71,7 +72,7 @@ openssl x509 -req -days 3650 -in cert.csr -signkey cert.key -out cert.pem -exten
 # openssl rsa -passin pass:x -in server.pass.key -out server.key
 # rm server.pass.key
 
-# #
+# # #
 # openssl req -new -key server.key -out server.csr
 
 # echo ""
@@ -91,9 +92,10 @@ openssl x509 -req -days 3650 -in cert.csr -signkey cert.key -out cert.pem -exten
 # EOF
 
 # openssl x509 -req -sha256 -extfile v3.ext -days 365 -in server.csr -signkey server.key -out server.crt
-# # openssl x509 -in server.crt -out server.pem -outform PEM
+# openssl x509 -in server.crt -out server.pem -outform PEM
 
 # #
+#---
 # openssl genrsa -des3 -out hostname.key 2048
 # openssl rsa -in hostname.key -out hostname-key.pem
 # openssl req -new -key hostname-key.pem -out hostname-request.csr

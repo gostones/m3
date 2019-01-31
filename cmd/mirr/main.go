@@ -17,7 +17,7 @@ func main() {
 	var web m3.ListFlags
 	flag.Var(&web, "web", "Peer ID as W3 proxy ")
 
-	var local = flag.Bool("local", false, "Allow localhost access")
+	var local = flag.Bool("local", true, "Allow localhost access")
 	var blocked m3.ListFlags
 	flag.Var(&blocked, "block", "Block port if local is enabled")
 

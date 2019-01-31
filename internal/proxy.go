@@ -93,7 +93,9 @@ func HTTPProxy(port int, nb *Neighborhood) {
 
 		if IsHome(hostport[0]) {
 			route := nb.Home.Match(hostport[0])
-			target := route.Backend[0].Host //TODO lb
+			target := route.Backend[0].Host
+			//TODO host only has hostname, no port for home domain  for now
+			// only use traefik?
 			if strings.Index(target, ":") < 0 {
 				target = fmt.Sprintf("%v:%v", target, hostport[1])
 			}
@@ -294,15 +296,18 @@ func StartProxy(cfg *Config) {
 	//TODO external config
 	// home
 	nb.Home = NewRouteRegistry()
-	nb.Home.SetDefault("127.0.0.1:80")
+	nb.Home.SetDefault("127.0.0.1:8080")
 
 	// reverse proxy
-	rpPort := 28080 //FreePort()
+	// rpPort := 28080 //FreePort()
 
 	// reverse proxy
 	myAddr := ToPeerAddr(nb.My.ID)
-	nb.Home.Add(".home", fmt.Sprintf("127.0.0.1:%v", rpPort))
-	nb.Home.Add("."+myAddr, fmt.Sprintf("127.0.0.1:%v", rpPort))
+	// nb.Home.Add(".home", fmt.Sprintf("127.0.0.1:%v", rpPort))
+	// nb.Home.Add("."+myAddr, fmt.Sprintf("127.0.0.1:%v", rpPort))
+	// ALL ports
+	nb.Home.Add(".home", "127.0.0.1")
+	nb.Home.Add("."+myAddr, "127.0.0.1")
 
 	//
 	port := cfg.Port
