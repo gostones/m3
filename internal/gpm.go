@@ -43,13 +43,13 @@ var gpmConfigJSON = `
 	  },
 	{
 		"name": "traefik",
-		"command": "traefik -c ${DHNT_BASE}/etc/traefik/config.toml --file.directory=${DHNT_BASE}/etc/traefik",
+		"command": "gsh ${DHNT_BASE}/etc/traefik/rc.sh",
 		"autoRestart": true,
 		"workDir": "${DHNT_BASE}/home/traefik"
 	},
 	{
 		"name": "mirr",
-		"command": "mirr --port 18080",
+		"command": "mirr --port 18080 --route ${DHNT_BASE}/etc/mirr/route.conf",
 		"autoRestart": true,
 		"workDir": "${DHNT_BASE}/home/m3"
 	}

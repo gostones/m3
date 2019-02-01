@@ -6,12 +6,13 @@ import (
 
 // Config is application settings
 type Config struct {
-	Port    int
-	Local   bool
-	Blocked []string
-	Home    []string
-	Web     []string
-	Alias   map[string]string
+	Port      int
+	RouteFile string
+	// Local   bool
+	// Blocked []string
+	// Home    []string
+	// Web     []string
+	// Alias   map[string]string
 }
 
 // ListFlags is for collecting an array of command line arguments

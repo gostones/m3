@@ -23,13 +23,13 @@ type Peer struct {
 
 // Neighborhood is
 type Neighborhood struct {
-	Peers       map[string]*Peer
-	My          *Node
-	Home        *RouteRegistry
-	W3ProxyHost string
-	config      *Config
-	min         int
-	max         int
+	Peers  map[string]*Peer
+	My     *Node
+	Router *RouteRegistry
+	// W3ProxyHost string
+	config *Config
+	min    int
+	max    int
 
 	sync.Mutex
 }
@@ -174,16 +174,16 @@ func (r *Neighborhood) IsReady() bool {
 	return r.My != nil
 }
 
-func (r *Neighborhood) resolveAlias(s string) string {
-	a, err := Alias(s)
-	if err == nil && a != "" {
-		alias, b := r.config.Alias[a]
-		if b {
-			return alias
-		}
-	}
-	return s
-}
+// func (r *Neighborhood) resolveAlias(s string) string {
+// 	a, err := Alias(s)
+// 	if err == nil && a != "" {
+// 		alias, b := r.config.Alias[a]
+// 		if b {
+// 			return alias
+// 		}
+// 	}
+// 	return s
+// }
 
 // IsHome checks if host is not localhost but a home node
 func (r *Neighborhood) IsHome(host string) bool {
@@ -203,8 +203,8 @@ func (r *Neighborhood) IsPeer(host string) bool {
 // *.<hex> -- peer node
 // *.<tld> -- world wide web address
 func (r *Neighborhood) ResolveAddr(s string) string {
-	// TODO alias name service
-	s = r.resolveAlias(s)
+	// // TODO alias name service
+	// s = r.resolveAlias(s)
 
 	//localhost
 	if IsLocalHost(s) {
