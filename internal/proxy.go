@@ -86,47 +86,47 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		hostport := strings.Split(addr, ":")
 		hostport[0] = nb.ResolveAddr(hostport[0])
 
-		if IsLocalHost(hostport[0]) {
-			log.Printf("@@@ Dial local network: %v addr: %v\n", network, addr)
-			return net.Dial(network, addr)
-		}
+		// if IsLocalHost(hostport[0]) {
+		// 	log.Printf("@@@ Dial local network: %v addr: %v\n", network, addr)
+		// 	return net.Dial(network, addr)
+		// }
 
-		if IsHome(hostport[0]) {
-			route := nb.Home.Match(hostport[0])
-			target := route.Backend[0].Host
-			//TODO host only has hostname, no port for home domain  for now
-			// only use traefik?
-			if strings.Index(target, ":") < 0 {
-				target = fmt.Sprintf("%v:%v", target, hostport[1])
-			}
-			log.Printf("@@@ Dial home network: %v addr: %v target: %v\n", network, addr, target)
+		// if IsHome(hostport[0]) {
+		// 	route, _ := nb.Home.Match(hostport[0])
+		// 	//target := route.Backend[0].Host
+		// 	//TODO host only has hostname, no port for home domain  for now
+		// 	// only use traefik?
+		// 	if strings.Index(target, ":") < 0 {
+		// 		target = fmt.Sprintf("%v:%v", target, hostport[1])
+		// 	}
+		// 	log.Printf("@@@ Dial home network: %v addr: %v target: %v\n", network, addr, target)
 
-			return net.Dial(network, target)
-		}
+		// 	return net.Dial(network, target)
+		// }
 
-		if IsPeer(hostport[0]) {
-			log.Printf("@@@ Dial peer network: %v addr: %v\n", network, addr)
+		// if IsPeer(hostport[0]) {
+		// 	log.Printf("@@@ Dial peer network: %v addr: %v\n", network, addr)
 
-			tld := TLD(hostport[0])
-			id := ToPeerID(tld)
-			if id == "" {
-				return nil, fmt.Errorf("Peer invalid: %v", hostport[0])
-			}
-			target := nb.GetPeerTarget(id)
-			if target == "" {
-				return nil, fmt.Errorf("Peer not reachable: %v", hostport[0])
-			}
+		// 	tld := TLD(hostport[0])
+		// 	id := ToPeerID(tld)
+		// 	if id == "" {
+		// 		return nil, fmt.Errorf("Peer invalid: %v", hostport[0])
+		// 	}
+		// 	target := nb.GetPeerTarget(id)
+		// 	if target == "" {
+		// 		return nil, fmt.Errorf("Peer not reachable: %v", hostport[0])
+		// 	}
 
-			log.Printf("@@@ Dial peer network: %v addr: %v target: %v\n", network, addr, target)
+		// 	log.Printf("@@@ Dial peer network: %v addr: %v target: %v\n", network, addr, target)
 
-			dial := proxy.NewConnectDialToProxyWithHandler(fmt.Sprintf("http://%v", target), func(req *http.Request) {
-				log.Printf("\n@@@ Dial peerr NewConnectDialToProxyWithHandler peer network: %v addr: %v target: %v\nreq: %v\n", network, addr, target, req)
-			})
-			if dial != nil {
-				return dial(network, addr)
-			}
-			return nil, fmt.Errorf("Peer proxy error: %v", target)
-		}
+		// 	dial := proxy.NewConnectDialToProxyWithHandler(fmt.Sprintf("http://%v", target), func(req *http.Request) {
+		// 		log.Printf("\n@@@ Dial peerr NewConnectDialToProxyWithHandler peer network: %v addr: %v target: %v\nreq: %v\n", network, addr, target, req)
+		// 	})
+		// 	if dial != nil {
+		// 		return dial(network, addr)
+		// 	}
+		// 	return nil, fmt.Errorf("Peer proxy error: %v", target)
+		// }
 
 		// web
 		target := nb.W3ProxyHost
@@ -293,21 +293,21 @@ func StartProxy(cfg *Config) {
 	go W3Proxy(nb.My.ID, w3Port)
 	nb.W3ProxyHost = fmt.Sprintf("127.0.0.1:%v", w3Port)
 
-	//TODO external config
-	// home
-	nb.Home = NewRouteRegistry()
-	nb.Home.SetDefault("127.0.0.1:8080")
+	// //TODO external config
+	// // home
+	// nb.Home = NewRouteRegistry()
+	// nb.Home.SetDefault("127.0.0.1:8080")
 
-	// reverse proxy
-	// rpPort := 28080 //FreePort()
+	// // reverse proxy
+	// // rpPort := 28080 //FreePort()
 
-	// reverse proxy
-	myAddr := ToPeerAddr(nb.My.ID)
-	// nb.Home.Add(".home", fmt.Sprintf("127.0.0.1:%v", rpPort))
-	// nb.Home.Add("."+myAddr, fmt.Sprintf("127.0.0.1:%v", rpPort))
-	// ALL ports
-	nb.Home.Add(".home", "127.0.0.1")
-	nb.Home.Add("."+myAddr, "127.0.0.1")
+	// // reverse proxy
+	// myAddr := ToPeerAddr(nb.My.ID)
+	// // nb.Home.Add(".home", fmt.Sprintf("127.0.0.1:%v", rpPort))
+	// // nb.Home.Add("."+myAddr, fmt.Sprintf("127.0.0.1:%v", rpPort))
+	// // ALL ports
+	// nb.Home.Add(".home", "127.0.0.1")
+	// nb.Home.Add("."+myAddr, "127.0.0.1")
 
 	//
 	port := cfg.Port
