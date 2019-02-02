@@ -37,7 +37,7 @@ var gpmConfigJSON = `
 	},
 	{
 		"name": "gotty",
-		"command": "gotty --port 50022 --permit-write login",
+		"command": "gotty --port 10022 --permit-write login",
 		"autoRestart": true,
 		"workDir": "${DHNT_BASE}/home/gotty"
 	  },

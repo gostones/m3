@@ -20,12 +20,12 @@ docker inspect web; if [ $? -ne 0 ]; then
     docker network create web
 fi
 
-docker run \
+docker run --rm \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v $PWD/etc/traefik:/etc/traefik \
-  -p 38080:80 \
-  -p 38081:8080 \
-  -p 38443:443 \
+  -p 28080:80 \
+  -p 28081:8080 \
+  -p 28443:443 \
   --network web \
   --name traefik \
   traefik:1.7.2-alpine
