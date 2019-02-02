@@ -8,14 +8,14 @@ services:
     labels:
       - "traefik.backend=bbb"
       - "traefik.docker.network=web"
-      # - "traefik.frontend.passHostHeader=true"
+      - "traefik.frontend.passHostHeader=true"
       - "traefik.frontend.rule=Host:bbb.home, bbb.921sm3fxr9v5wwh08d7nvnks5a37px0tdj8qd8e0cc60acy514r61r"
       - "traefik.port=80"
       - "traefik.enable=true"
     networks:
       - web
     container_name: bbb
-    hostname: bbb.home
+    # hostname: bbb.home
     image: bigbluebutton/bigbluebutton
     restart: always
     # ports:
@@ -36,7 +36,8 @@ services:
 # #
     cap_add:
      - NET_ADMIN
+
 networks:
   web:
-    external: true
-    name: web
+    external:
+      name: web
