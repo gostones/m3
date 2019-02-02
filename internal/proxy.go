@@ -92,6 +92,11 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		}
 		log.Printf("Router.Match(%q): %v proxy: %v, network: %v addr: %v", resolved, *be[0], viaProxy, network, addr)
 
+		// prevent loop
+		if be[0].Hostname == hostport[0] {
+			return net.Dial(network, addr)
+		}
+
 		if be[0].Hostname == "direct" {
 			return net.Dial(network, addr)
 		}
@@ -110,10 +115,10 @@ func HTTPProxy(port int, nb *Neighborhood) {
 			}
 
 			log.Printf("@@@ Dial peer network: %v addr: %v target: %v\n", network, addr, target)
-
-			dial := proxy.NewConnectDialToProxyWithHandler(fmt.Sprintf("http://%v", target), func(req *http.Request) {
-				log.Printf("\n@@@ Dial peer NewConnectDialToProxyWithHandler peer network: %v addr: %v target: %v\nreq: %v\n", network, addr, target, req)
-			})
+			dial := proxy.NewConnectDialToProxy(fmt.Sprintf("http://%v", target))
+			// dial := proxy.NewConnectDialToProxyWithHandler(fmt.Sprintf("http://%v", target), func(req *http.Request) {
+			// 	log.Printf("\n@@@ Dial peer NewConnectDialToProxyWithHandler peer network: %v addr: %v target: %v\nreq: %v\n", network, addr, target, req)
+			// })
 			if dial != nil {
 				return dial(network, addr)
 			}
@@ -121,17 +126,18 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		}
 
 		// pass on port if not provided in backend target
-		port := string(be[0].Port)
+		port := fmt.Sprintf("%v", be[0].Port)
 		if be[0].Port == 0 {
 			port = hostport[1]
 		}
 		target := fmt.Sprintf("%v:%v", be[0].Hostname, port)
 		if viaProxy {
-			dial := proxy.NewConnectDialToProxyWithHandler(fmt.Sprintf("http://%v", target), func(req *http.Request) {
-				log.Printf("\n@@@ Dial web NewConnectDialToProxyWithHandler w3: %v addr: %v target: %v\nreq: %v\n", network, addr, target, req)
-			})
+			dial := proxy.NewConnectDialToProxy(fmt.Sprintf("http://%v", target))
+			// dial := proxy.NewConnectDialToProxyWithHandler(fmt.Sprintf("http://%v", target), func(req *http.Request) {
+			// 	log.Printf("\n@@@ Dial web NewConnectDialToProxyWithHandler w3: %v addr: %v target: %v\nreq: %v\n", network, addr, target, req)
+			// })
 			if dial != nil {
-				return dial(network, target)
+				return dial(network, addr)
 			}
 			return nil, fmt.Errorf("Proxy routing error: %v %v", network, addr)
 		}

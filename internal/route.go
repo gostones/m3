@@ -203,7 +203,7 @@ func (c *RouteRegistry) Read(reader io.Reader) error {
 				re:      re,
 				pattern: pa,
 				Backend: []*Backend{c.parseBackend(fs[1])},
-				Proxy:   false,
+				Proxy:   true,
 			})
 		default:
 			// TODO: multiple backends?
