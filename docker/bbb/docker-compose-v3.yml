@@ -1,0 +1,76 @@
+version: '3.6'
+
+services:
+  bbb:
+    labels:
+      - "traefik.backend=bbb"
+      - "traefik.docker.network=web"
+      - "traefik.frontend.passHostHeader=true"
+      # - "traefik.frontend.rule=Host:bbb.home, bbb.921sm3fxr9v5wwh08d7nvnks5a37px0tdj8qd8e0cc60acy514r61r"
+      - "traefik.frontend.rule=Host: bbb.home"
+      - "traefik.port=80"
+      - "traefik.enable=true"
+    networks:
+      - web
+    container_name: bbb
+    hostname: bbb.home
+    image: bigbluebutton/bigbluebutton
+    restart: unless-stopped
+    # ports:
+    #   - 80:80/tcp
+    #   - 443:443/tcp
+    #   - 1935:1935/tcp
+    #   - 5066:5066/tcp
+    #   - 3478:3478/tcp
+    #   - 3478:3478/udp
+
+    #  - 32730-32768:32730-32768/udp
+    #  - 2202:2202
+    environment:
+     - HOST=bbb.home
+    cap_add:
+     - NET_ADMIN
+
+  # greenlight:
+  #   labels:
+  #     - "traefik.backend=greenlight"
+  #     - "traefik.docker.network=web"
+  #     - "traefik.default.protocol=http"
+  #     # - "traefik.domain=bbb.home"
+  #     - "traefik.frontend.passHostHeader=true"
+  #     # - traefik.frontend.rule=Host:fe.bbb.home,fe.bbb.921sm3fxr9v5wwh08d7nvnks5a37px0tdj8qd8e0cc60acy514r61r
+  #     # - "traefik.frontend.rule=Host:fe.bbb.home"
+  #     - "traefik.frontend.rule=Host: fe.bbb.home; PathPrefix: /b"
+  #     - "traefik.port=80"
+  #     - "traefik.enable=true"
+  #   image: bigbluebutton/greenlight
+  #   restart: unless-stopped
+  #   networks:
+  #     - web
+  #   hostname: fe.bbb.home
+  #   entrypoint: [bin/start]
+  #   container_name: greenlight
+  #   environment:
+  #     # BIGBLUEBUTTON_ENDPOINT: https://${SERVER_DOMAIN}/bigbluebutton/
+  #     # BIGBLUEBUTTON_SECRET: ${SHARED_SECRET}
+  #     # SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+  #     # ALLOW_GREENLIGHT_ACCOUNTS: "true"
+  #     - SECRET_KEY_BASE=65f3db279dde4a41ead326fc60b0b2e4c5ce9579073c3c79353188bddc29b958fd2d436c4709fc53795e781b48ed549021f19f66e93cbaea94e2d0f610dd864a
+  #     - BIGBLUEBUTTON_ENDPOINT=http://bbb.home/bigbluebutton/
+  #     - BIGBLUEBUTTON_SECRET=3ce47f0abd9beac3a66520c43e108820
+  #     - ALLOW_GREENLIGHT_ACCOUNTS=true
+
+  #     # - SMTP_SERVER=smtp.gmail.com
+  #     # - SMTP_PORT=587
+  #     # - SMTP_DOMAIN=gmail.com
+  #     # - SMTP_AUTH=plain
+  #     # - SMTP_STARTTLS_AUTO=true
+  #     # - RELATIVE_URL_ROOT=/b
+  #   volumes:
+  #     - ./db:/usr/src/app/db/production
+  #     - ./log:/usr/src/app/log
+
+networks:
+  web:
+    external:
+      name: web
