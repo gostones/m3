@@ -34,6 +34,7 @@ type Route struct {
 type RouteRegistry struct {
 	mu     sync.Mutex
 	MyID   string
+	MyAddr string
 	Routes []*Route
 }
 
@@ -127,7 +128,7 @@ func (c *RouteRegistry) expandVar(s string) string {
 	mapper := func(n string) string {
 		switch n {
 		case "myid":
-			return c.MyID
+			return c.MyAddr
 		}
 		return ""
 	}
@@ -236,8 +237,11 @@ func (c *RouteRegistry) ReadString(cfg string) error {
 	return c.Read(b)
 }
 
+// NewRouteRegistry instantiates a new route registry
 func NewRouteRegistry(myid string) *RouteRegistry {
+	addr := ToPeerAddr(myid)
 	return &RouteRegistry{
-		MyID: myid,
+		MyID:   myid,
+		MyAddr: addr,
 	}
 }
