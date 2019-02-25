@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#linux
+# export CC=x86_64-linux-musl-gcc
+# export CXX=x86_64-linux-musl-g++ 
+
 ##
 function set_env() {
     export DHNT_BASE=~/dhnt

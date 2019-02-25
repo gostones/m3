@@ -1,0 +1,37 @@
+#
+version: '3.6'
+
+services:
+  frpc:
+      build:
+        context: ./ #https://github.com/asperitus/docker-frp.git
+        dockerfile: Dockerfile
+      image: asperitus/m3:latest
+      restart: always
+      ports:
+        - "10080:80"
+        - "10440:443"
+        - "18080:18080"
+      volumes:
+        # - /var/run/docker.sock:/var/run/docker.sock
+        - ./etc:/app/etc
+      entrypoint:
+        - '/app/bin/m3d'
+        - '--base'
+        - '/app/dhnt'
+      # labels:
+      #   - traefik.backend=m3d
+      #   - traefik.enable=true
+      #   - traefik.frontend.rule=Host:m3.local.dhnt.io
+      #   - traefik.frontend.passHostHeader=true
+      #   - traefik.backend.loadbalancer.stickiness=true
+      #   - traefik.docker.network=web
+      #   - traefik.port=18080
+
+networks:
+  default:
+    external: true
+    name: web
+#
+# docker network create web
+#

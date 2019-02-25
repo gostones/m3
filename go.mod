@@ -20,7 +20,6 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.6.4 // indirect
-	github.com/gxed/hashland v0.0.0-20180221191214-d9f6b97f8db2 // indirect
 	github.com/ilius/crock32 v0.0.0-20180429101545-733fd36abb8c
 	github.com/jonboulle/clockwork v0.1.0 // indirect
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7
@@ -30,12 +29,9 @@ require (
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/michaelmacinnis/adapted v0.0.0-20171216080906-993520cda764 // indirect
 	github.com/michaelmacinnis/oh v0.0.0-20180701231441-735487d5ef2a
-	github.com/minio/blake2b-simd v0.0.0-20160723061019-3f5f724cb5b1 // indirect
-	github.com/minio/sha256-simd v0.0.0-20181005183134-51976451ce19 // indirect
 	github.com/mitchellh/go-homedir v1.0.0
 	github.com/moul/http2curl v1.0.0 // indirect
-	github.com/mr-tron/base58 v1.1.0 // indirect
-	github.com/multiformats/go-multihash v1.0.8
+	github.com/multiformats/go-multihash v0.0.1
 	github.com/parnurzeal/gorequest v0.2.15
 	github.com/peterh/liner v1.1.0
 	github.com/pkg/errors v0.8.1 // indirect
@@ -47,7 +43,6 @@ require (
 	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d // indirect
 	github.com/smartystreets/goconvey v0.0.0-20181108003508-044398e4856c // indirect
 	github.com/soheilhy/cmux v0.1.4 // indirect
-	github.com/spaolacci/murmur3 v0.0.0-20180118202830-f09979ecbc72 // indirect
 	github.com/takama/daemon v0.0.0-20180403113744-aa76b0035d12
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5 // indirect
 	github.com/ugorji/go v1.1.1 // indirect
@@ -55,9 +50,7 @@ require (
 	go.uber.org/atomic v1.3.2 // indirect
 	go.uber.org/multierr v1.1.0 // indirect
 	go.uber.org/zap v1.9.1 // indirect
-	golang.org/x/crypto v0.0.0-20190103213133-ff983b9c42bc // indirect
 	golang.org/x/net v0.0.0-20190110200230-915654e7eabc // indirect
-	golang.org/x/sys v0.0.0-20190116161447-11f53e031339 // indirect
 	golang.org/x/time v0.0.0-20181108054448-85acf8d2951c // indirect
 	google.golang.org/genproto v0.0.0-20190111180523-db91494dd46c // indirect
 	google.golang.org/grpc v1.18.0 // indirect
