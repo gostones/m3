@@ -21,6 +21,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.6.4 // indirect
 	github.com/ilius/crock32 v0.0.0-20180429101545-733fd36abb8c
+	github.com/ipfs/go-ipfs v0.4.18
 	github.com/jonboulle/clockwork v0.1.0 // indirect
 	github.com/jpillora/backoff v0.0.0-20180909062703-3050d21c67d7
 	github.com/jtolds/gls v4.2.1+incompatible // indirect

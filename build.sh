@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-
+set -x
 ##
 # export GOOS=darwin
 export GOOS=linux

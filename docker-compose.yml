@@ -2,9 +2,9 @@
 version: '3.6'
 
 services:
-  frpc:
+  m3:
       build:
-        context: ./ #https://github.com/asperitus/docker-frp.git
+        context: ./
         dockerfile: Dockerfile
       image: asperitus/m3:latest
       restart: always
@@ -14,11 +14,11 @@ services:
         - "18080:18080"
       volumes:
         # - /var/run/docker.sock:/var/run/docker.sock
-        - ./etc:/app/etc
-      entrypoint:
-        - '/app/bin/m3d'
-        - '--base'
-        - '/app/dhnt'
+        - ~/dhnt:/app/dhnt
+      # entrypoint:
+      #   - '/app/bin/m3d'
+      #   - '--base'
+      #   - '/app/dhnt'
       # labels:
       #   - traefik.backend=m3d
       #   - traefik.enable=true
