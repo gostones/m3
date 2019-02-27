@@ -23,6 +23,7 @@ function set_env() {
     #
     mkdir -p $DHNT_BASE/go/bin
     mkdir -p $DHNT_BASE/home
+    mkdir -p $DHNT_BASE/etc
 }
 
 # ipfs
@@ -141,11 +142,97 @@ function install_traefik() {
     cp -R $GOPATH/src/github.com/containous/traefik/static $DHNT_BASE/home/traefik
 }
 
+# reverse proxy
+function install_frp() {
+    export GOPATH=$DHNT_BASE/go
+    export GO111MODULE=on
+
+    mkdir -p $GOPATH/src/github.com/fatedier
+    cd $GOPATH/src/github.com/fatedier
+    git clone -b m3 https://github.com/gostones/frp.git; if [ $? -ne 0 ]; then
+        echo "Git repo exists?"
+    fi
+    cd frp
+
+    make
+    cp bin/* $GOPATH/bin/linux_amd64
+    mkdir -p $DHNT_BASE/etc/frp
+    cp $GOPATH/src/github.com/fatedier/frp/conf/* $DHNT_BASE/etc/frp/
+}
+
+# gost
+function install_gost() {
+    export GOPATH=$DHNT_BASE/go
+    export GO111MODULE=off
+
+    mkdir -p $GOPATH/src/github.com/ginuerzh
+    cd $GOPATH/src/github.com/ginuerzh
+    git clone -b v2.7.2 https://github.com/gostones/gost.git; if [ $? -ne 0 ]; then
+        echo "Git repo exists?"
+    fi
+    cd gost
+
+    go install ./cmd/...
+}
+
+# etcd
+function install_etcd() {
+    export GOPATH=$DHNT_BASE/go
+    export GO111MODULE=off
+
+    mkdir -p $GOPATH/src/github.com/etcd-io
+    cd $GOPATH/src/github.com/etcd-io
+    git clone -b v3.3.12 https://github.com/gostones/etcd.git; if [ $? -ne 0 ]; then
+        echo "Git repo exists?"
+    fi
+    cd etcd
+
+    ./build
+    cp bin/* $GOPATH/bin/linux_amd64
+}
+
+# caddy
+function install_caddy() {
+    export GOPATH=$DHNT_BASE/go
+    export GO111MODULE=off
+
+    mkdir -p $GOPATH/src/github.com/mholt
+    cd $GOPATH/src/github.com/mholt
+    git clone -b v0.11.4 https://github.com/gostones/caddy.git; if [ $? -ne 0 ]; then
+        echo "Git repo exists?"
+    fi
+    go get github.com/caddyserver/builds
+    cd caddy
+
+    # go run build.go --goos=$GOOS --goarch=$GOARCH
+    go install ./caddy/...
+}
+
+# chisel
+function install_chisel() {
+    export GOPATH=$DHNT_BASE/go
+    export GO111MODULE=on
+
+    mkdir -p $GOPATH/src/github.com/jpillora
+    cd $GOPATH/src/github.com/jpillora
+    git clone -b 1.3.1 https://github.com/gostones/chisel.git; if [ $? -ne 0 ]; then
+        echo "Git repo exists?"
+    fi
+    cd chisel
+
+    go install
+}
+
 function install_all() {
     install_ipfs
     install_gogs
     install_gotty
     install_traefik
+    install_frp
+    install_gost
+    install_etcd
+    install_caddy
+    install_chisel
 }
 
 ## setup
@@ -166,8 +253,23 @@ case "$1" in
         traefik)
             install_traefik
             ;;
+        frp)
+            install_frp
+            ;;
+        gost)
+            install_gost
+            ;;
+        etcd)
+            install_etcd
+            ;;
+        caddy)
+            install_caddy
+            ;;
+        chisel)
+            install_chisel
+            ;;
         help)
-            echo $"Usage: $0 {ipfs|gogs|gotty|traefik|help|_all_}"
+            echo $"Usage: $0 {ipfs|gogs|gotty|traefik|frp|gost|etcd|caddy|chisel|help|_all_}"
             exit 1
             ;;
         *)
