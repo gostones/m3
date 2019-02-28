@@ -20,12 +20,17 @@ RUN CGO_ENABLED=0 GOOS=linux go install ./cmd/...
 ###
 FROM alpine
 
+RUN apk add --no-cache git openssl
+
 COPY --from=builder /dist /dhnt
 COPY --from=builder /go/bin/* /dhnt/bin/
+COPY --from=builder /app/etc/* /dhnt/etc/
 
 ENV PATH="/dhnt/bin:${PATH}"
+ENV DHNT_BASE=/dhnt
 
-EXPOSE 80 443 18080
+VOLUME /dhnt/etc
+EXPOSE 18080
 
 CMD ["/dhnt/bin/m3", "run", "--base", "/dhnt"]
 ##

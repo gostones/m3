@@ -10,25 +10,28 @@ services:
       restart: always
       container_name: m3
       ports:
-        - "80:80"
-        - "443:443"
+        # - "80:80"
+        # - "443:443"
+        - "1080:1080"
+        # - "8080:8080"
         - "18080:18080"
+        - "18081:18081"
       volumes:
-        # - /var/run/docker.sock:/var/run/docker.sock
+        - /var/run/docker.sock:/var/run/docker.sock
         - ./etc:/dhnt/etc
-      # entrypoint:
-      #   - '/dhnt/bin/m3'
-      #   - 'run'
-      #   - '--base'
-      #   - '/dhnt'
-      # labels:
-      #   - traefik.backend=m3
-      #   - traefik.enable=true
-      #   - traefik.frontend.rule=Host:local.m3.dhnt.io
-      #   - traefik.frontend.passHostHeader=true
-      #   - traefik.backend.loadbalancer.stickiness=true
-      #   - traefik.docker.network=web
-      #   - traefik.port=18080
+      entrypoint:
+        - '/dhnt/bin/m3'
+        - 'run'
+        - '--base'
+        - '/dhnt'
+      labels:
+        - traefik.backend=m3
+        - traefik.enable=true
+        - traefik.frontend.rule=Host:local.m3
+        - traefik.frontend.passHostHeader=true
+        - traefik.backend.loadbalancer.stickiness=true
+        - traefik.docker.network=web
+        - traefik.port=18080
 
 networks:
   default:

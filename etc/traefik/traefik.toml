@@ -1,5 +1,5 @@
 # traefik.toml
-logLevel = "DEBUG"
+logLevel = "INFO"
 
 [traefikLog]
     filePath = "var/log/traefik.log"
@@ -23,9 +23,9 @@ defaultEntryPoints = ["http", "https"]
             [[entryPoints.https.tls.certificates]]
             certFile = "etc/cert/cert.crt"
             keyFile = "etc/cert/cert.key"
-            [[entryPoints.https.tls.certificates]]
-            certFile = "etc/cert/cert-myid.crt"
-            keyFile = "etc/cert/cert-myid.key"
+            # [[entryPoints.https.tls.certificates]]
+            # certFile = "etc/cert/cert-myid.crt"
+            # keyFile = "etc/cert/cert-myid.key"
 
 [api]
     entryPoint = "traefik"

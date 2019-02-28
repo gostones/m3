@@ -59,7 +59,7 @@ var gpmConfigJSON = `
 	},
 	{
 		"name": "gost",
-		"command": "gost -L=:8080 -L=socks5://:1080 -F=http://localhost:18080",
+		"command": "gost -L=:8080 -L=socks5://:1080 -F=http://127.0.0.1:18080",
 		"autoRestart": true
 	},
 	{
@@ -78,11 +78,12 @@ func readOrCreateConf(base string) (string, error) {
 	logger.Println("GPM config file: ", cf)
 
 	data, err := ioutil.ReadFile(cf)
-	if err == nil {
-		return string(data), nil
-	}
-	if err := ioutil.WriteFile(cf, []byte(gpmConfigJSON), 0644); err != nil {
-		return "", err
+	if err != nil {
+		//create default
+		data = []byte(gpmConfigJSON)
+		if err := ioutil.WriteFile(cf, data, 0644); err != nil {
+			return "", err
+		}
 	}
 
 	mapper := func(placeholder string) string {
@@ -92,8 +93,7 @@ func readOrCreateConf(base string) (string, error) {
 		}
 		return ""
 	}
-	data = []byte(os.Expand(gpmConfigJSON, mapper))
-	return string(data), nil
+	return os.Expand(string(data), mapper), nil
 }
 
 type GPM struct {
