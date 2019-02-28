@@ -8,21 +8,23 @@ services:
         dockerfile: Dockerfile
       image: asperitus/m3:latest
       restart: always
+      container_name: m3
       ports:
-        - "10080:80"
-        - "10440:443"
+        - "80:80"
+        - "443:443"
         - "18080:18080"
       volumes:
         # - /var/run/docker.sock:/var/run/docker.sock
-        - ~/dhnt:/app/dhnt
+        - ./etc:/dhnt/etc
       # entrypoint:
-      #   - '/app/bin/m3d'
+      #   - '/dhnt/bin/m3'
+      #   - 'run'
       #   - '--base'
-      #   - '/app/dhnt'
+      #   - '/dhnt'
       # labels:
-      #   - traefik.backend=m3d
+      #   - traefik.backend=m3
       #   - traefik.enable=true
-      #   - traefik.frontend.rule=Host:m3.local.dhnt.io
+      #   - traefik.frontend.rule=Host:local.m3.dhnt.io
       #   - traefik.frontend.passHostHeader=true
       #   - traefik.backend.loadbalancer.stickiness=true
       #   - traefik.docker.network=web

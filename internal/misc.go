@@ -170,7 +170,7 @@ func getBase() string {
 		base = fmt.Sprintf("%v/dhnt", home)
 	}
 
-	// dhnt/go/bin/m3d
+	// dhnt/bin/m3
 	exe, err := os.Executable()
 	if err != nil {
 		return ""

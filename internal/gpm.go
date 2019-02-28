@@ -2,56 +2,70 @@ package internal
 
 import (
 	"context"
-	"path/filepath"
-
-	//"fmt"
-	"github.com/dhnt/m3/internal/misc"
-	"github.com/gostones/gpm"
-
 	"io/ioutil"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
+
+	"github.com/dhnt/m3/internal/misc"
+	"github.com/gostones/gpm"
 )
 
-// ipfs, gogs, mirr
+//
 var gpmConfigJSON = `
 [
 	{
 		"name": "etcd",
-		"command": "etcd --base ${DHNT_BASE}",
-		"autoRestart": true,
-		"workDir": "${DHNT_BASE}/home/etcd"
+		"command": "etcd --config-file ${DHNT_BASE}/etc/etcd.conf.yml",
+		"autoRestart": true
 	},
 	{
 		"name": "ipfs",
-		"command": "gsh ${DHNT_BASE}/etc/ipfs/rc.sh",
-		"autoRestart": true,
-		"workDir": "${DHNT_BASE}/home/ipfs"
+		"command": "gsh ${DHNT_BASE}/etc/ipfs-rc.sh",
+		"autoRestart": true
 	},
 	{
 		"name": "gogs",
-		"command": "gsh ${DHNT_BASE}/etc/gogs/rc.sh",
+		"command": "gsh ${DHNT_BASE}/etc/gogs-rc.sh",
 		"autoRestart": true,
 		"workDir": "${DHNT_BASE}/home/gogs"
 	},
 	{
 		"name": "gotty",
 		"command": "gotty --port 10022 --permit-write login",
-		"autoRestart": true,
-		"workDir": "${DHNT_BASE}/home/gotty"
-	  },
+		"autoRestart": true
+	},
+	{
+		"name": "caddy",
+		"command": "caddy -conf ${DHNT_BASE}/etc/Caddyfile",
+		"autoRestart": true
+	},
+	{
+		"name": "frps",
+		"command": "frps -c ${DHNT_BASE}/etc/frps.ini",
+		"autoRestart": true
+	},
 	{
 		"name": "traefik",
-		"command": "gsh ${DHNT_BASE}/etc/traefik/rc.sh",
+		"command": "gsh ${DHNT_BASE}/etc/traefik-rc.sh",
 		"autoRestart": true,
 		"workDir": "${DHNT_BASE}/home/traefik"
 	},
 	{
 		"name": "mirr",
-		"command": "mirr --port 18080 --route ${DHNT_BASE}/etc/mirr/route.conf",
-		"autoRestart": true,
-		"workDir": "${DHNT_BASE}/home/m3"
+		"command": "mirr --port 18080 --route ${DHNT_BASE}/etc/route.conf",
+		"autoRestart": true
+	},
+	{
+		"name": "gost",
+		"command": "gost -L=:8080 -L=socks5://:1080 -F=http://localhost:18080",
+		"autoRestart": true
+	},
+	{
+		"name": "chisel",
+		"command": "chisel server --port 8008",
+		"autoRestart": true
 	}
 ]
 `
@@ -67,6 +81,9 @@ func readOrCreateConf(base string) (string, error) {
 	if err == nil {
 		return string(data), nil
 	}
+	if err := ioutil.WriteFile(cf, []byte(gpmConfigJSON), 0644); err != nil {
+		return "", err
+	}
 
 	mapper := func(placeholder string) string {
 		switch placeholder {
@@ -75,11 +92,7 @@ func readOrCreateConf(base string) (string, error) {
 		}
 		return ""
 	}
-
 	data = []byte(os.Expand(gpmConfigJSON, mapper))
-	if err := ioutil.WriteFile(cf, data, 0644); err != nil {
-		return "", err
-	}
 	return string(data), nil
 }
 

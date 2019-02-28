@@ -68,7 +68,7 @@ func (service *Service) Start() (string, error) {
 func (service *Service) Manage() (string, error) {
 	stdlog.Printf("Manage args: %v len: %v", os.Args, len(os.Args))
 
-	usage := "Usage: m3d install --base <dhnt_base>| uninstall | start | stop | status"
+	usage := "Usage: m3 install --base <dhnt_base>| uninstall | start | stop | status"
 	if len(os.Args) < 2 {
 		return usage, nil
 	}
@@ -153,7 +153,7 @@ func (service *Service) Manage() (string, error) {
 	script := filepath.Join(base, "etc/init.sh")
 	done := make(chan error, 1)
 	go func() {
-		done <- internal.Execute(base, "go/bin/gsh", script)
+		done <- internal.Execute(base, "bin/gsh", script)
 	}()
 
 	select {
