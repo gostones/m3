@@ -6,7 +6,7 @@
         entrypoints = ["https"]
         [frontends.home.routes]
             [frontends.home.routes.route1]
-            rule = "Host:home,home.921sm3fxr9v5wwh08d7nvnks5a37px0tdj8qd8e0cc60acy514r61r.m3"
+            rule = "Host:home"
 
 [backends]
     [backends.home]

@@ -48,9 +48,9 @@ var gpmConfigJSON = `
 	},
 	{
 		"name": "traefik",
-		"command": "gsh ${DHNT_BASE}/etc/traefik-rc.sh",
+		"command": "traefik -c ${DHNT_BASE}/etc/traefik/traefik.toml --file.directory=${DHNT_BASE}/etc/traefik/config",
 		"autoRestart": true,
-		"workDir": "${DHNT_BASE}/home/traefik"
+		"workDir": "${DHNT_BASE}"
 	},
 	{
 		"name": "mirr",

@@ -6,7 +6,7 @@
         entrypoints = ["https"]
         [frontends.traefik.routes]
             [frontends.traefik.routes.route]
-            rule = "Host:traefik.local.m3"
+            rule = "Host:traefik.home"
 
 [backends]
     [backends.traefik]
@@ -15,6 +15,6 @@
             [backends.traefik.loadbalancer.stickiness]
         [backends.traefik.servers] 
             [backends.traefik.servers.server1]
-            url = "http://127.0.0.1:18081"
+            url = "http://127.0.0.1:10080"
             weight = 1
 ##

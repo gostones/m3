@@ -3,5 +3,5 @@
 ##
 echo "base: $DHNT_BASE"
 
-gpm --base $DHNT_BASE --port 18082
+gpm --base $DHNT_BASE --port 1024
 ##

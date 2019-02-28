@@ -1,18 +1,23 @@
 # traefik.toml
-logLevel = "INFO"
+logLevel = "DEBUG"
 
-[traefikLog]
-    filePath = "var/log/traefik.log"
+# [traefikLog]
+#     filePath = "var/log/traefik.log"
 
-[accessLog]
-    filePath = "var/log/traefik-access.log"
+# [accessLog]
+#     filePath = "var/log/traefik-access.log"
 
 insecureSkipVerify = true
 defaultEntryPoints = ["http", "https"]
 
 [entryPoints]
     [entryPoints.traefik]
-        address = ":18081"
+        address=":10080"
+    [entryPoints.ui.auth]
+        [entryPoints.ui.auth.basic]
+        users = [
+            "admin:$apr1$1pj0sndM$duBQ2vbhy8N9IN23ODAaX0",
+        ]
     [entryPoints.http]
         address = ":80"
         [entryPoints.http.redirect]
@@ -27,16 +32,17 @@ defaultEntryPoints = ["http", "https"]
             # certFile = "etc/cert/cert-myid.crt"
             # keyFile = "etc/cert/cert-myid.key"
 
-[api]
-    entryPoint = "traefik"
-    dashboard = true
-
 [ping]
     entryPoint = "http"
 
-[file]
-    directory = "etc/traefik/config/"
-    watch = true
+[api]
+    entryPoint = "traefik"
+    dashboard = true
+    debug = false
+
+# [file]
+#     directory = "etc/traefik/config/"
+#     watch = true
 
 # [etcd]
 #     endpoint = "127.0.0.1:2379"
@@ -44,12 +50,27 @@ defaultEntryPoints = ["http", "https"]
 #     prefix = "/traefik"
 #     useAPIV3 = true
 
-# [docker]
-#     endpoint = "unix:///var/run/docker.sock"
-#     domain = "local.m3"
-#     watch = true
-#     network = "web"
-##
+[docker]
+    endpoint = "unix:///var/run/docker.sock"
+    # endpoint = "tcp://frps:6003"
+    domain = "local.m3"
+    network = "web"
+    watch = true
+    exposedByDefault = false
+
+# [acme]
+#     email = "noreply@local.m3"
+#     storage = "acme.json"
+#     entryPoint = "https"
+#     onHostRule = true
+#     [acme.httpChallenge]
+#         entryPoint = "https"
+#     # [acme.dnsChallenge]
+#     #     provider = "digitalocean"
+#     #     delayBeforeCheck = 0
+
+# [[acme.domains]]
+#   main = "*.local.m3"
 
 [lifeCycle]
     graceTimeOut = "0s"

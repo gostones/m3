@@ -5,7 +5,7 @@ RUN apk add --no-cache git
 
 #
 WORKDIR /
-ARG M3EXT_VERSION=v0.0.1
+ARG M3EXT_VERSION=v0.0.2
 RUN wget -qO- "https://github.com/dhnt/m3-ext/releases/download/${M3EXT_VERSION}/m3-ext.tar.gz" \
     | tar -xzv
 
@@ -20,7 +20,7 @@ RUN CGO_ENABLED=0 GOOS=linux go install ./cmd/...
 ###
 FROM alpine
 
-RUN apk add --no-cache git openssl
+RUN apk add --no-cache git curl openssl
 
 COPY --from=builder /dist /dhnt
 COPY --from=builder /go/bin/* /dhnt/bin/
@@ -31,6 +31,7 @@ ENV DHNT_BASE=/dhnt
 
 VOLUME /dhnt/etc
 EXPOSE 18080
+WORKDIR /
 
 CMD ["/dhnt/bin/m3", "run", "--base", "/dhnt"]
 ##

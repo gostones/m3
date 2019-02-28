@@ -11,8 +11,6 @@ export CGO_ENABLED=0
 export SKIP_TEST=true
 
 ##
-source env.sh
-##
 [[ $DEBUG ]] && FLAG="-x"
 
 function build() {

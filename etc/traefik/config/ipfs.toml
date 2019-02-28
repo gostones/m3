@@ -6,7 +6,7 @@
         entrypoints = ["https"]
         [frontends.ipfs.routes]
             [frontends.ipfs.routes.route]
-            rule = "Host:ipfs.local.m3"
+            rule = "Host:ipfs.home"
 
 [backends]
     [backends.ipfs]
