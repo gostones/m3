@@ -1,0 +1,56 @@
+# traefik.toml
+logLevel = "DEBUG"
+
+[traefikLog]
+    filePath = "var/log/traefik.log"
+
+[accessLog]
+    filePath = "var/log/traefik-access.log"
+
+insecureSkipVerify = true
+defaultEntryPoints = ["http", "https"]
+
+[entryPoints]
+    [entryPoints.traefik]
+        address = ":18081"
+    [entryPoints.http]
+        address = ":80"
+        [entryPoints.http.redirect]
+        entryPoint = "https"
+    [entryPoints.https]
+        address = ":443"
+        [entryPoints.https.tls]
+            [[entryPoints.https.tls.certificates]]
+            certFile = "etc/cert/cert.crt"
+            keyFile = "etc/cert/cert.key"
+            [[entryPoints.https.tls.certificates]]
+            certFile = "etc/cert/cert-myid.crt"
+            keyFile = "etc/cert/cert-myid.key"
+
+[api]
+    entryPoint = "traefik"
+    dashboard = true
+
+[ping]
+    entryPoint = "http"
+
+[file]
+    directory = "etc/traefik/config/"
+    watch = true
+
+# [etcd]
+#     endpoint = "127.0.0.1:2379"
+#     watch = true
+#     prefix = "/traefik"
+#     useAPIV3 = true
+
+# [docker]
+#     endpoint = "unix:///var/run/docker.sock"
+#     domain = "local.m3"
+#     watch = true
+#     network = "web"
+##
+
+[lifeCycle]
+    graceTimeOut = "0s"
+##

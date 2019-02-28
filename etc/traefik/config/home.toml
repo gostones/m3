@@ -1,0 +1,20 @@
+# rules.toml
+[frontends]
+    [frontends.home]
+        backend = "home"
+        passHostHeader = true
+        entrypoints = ["https"]
+        [frontends.home.routes]
+            [frontends.home.routes.route1]
+            rule = "Host:home,home.921sm3fxr9v5wwh08d7nvnks5a37px0tdj8qd8e0cc60acy514r61r.m3"
+
+[backends]
+    [backends.home]
+        [backends.home.LoadBalancer]
+            method = "drr"
+            [backends.home.loadbalancer.stickiness]
+        [backends.home.servers] 
+            [backends.home.servers.server]
+            url = "http://127.0.0.1:1313"
+            weight = 1
+##
