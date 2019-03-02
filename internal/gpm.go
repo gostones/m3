@@ -13,6 +13,15 @@ import (
 )
 
 //
+// port assignment:
+// 0xxxx - gost
+// 1xxxx - mirr
+// 2xxxx - traefik
+// 3xxxx - frps/chisel
+// 4xxxx - frpc/chisel
+// 5xxxx - other
+// 6xxxx - free
+//
 var gpmConfigJSON = `
 [
 	{
@@ -33,7 +42,7 @@ var gpmConfigJSON = `
 	},
 	{
 		"name": "gotty",
-		"command": "gotty --port 10022 --permit-write login",
+		"command": "gotty --port 50022 --permit-write login",
 		"autoRestart": true
 	},
 	{
@@ -59,12 +68,12 @@ var gpmConfigJSON = `
 	},
 	{
 		"name": "gost",
-		"command": "gost -L=:8080 -L=socks5://:1080 -F=http://127.0.0.1:18080",
+		"command": "gost -L http://:8080  -L https://:8443 -L socks5://:1080 -F http://127.0.0.1:18080",
 		"autoRestart": true
 	},
 	{
 		"name": "chisel",
-		"command": "chisel server --port 8008",
+		"command": "chisel server --port 38080",
 		"autoRestart": true
 	}
 ]

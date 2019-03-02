@@ -15,6 +15,6 @@
             [backends.traefik.loadbalancer.stickiness]
         [backends.traefik.servers] 
             [backends.traefik.servers.server1]
-            url = "http://127.0.0.1:10080"
+            url = "http://127.0.0.1:28080"
             weight = 1
 ##

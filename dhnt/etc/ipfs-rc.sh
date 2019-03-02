@@ -4,7 +4,7 @@ define config_ipfs: method() = {
 	echo "configuring $myid ..."
 	#ipfs config Addresses
 	#optional - change default ports
-	ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8082 #8080
+	ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/58080 #8080
 	ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
 	ipfs config --json Experimental.Libp2pStreamMounting true
 	ipfs config --json Experimental.FilestoreEnabled true

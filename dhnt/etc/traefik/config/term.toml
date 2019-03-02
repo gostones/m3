@@ -15,6 +15,6 @@
             [backends.term.loadbalancer.stickiness]
         [backends.term.servers] 
             [backends.term.servers.server1]
-            url = "http://127.0.0.1:10022"
+            url = "http://127.0.0.1:50022"
             weight = 1
 ##

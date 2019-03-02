@@ -12,7 +12,7 @@ defaultEntryPoints = ["http", "https"]
 
 [entryPoints]
     [entryPoints.traefik]
-        address=":10080"
+        address=":28080"
     [entryPoints.ui.auth]
         [entryPoints.ui.auth.basic]
         users = [
