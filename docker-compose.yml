@@ -16,9 +16,9 @@ services:
         - "8080:8080"
         - "10080:10080"
         - "18080:18080"
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - ./etc:/dhnt/etc
+      # volumes:
+      #   - /var/run/docker.sock:/var/run/docker.sock
+      #   - ./etc:/dhnt/etc
       entrypoint:
         - '/dhnt/bin/m3'
         - 'run'
@@ -29,7 +29,7 @@ services:
 
 networks:
   default:
-    external: true
+    external: false
     name: web
 #
 # docker network create web
