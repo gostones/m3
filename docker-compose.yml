@@ -18,9 +18,11 @@ services:
         - "18080:18080"
         - "28080:28080"
         - "38080:38080"
-      # volumes:
-      #   - /var/run/docker.sock:/var/run/docker.sock
-      #   - ./etc:/dhnt/etc
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - ./dhnt/etc:/dhnt/etc
+        # - ./dhnt/home:/dhnt/home
+        # - ./dhnt/data:/dhnt/data
       entrypoint:
         - '/dhnt/bin/m3'
         - 'run'

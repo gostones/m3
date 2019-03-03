@@ -1,1 +1,9 @@
-localhost:50080
+:2015
+
+gzip
+git {
+    repo http://localhost:3000/dhnt/website.git
+    branch master
+    interval 300
+    then hugo -s
+}

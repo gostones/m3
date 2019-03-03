@@ -5,7 +5,7 @@ RUN apk add --no-cache git
 
 #
 WORKDIR /
-ARG M3EXT_VERSION=v0.0.2
+ARG M3EXT_VERSION=v0.0.3
 RUN wget -qO- "https://github.com/dhnt/m3-ext/releases/download/${M3EXT_VERSION}/m3-ext.tar.gz" \
     | tar -xzv
 #
