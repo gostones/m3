@@ -1,0 +1,20 @@
+# rules.toml
+[frontends]
+    [frontends.fb]
+        backend = "fb"
+        passHostHeader = true
+        entrypoints = ["https"]
+        [frontends.fb.routes]
+            [frontends.fb.routes.route]
+            rule = "Host:fb.home"
+
+[backends]
+    [backends.fb]
+        [backends.fb.LoadBalancer]
+            method = "drr"
+            [backends.fb.loadbalancer.stickiness]
+        [backends.fb.servers] 
+            [backends.fb.servers.server1]
+            url = "http://127.0.0.1:50082"
+            weight = 1
+##

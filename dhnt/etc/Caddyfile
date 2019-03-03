@@ -1,9 +1,14 @@
 :2015
 
+root /var/caddy/hugo
+
+tls off
+
 gzip
 git {
-    repo http://localhost:3000/dhnt/website.git
-    branch master
-    interval 300
-    then hugo -s
+    #repo http://localhost:3000/dhnt/website.git
+    repo https://github.com/dhnt/hugosite.git
+    branch terrassa
+    interval -1
+    then hugo -s .
 }

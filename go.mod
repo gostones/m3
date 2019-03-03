@@ -23,6 +23,6 @@ require (
 	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d // indirect
 	github.com/smartystreets/goconvey v0.0.0-20181108003508-044398e4856c // indirect
 	github.com/takama/daemon v0.0.0-20180403113744-aa76b0035d12
-	golang.org/x/net v0.0.0-20190110200230-915654e7eabc // indirect
+	golang.org/x/net v0.0.0-20190301231341-16b79f2e4e95 // indirect
 	gopkg.in/resty.v1 v1.10.3
 )

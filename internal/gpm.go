@@ -46,6 +46,11 @@ var gpmConfigJSON = `
 		"autoRestart": true
 	},
 	{
+		"name": "fb",
+		"command": "gsh ${DHNT_BASE}/etc/fb-rc.sh",
+		"autoRestart": true
+	},
+	{
 		"name": "caddy",
 		"command": "caddy -conf ${DHNT_BASE}/etc/Caddyfile",
 		"autoRestart": true
