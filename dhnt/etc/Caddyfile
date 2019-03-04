@@ -1,6 +1,6 @@
 :2015
 
-root /var/caddy/hugo
+root /var/caddy/hugo/www
 
 tls off
 
@@ -9,6 +9,8 @@ git {
     #repo http://localhost:3000/dhnt/website.git
     repo https://github.com/dhnt/hugosite.git
     branch terrassa
+    clone_args --recurse-submodules
     interval -1
-    then hugo -s .
+    path ../repo
+    then hugo --source . --destination ../www
 }
