@@ -1,0 +1,60 @@
+
+[
+	{
+		"name": "etcd",
+		"command": "etcd --config-file ${DHNT_BASE}/etc/etcd.conf.yml",
+		"autoRestart": true
+	},
+	{
+		"name": "ipfs",
+		"command": "gsh ${DHNT_BASE}/etc/ipfs-rc.sh",
+		"autoRestart": true
+	},
+	{
+		"name": "gogs",
+		"command": "gsh ${DHNT_BASE}/etc/gogs-rc.sh",
+		"autoRestart": true,
+		"workDir": "${DHNT_BASE}/home/gogs"
+	},
+	{
+		"name": "gotty",
+		"command": "gotty --port 50022 --permit-write login",
+		"autoRestart": true
+	},
+	{
+		"name": "fb",
+		"command": "gsh ${DHNT_BASE}/etc/fb-rc.sh",
+		"autoRestart": true
+	},
+	{
+		"name": "caddy",
+		"command": "caddy -conf ${DHNT_BASE}/etc/Caddyfile",
+		"autoRestart": true
+	},
+	{
+		"name": "frps",
+		"command": "frps -c ${DHNT_BASE}/etc/frps.ini",
+		"autoRestart": true
+	},
+	{
+		"name": "traefik",
+		"command": "traefik -c ${DHNT_BASE}/etc/traefik/traefik.toml --file.directory=${DHNT_BASE}/etc/traefik/config",
+		"autoRestart": true,
+		"workDir": "${DHNT_BASE}"
+	},
+	{
+		"name": "mirr",
+		"command": "mirr --port 18080 --route ${DHNT_BASE}/etc/route.conf",
+		"autoRestart": true
+	},
+	{
+		"name": "gost",
+		"command": "gost -L http://:8080  -L https://:8443 -L socks5://:1080 -F http://127.0.0.1:18080",
+		"autoRestart": true
+	},
+	{
+		"name": "chisel",
+		"command": "chisel server --port 38080",
+		"autoRestart": true
+	}
+]
