@@ -2,13 +2,13 @@
 version: '3.6'
 
 services:
-  m3:
+  m3os:
       build:
         context: ./
         dockerfile: Dockerfile
       image: asperitus/m3:latest
       restart: always
-      container_name: m3
+      container_name: m3os
       hostname: m3os
       ports:
         - "80:80"
@@ -19,9 +19,10 @@ services:
         - "18080:18080"
         # - "28080:28080"
         # - "38080:38080"
+        - "7000:7000"
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
-        - ./dhnt/etc:/dhnt/etc
+        # - ./dhnt/etc:/dhnt/etc
         # - ./dhnt/home:/dhnt/home
         # - ./dhnt/data:/dhnt/data
       entrypoint:
@@ -31,11 +32,17 @@ services:
         - '/dhnt'
       labels:
         - traefik.enable=false
+        - traefik.docker.network=m3net
+      networks:
+        m3net:
+        web:
 
 networks:
-  default:
+  m3net:
     external: false
-    name: web
+  web:
+    external: true
+
 #
 # docker network create web
 #

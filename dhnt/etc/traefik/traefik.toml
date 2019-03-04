@@ -52,7 +52,7 @@ defaultEntryPoints = ["http", "https"]
 
 [docker]
     endpoint = "unix:///var/run/docker.sock"
-    # endpoint = "tcp://frps:6003"
+    # endpoint = "tcp://localhost:60003"
     domain = "local.m3"
     network = "web"
     watch = true

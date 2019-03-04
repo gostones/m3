@@ -1,0 +1,20 @@
+# rules.toml
+[frontends]
+    [frontends.frp]
+        backend = "frp"
+        passHostHeader = true
+        entrypoints = ["https"]
+        [frontends.frp.routes]
+            [frontends.frp.routes.route]
+            rule = "Host:frp.home"
+
+[backends]
+    [backends.frp]
+        [backends.frp.LoadBalancer]
+            method = "drr"
+            [backends.frp.loadbalancer.stickiness]
+        [backends.frp.servers] 
+            [backends.frp.servers.server1]
+            url = "http://127.0.0.1:7500"
+            weight = 1
+##
