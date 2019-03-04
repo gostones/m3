@@ -9,6 +9,7 @@ services:
       image: asperitus/m3:latest
       restart: always
       container_name: m3
+      hostname: m3os
       ports:
         - "80:80"
         - "443:443"
@@ -16,8 +17,8 @@ services:
         - "8080:8080"
         - "8443:8443"
         - "18080:18080"
-        - "28080:28080"
-        - "38080:38080"
+        # - "28080:28080"
+        # - "38080:38080"
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - ./dhnt/etc:/dhnt/etc

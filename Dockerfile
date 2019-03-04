@@ -22,7 +22,17 @@ RUN CGO_ENABLED=0 GOOS=linux go install ./cmd/...
 ###
 FROM alpine
 
-RUN apk add --no-cache git curl openssl
+ARG DHNT_USER=dhnt
+ARG DHNT_PWD=password
+
+RUN apk add --no-cache git curl openssl sudo
+
+# sudo
+RUN adduser ${DHNT_USER} -D \
+    && echo "${DHNT_USER}:${DHNT_PWD}" | chpasswd \
+    && sed -e 's;^# \(%sudo.*ALL\);\1;g' -i /etc/sudoers \
+    && addgroup sudo \
+    && adduser ${DHNT_USER} sudo
 
 VOLUME /dhnt/etc
 EXPOSE 18080
