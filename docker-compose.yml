@@ -40,9 +40,8 @@ services:
 networks:
   m3net:
     external: false
+    name: m3
   web:
-    external: true
-
-#
-# docker network create web
-#
+    external: false
+    name: web
+##
