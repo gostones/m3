@@ -1,0 +1,21 @@
+# rules.toml
+[frontends]
+    [frontends.catchall]
+        backend = "catchall"
+        passHostHeader = true
+        entrypoints = ["https"]
+        [frontends.catchall.routes]
+            [frontends.catchall.routes.route]
+            rule = "HostRegexp:{catchall:.*}.k8s.local.m3"
+            priority = 1
+
+[backends]
+    [backends.catchall]
+        [backends.catchall.LoadBalancer]
+            method = "drr"
+            [backends.catchall.loadbalancer.stickiness]
+        [backends.catchall.servers] 
+            [backends.catchall.servers.server]
+            url = "http://127.0.0.1:38080"
+            weight = 1
+##

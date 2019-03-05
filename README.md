@@ -20,7 +20,7 @@ usher a new era of Internet based on peer technologies.
 <dd>Uniform Resource Locator, examples: http://home for local resource on your own node, http://chat.1220848ba2cbc954d17fc1758a4dc06ec128b21c6ecc1dcfcbdc284809f4a922ba08 for slacking qiangli a message through the collaboration tool running on his node, or http://dhnt.io the classic web address</dd>
 </dl>
 
-### Technology Stack
+<!-- ### Technology Stack
 *Computing*
 
 [Docker/Kubernetes](https://kubernetes.io/)
@@ -39,9 +39,9 @@ You may pick your favorite browser and proxy plugins. However M3 has only been t
 [Chrome](https://www.google.com/chrome/)
 and [SwitchyOmega](https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=en)
 
-Any browser should work and proxy plugin is optional if you change your system default proxy settings to point to M3.
+Any browser should work and proxy plugin is optional if you change your system default proxy settings to point to M3. -->
 
-### What is M3, really?
+<!-- ### What is M3, really?
 
 - A forwarding proxy
 
@@ -54,7 +54,7 @@ Yes, you can now host almost any contents and applications on your own node at y
 
 - A gateway 
 
-to the resources hosted on the entire M3 network - the next generation of world wide wide.
+to the resources hosted on the entire M3 network - the next generation of world wide wide. -->
 
 ### Getting started
 
@@ -62,7 +62,7 @@ M3 is still under development and no simple one-click installation available yet
 
 If you are interested in trying it out, following instructions [here](doc/dev.md)
 
-Contact us if you have questions or want to contribute.
+<!-- Contact us if you have questions or want to contribute. -->
 
 
 

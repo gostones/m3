@@ -1,7 +1,15 @@
-#!/usr/bin/env bash
-
+#!/usr/bin/env sh
+set -x
 ##
-source env.sh
+# export GOOS=darwin
+export GOOS=linux
+
+export GOARCH=amd64
+export CGO_ENABLED=0
+
+# export SKIP_TEST=false
+export SKIP_TEST=true
+
 ##
 [[ $DEBUG ]] && FLAG="-x"
 
@@ -27,30 +35,10 @@ function build() {
     fi
 
     echo "## Building ..."
-#    go build $FLAG -buildmode=exe -o bin/mirr -ldflags '-extldflags "-static"'; if [ $? -ne 0 ]; then
-#        return 1
-#    fi
 
     go build $FLAG -a -ldflags '-w -extldflags "-static"' ./...; if [ $? -ne 0 ]; then
         return 1
     fi
-
-    #bin
-    # go build $FLAG -buildmode=exe -o $GOPATH/bin/mirr ./cmd/mirr; if [ $? -ne 0 ]; then
-    #     return 1
-    # fi
-    # go build $FLAG -buildmode=exe -o $GOPATH/bin/hexid ./cmd/hexid; if [ $? -ne 0 ]; then
-    #     return 1
-    # fi
-    # go build $FLAG -buildmode=exe -o $GOPATH/bin/systray ./cmd/systray; if [ $? -ne 0 ]; then
-    #     return 1
-    # fi
-    # go build $FLAG -buildmode=exe -o $GOPATH/bin/m3d ./cmd/m3d; if [ $? -ne 0 ]; then
-    #     return 1
-    # fi
-    # go build $FLAG -buildmode=exe -o $GOPATH/bin/m3ctl ./cmd/m3ctl; if [ $? -ne 0 ]; then
-    #     return 1
-    # fi
 
     go install $FLAG ./cmd/...
     

@@ -1,15 +1,30 @@
 # Developer Guide
 
+## Requirements
+
+1. Install [Docker](http://docker.io).
+2. Install [Docker-compose](http://docs.docker.com/compose/install/).
+3. Clone this repository
+
 ## Set up
 
 
-You may run setup.sh to have all the required projects set up automatically as follows:
+```
+docker-compose up -d
+```
+
+<!-- ```
+docker-compose build
+docker run --rm -i -t -v $PWD/etc:/dhnt/etc  asperitus/m3 /bin/sh
+m3 run --base /dhnt
+``` -->
+
+<!-- You may run setup.sh to have all the required projects set up automatically as follows:
 
 ```
 wget -O - https://raw.githubusercontent.com/dhnt/m3/master/setup.sh | bash
 
 #
-<!-- source ~/dhnt/m3/env.sh -->
 
 sudo m3d install --base ~/dhnt
 sudo m3d start
@@ -19,11 +34,11 @@ systray
 sudo m3d stop
 sudo m3d uninstall
 
-```
+``` -->
 
 If everything goes well, you should now have M3 up and running.
 
-However if it failed, please follow the following manual steps.
+<!-- However if it failed, please follow the following manual steps.
 
 Assuming M3 source code and third party projects will be checked out under `dhnt`.
 For third party Golang projects that still require the GOPATH to build will go into dhnt/go.
@@ -38,8 +53,8 @@ mkdir -p ~/dhnt/go/bin
 export DHNT_BASE=~/dhnt
 export GOPATH=~/dhnt/go
 export PATH=./:$GOPATH/bin:$DHNT_BASE/bin:$PATH
-```
-
+``` -->
+<!-- 
 ## Install required tools
 
 *Docker CE/Kubernetes*
@@ -102,9 +117,9 @@ ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
 #
 
 ipfs daemon
-```
+``` -->
 
-*M3*
+<!-- *M3*
 
 Clone this repo and run from [source](https://github.com/dhnt/m3.git)
 
@@ -128,7 +143,7 @@ $ps
 13753 ttys001    0:00.03 /Users/liqiang/dhnt/go/bin/gotty --port 50022 --permit-wr
 13754 ttys001    0:00.44 /Users/liqiang/dhnt/go/bin/gogs web --port 3000
 13755 ttys001    0:00.19 /Users/liqiang/dhnt/go/bin/ipfs daemon
-```
+``` -->
 
 *Chrome Proxy Plugin*
 
@@ -145,7 +160,7 @@ This plugin is optional if you change your system default to localhost:18080
 
 ## Best practices 
 
-In my humble opinion, programming language is not English so the latter's grammar rule does not apply to coding in the former.
+IMHO, programming language is not English so the latter's grammar rule does not apply to coding in the former.
 
 For naming conventions:
 
