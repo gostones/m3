@@ -62,7 +62,7 @@ var gpmConfigJSON = `
 	},
 	{
 		"name": "traefik",
-		"command": "traefik -c ${DHNT_BASE}/etc/traefik/traefik.toml --file.directory=${DHNT_BASE}/etc/traefik/config",
+		"command": "traefik -c ${DHNT_BASE}/etc/traefik/traefik.toml",
 		"autoRestart": true,
 		"workDir": "${DHNT_BASE}"
 	},

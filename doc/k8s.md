@@ -89,12 +89,16 @@ helm install --namespace cwe --name dokuwiki stable/dokuwiki \
 We use [Traefik](https://docs.traefik.io/) [Helm chart](https://github.com/helm/charts/tree/master/stable/traefik)
 
 ```
+
 helm install stable/traefik --name traefik --namespace kube-system \
+  --set serviceType=NodePort \
 	--set ssl.insecureSkipVerify=true \
 	--set cpuLimit=500m \
 	--set memoryLimit=1Gi \
 	--set dashboard.enabled=true \
-	--set dashboard.domain=localhost
+	--set dashboard.domain=localhost \
+  --set service.nodePorts.http=30080 \
+  --set service.nodePorts.https=30443
 
 ```
 
@@ -164,3 +168,7 @@ curl -kv -x http://localhost:18080 http://chat.home
 ```
 
 You should now be able to access mattermost from browser by entering http://chat.home in the address bar after you have installed a browser proxy plugin pointing to http://localhost:18080
+
+```
+kubectl -n cwe delete -f mattermost-ingress.yaml
+```

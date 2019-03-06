@@ -64,5 +64,15 @@ If you are interested in trying it out, following instructions [here](doc/dev.md
 
 <!-- Contact us if you have questions or want to contribute. -->
 
+<!-- 
+kubectl config --kubeconfig=config-m3 set-cluster m3-k8s --server=https://host.docker.internal:6443 --insecure-skip-tls-verify
+
+kubectl config set-cluster m3-k8s --server=https://host.docker.internal:6443 --insecure-skip-tls-verify
+
+kubectl config set-context m3 --cluster=m3-k8s --namespace=kube-system
+
+kubectl config use-context m3
+
+-->
 
 

@@ -25,7 +25,7 @@ FROM alpine
 ARG DHNT_USER=dhnt
 ARG DHNT_PWD=password
 
-RUN apk add --no-cache git curl openssl sudo
+RUN apk add --no-cache curl git sudo wget
 
 # sudo
 RUN adduser ${DHNT_USER} -D \
@@ -34,8 +34,18 @@ RUN adduser ${DHNT_USER} -D \
     && addgroup sudo \
     && adduser ${DHNT_USER} sudo
 
-VOLUME /dhnt/etc
-EXPOSE 18080
+# RUN curl -L -o /usr/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl" \
+#     && chmod +x /usr/bin/kubectl \
+#     && kubectl version --client
+
+#https://github.com/docker/compose/issues/3465
+# RUN curl -L -o /usr/bin/docker-compose "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" \
+#     && chmod +x /usr/bin/docker-compose \
+#     && docker-compose --version
+
+##
+VOLUME /dhnt/etc /home/dhnt
+EXPOSE 18080 8080 1080
 WORKDIR /
 
 COPY --from=builder /dist /dhnt
