@@ -1,5 +1,5 @@
 # traefik.toml
-logLevel = "DEBUG"
+logLevel = "INFO"
 
 # [traefikLog]
 #     filePath = "var/log/traefik.log"
@@ -40,9 +40,9 @@ defaultEntryPoints = ["http", "https"]
     dashboard = true
     debug = false
 
-# [file]
-#     directory = "etc/traefik/config/"
-#     watch = true
+[file]
+    directory = "etc/traefik/config/"
+    watch = true
 
 # [etcd]
 #     endpoint = "127.0.0.1:2379"
@@ -57,6 +57,10 @@ defaultEntryPoints = ["http", "https"]
     network = "web"
     watch = true
     exposedByDefault = false
+
+# [kubernetes]
+#     endpoint = "http://localhost:8001"
+#     token = ""
 
 # [acme]
 #     email = "noreply@local.m3"

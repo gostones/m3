@@ -11,17 +11,18 @@ services:
       container_name: m3os
       hostname: m3os
       ports:
-        - "80:80"
-        - "443:443"
+        # - "80:80"
+        # - "443:443"
         - "1080:1080"
         - "8080:8080"
-        - "8443:8443"
+        # - "8443:8443"
         - "18080:18080"
         # - "28080:28080"
         # - "38080:38080"
-        - "7000:7000"
+        # - "7000:7000"
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
+        - dhnt:/home/dhnt
         # - ./dhnt/etc:/dhnt/etc
         # - ./dhnt/home:/dhnt/home
         # - ./dhnt/data:/dhnt/data
@@ -32,15 +33,13 @@ services:
         - '/dhnt'
       labels:
         - traefik.enable=false
-        - traefik.docker.network=m3net
       networks:
-        m3net:
         web:
 
+volumes:
+  dhnt:
+
 networks:
-  m3net:
-    external: false
-    name: m3
   web:
     external: false
     name: web

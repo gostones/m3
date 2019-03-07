@@ -7,17 +7,17 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: wiki.home
+  - host: wiki.k8s.local.m3
     http:
       paths:
       - path: /
         backend:
           serviceName: dokuwiki-dokuwiki
           servicePort: 80
-  - host: wiki.<hexid>
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: dokuwiki-dokuwiki
-          servicePort: 80
+  # - host: wiki.<hexid>
+  #   http:
+  #     paths:
+  #     - path: /
+  #       backend:
+  #         serviceName: dokuwiki-dokuwiki
+  #         servicePort: 80

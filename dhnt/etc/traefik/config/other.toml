@@ -16,6 +16,7 @@
             [backends.catchall.loadbalancer.stickiness]
         [backends.catchall.servers] 
             [backends.catchall.servers.server]
-            url = "http://127.0.0.1:38080"
+            # url = "http://host.docker.internal:30080"
+            url = "http://k8s:8080"
             weight = 1
 ##
