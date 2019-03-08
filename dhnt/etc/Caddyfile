@@ -7,8 +7,9 @@ tls off
 gzip
 git {
     #repo http://localhost:3000/dhnt/website.git
-    repo https://github.com/dhnt/hugosite.git
-    branch terrassa
+    #repo https://github.com/dhnt/hugosite.git
+    #branch terrassa
+    repo https://github.com/dhnt/home.git
     clone_args --recurse-submodules
     interval -1
     path ../repo
