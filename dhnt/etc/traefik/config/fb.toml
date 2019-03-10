@@ -6,7 +6,7 @@
         entrypoints = ["https"]
         [frontends.fb.routes]
             [frontends.fb.routes.route]
-            rule = "Host:fb.home"
+            rule = "Host:fb.home,fb.home.m3"
 
 [backends]
     [backends.fb]

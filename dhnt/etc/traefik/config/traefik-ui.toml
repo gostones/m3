@@ -6,7 +6,7 @@
         entrypoints = ["https"]
         [frontends.traefik.routes]
             [frontends.traefik.routes.route]
-            rule = "Host:traefik.home"
+            rule = "Host:traefik.home,traefik.home.m3"
 
 [backends]
     [backends.traefik]
