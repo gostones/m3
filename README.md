@@ -1,10 +1,10 @@
 # m3
 
-M3, MMM - the inverse of WWW (world wide web), will 
+M3, MMM - inverse of WWW (world wide web), will 
 usher a new era of Internet based on peer technologies.
 
 ![M3 architecture](doc/m3-architecture.png "The next gen peer to peer web")
-### Terminology
+<!-- ### Terminology
 
 <dl>
 <dt>Node</dt>
@@ -18,7 +18,7 @@ usher a new era of Internet based on peer technologies.
 
 <dt>URL</dt>
 <dd>Uniform Resource Locator, examples: http://home for local resource on your own node, http://chat.1220848ba2cbc954d17fc1758a4dc06ec128b21c6ecc1dcfcbdc284809f4a922ba08 for slacking qiangli a message through the collaboration tool running on his node, or http://dhnt.io the classic web address</dd>
-</dl>
+</dl> -->
 
 <!-- ### Technology Stack
 *Computing*

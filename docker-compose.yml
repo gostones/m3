@@ -14,18 +14,19 @@ services:
       # - "80:80"
       # - "443:443"
       - "1080:1080"
-      - "8080:8080"
+      # - "8080:8080"
       # - "8443:8443"
       - "18080:18080"
       # - "28080:28080"
       # - "38080:38080"
       # - "7000:7000"
+      # etcd
+      # - "2379:2379"
+      # - "2380:2380"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - dhnt:/home/dhnt
-      # - ./dhnt/etc:/dhnt/etc
-      # - ./dhnt/home:/dhnt/home
-      # - ./dhnt/data:/dhnt/data
+      # - dhnt:/home/dhnt
+      - ./dhnt/etc:/dhnt/etc
     entrypoint:
       - '/dhnt/bin/m3'
       - 'run'
@@ -53,7 +54,7 @@ services:
       - "traefik.docker.network=web"
       - "traefik.entrypoints=http"
       - "traefik.frontend.passHostHeader=true"
-      - "traefik.frontend.rule=Host:dui.home"
+      - "traefik.frontend.rule=Host:dui.home.m3"
       - "traefik.port=5000"
 
 volumes:

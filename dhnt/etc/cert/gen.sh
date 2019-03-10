@@ -12,7 +12,7 @@ openssl req \
     -subj /C=US/ST=CA/L=Bayarea/O=DHNT/OU=M3/CN=m3 \
     -reqexts SAN \
     -extensions SAN \
-    -config <(cat openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:m3,DNS:local.m3,DNS:*.local.m3,DNS:home,DNS:git.home,DNS:term.home')) \
+    -config <(cat openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:m3,DNS:local.m3,DNS:*.local.m3,DNS:home,DNS:*.home,DNS:*.home.m3')) \
     -days 3650
 
 echo "Done!"

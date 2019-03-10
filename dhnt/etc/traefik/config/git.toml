@@ -6,7 +6,7 @@
         entrypoints = ["https"]
         [frontends.git.routes]
             [frontends.git.routes.route]
-            rule = "Host:git.home"
+            rule = "Host:git.home.m3"
 
 [backends]
     [backends.git]
