@@ -58,9 +58,13 @@ to the resources hosted on the entire M3 network - the next generation of world 
 
 ### Getting started
 
-M3 is still under development and no simple one-click installation available yet (sorry!).
 
-If you are interested in trying it out, following instructions [here](doc/dev.md)
+M3 is still under development and is not ready for production.
+
+To  try it out, follow instructions [here](https://github.com/dhnt/dhnt)
+
+For development, see [here](doc/dev.md)
+
 
 <!-- Contact us if you have questions or want to contribute. -->
 
