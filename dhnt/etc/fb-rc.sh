@@ -8,7 +8,7 @@ define config_fb: method() = {
 	filebrowser users update dhnt --password password
 }
 
-export FB_DATABASE = "${DHNT_BASE}/home/fb/filebrowser.db"
+export FB_DATABASE = "/home/dhnt/fb/filebrowser.db"
 
 if ([ ! -e "${FB_DATABASE}" ]) {
 	filebrowser config init \
