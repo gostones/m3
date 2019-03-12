@@ -15,7 +15,8 @@ WORKDIR /app
 #https://github.com/moby/moby/issues/15858
 COPY dhnt/etc /dist/etc
 
-#
+RUN git clone https://github.com/dhnt/home.git /app/home
+
 # RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags '-w -extldflags "-static"' ./...
 RUN CGO_ENABLED=0 GOOS=linux go install ./cmd/...
 
@@ -50,6 +51,7 @@ WORKDIR /
 
 COPY --from=builder /dist /dhnt
 COPY --from=builder /go/bin/* /dhnt/bin/
+COPY --from=builder /app/home/public /var/caddy/hugo/www
 
 ENV PATH="/dhnt/bin:${PATH}"
 ENV DHNT_BASE=/dhnt
