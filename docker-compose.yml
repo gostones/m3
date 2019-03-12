@@ -6,7 +6,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: asperitus/m3:latest
+    image: dhnt/m3:latest
     restart: always
     container_name: m3os
     hostname: m3os
