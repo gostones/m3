@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"log"
 	"sync"
 )
 
@@ -57,7 +56,7 @@ func (r *Neighborhood) GetPeers() []string {
 			addresses = append(addresses, addr)
 		}
 	}
-	log.Printf("@@@ addresses: %v\n", addresses)
+	logger.Printf("@@@ addresses: %v\n", addresses)
 	return addresses
 }
 
@@ -88,7 +87,7 @@ func (r *Neighborhood) AddPeerProxy(id string) string {
 
 // GetPeerTarget returns peer proxy host:port
 func (r *Neighborhood) GetPeerTarget(id string) string {
-	log.Printf("@@@ GetPeerTarget: id: %v\n", id)
+	logger.Printf("@@@ GetPeerTarget: id: %v\n", id)
 
 	p := r.getPeer(id)
 	if p != nil && p.Port > 0 && p.Rank > 0 {
@@ -116,7 +115,7 @@ func (r *Neighborhood) addPeer(id string) *Peer {
 
 	port := FreePort()
 	var err error
-	log.Printf("@@@ addPeer: id: %v port: %v\n", id, port)
+	logger.Printf("@@@ addPeer: id: %v port: %v\n", id, port)
 
 	err = p2pForward(port, id)
 
@@ -127,7 +126,7 @@ func (r *Neighborhood) addPeer(id string) *Peer {
 			rank = 1
 		}
 	}
-	log.Printf("@@@ addPeer id: %v port: %v rank: %v err: %v\n", id, port, rank, err)
+	logger.Printf("@@@ addPeer id: %v port: %v rank: %v err: %v\n", id, port, rank, err)
 
 	p = &Peer{
 		Peer:      id,

@@ -30,6 +30,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - dhnt:/home/dhnt
       # - ./dhnt/etc:/dhnt/etc
+    environment: 
+      - log_level=debug
+      - log_file=/var/m3.log
     entrypoint:
       - '/dhnt/bin/m3'
       - 'run'

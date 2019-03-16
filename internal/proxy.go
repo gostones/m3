@@ -6,11 +6,8 @@ import (
 
 	"github.com/elazarl/goproxy"
 
-	//"github.com/elazarl/goproxy/ext/auth"
-
 	"bytes"
 	"io/ioutil"
-	"log"
 	"net"
 	"net/http"
 
@@ -55,7 +52,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		if be == nil || len(be) == 0 {
 			return nil, fmt.Errorf("Proxy routing error: %v %v", network, addr)
 		}
-		log.Printf("Router.Match(%q): %v proxy: %v, network: %v addr: %v", hostport[0], *be[0], viaProxy, network, addr)
+		logger.Debugf("Router.Match(%q): %v proxy: %v, network: %v addr: %v", hostport[0], *be[0], viaProxy, network, addr)
 
 		// prevent loop
 		if be[0].Hostname == hostport[0] {
@@ -67,7 +64,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 		}
 
 		if be[0].Hostname == "peer" {
-			log.Printf("@@@ Dial peer network: %v addr: %v\n", network, addr)
+			logger.Debugf("@@@ Dial peer network: %v addr: %v\n", network, addr)
 
 			tld := PeerTLD(hostport[0])
 			id := ToPeerID(tld)
@@ -79,7 +76,7 @@ func HTTPProxy(port int, nb *Neighborhood) {
 				return nil, fmt.Errorf("Peer not reachable: %v", hostport[0])
 			}
 
-			log.Printf("@@@ Dial peer network: %v addr: %v target: %v\n", network, addr, target)
+			logger.Debugf("@@@ Dial peer network: %v addr: %v target: %v\n", network, addr, target)
 			dial := proxy.NewConnectDialToProxy(fmt.Sprintf("http://%v", target))
 
 			if dial != nil {
@@ -127,27 +124,27 @@ func HTTPProxy(port int, nb *Neighborhood) {
 
 	proxy.OnRequest().DoFunc(
 		func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-			log.Printf("\n\n\n##################\n")
+			logger.Debugf("\n\n\n##################\n")
 
-			log.Printf("@@@ OnRequest Proto: %v method: %v url: %v\n", req.Proto, req.Method, req.URL)
-			log.Printf("@@@ OnRequest request: %v\n", req)
+			logger.Debugf("@@@ OnRequest Proto: %v method: %v url: %v\n", req.Proto, req.Method, req.URL)
+			logger.Debugf("@@@ OnRequest request: %v\n", req)
 
 			return req, nil
 		})
 
 	proxy.OnResponse().DoFunc(func(r *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
-		log.Printf("\n--------------------\n")
+		logger.Debugf("\n--------------------\n")
 		if r != nil {
 			r.Header.Add("X-Peer-Id", nb.My.ID)
 			cors(r)
-			log.Printf("@@@ Proxy OnResponse status: %v length: %v\n", r.StatusCode, r.ContentLength)
+			logger.Debugf("@@@ Proxy OnResponse status: %v length: %v\n", r.StatusCode, r.ContentLength)
 		}
-		log.Printf("@@@ OnResponse response: %v\n", r)
+		logger.Debugf("@@@ OnResponse response: %v\n", r)
 		return r
 	})
 
-	log.Printf("Proxy listening on: %v\n", port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), proxy))
+	logger.Debugf("Proxy listening on: %v\n", port)
+	logger.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), proxy))
 }
 
 // StartProxy starts proxy services
@@ -155,7 +152,7 @@ func StartProxy(cfg *Config) {
 	// clean up old p2p connections
 	err := P2PCloseAll()
 
-	logger.Printf("Configuration: %v", cfg)
+	logger.Infof("Configuration: %v", cfg)
 
 	nb := NewNeighborhood(cfg)
 
@@ -163,7 +160,7 @@ func StartProxy(cfg *Config) {
 	var node Node
 
 	for node, err = p2pID(); err != nil; node, err = p2pID() {
-		log.Printf("IPFS not ready, will retry in a sec: %v\n", err)
+		logger.Debugf("IPFS not ready, will retry in a sec: %v\n", err)
 
 		time.Sleep(1 * time.Second)
 	}
@@ -173,7 +170,7 @@ func StartProxy(cfg *Config) {
 
 	//
 	port := cfg.Port
-	log.Printf("proxy/p2p port: %v\n", port)
+	logger.Infof("proxy/p2p port: %v\n", port)
 
 	P2PListen(port)
 	HTTPProxy(port, nb)

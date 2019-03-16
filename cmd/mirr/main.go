@@ -2,10 +2,10 @@ package main
 
 import (
 	"flag"
-	// "strings"
-
 	"github.com/dhnt/m3/internal"
 )
+
+var logger = internal.Logger()
 
 func main() {
 	//
@@ -20,6 +20,9 @@ func main() {
 
 	cfg.Port = *port
 	cfg.RouteFile = *route
+
+	logger.Info("starting mirr ...")
+	logger.Infof("configration: %v", cfg)
 
 	internal.StartProxy(cfg)
 }

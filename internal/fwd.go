@@ -4,14 +4,11 @@ package internal
 import (
 	"fmt"
 	"github.com/fatih/color"
-	// "github.com/urfave/cli"
 	"io"
-	"log"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
-	// "runtime"
 )
 
 func getLocalAddrs() ([]net.IP, error) {
@@ -33,7 +30,7 @@ func fwd(src net.Conn, remote string, proto string) {
 	dst, err := net.Dial(proto, remote)
 	//errHandler(err)
 	if err != nil {
-		log.Printf("fwd: remote: %v err: %v\n", remote, err)
+		logger.Printf("fwd: remote: %v err: %v\n", remote, err)
 		return
 	}
 	go func() {
@@ -98,7 +95,7 @@ func tcpStart(from string, to string) {
 	for {
 		src, err := listener.Accept()
 		if err != nil {
-			log.Printf("tcpStart listener accept err: %v\n", err)
+			logger.Printf("tcpStart listener accept err: %v\n", err)
 			continue
 		}
 		fmt.Printf("tcpStart new connection established from '%v'\n", src.RemoteAddr())

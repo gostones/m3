@@ -7,9 +7,11 @@ import (
 	"os"
 )
 
-var logger = internal.Stdlog
+var logger = internal.Logger()
 
 func main() {
+	logger.Info("gpm starting ...")
+
 	base := flag.String("base", "", "dhnt base")
 	port := flag.Int("port", internal.GetDaemonPort(), "gpm port")
 	flag.Parse()
@@ -23,5 +25,5 @@ func main() {
 	defer s.Stop()
 	s.Run()
 
-	logger.Println("gpm exited")
+	logger.Info("gpm exited")
 }

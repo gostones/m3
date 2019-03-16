@@ -1,7 +1,6 @@
 module github.com/dhnt/m3
 
 require (
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/elazarl/goproxy v0.0.0-20181111060418-2ce16c963a8a
 	github.com/fatih/color v1.7.0
 	github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e // indirect
@@ -20,6 +19,7 @@ require (
 	github.com/parnurzeal/gorequest v0.2.15
 	github.com/peterh/liner v1.1.0
 	github.com/pkg/errors v0.8.1 // indirect
+	github.com/sirupsen/logrus v1.4.0
 	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d // indirect
 	github.com/smartystreets/goconvey v0.0.0-20181108003508-044398e4856c // indirect
 	github.com/takama/daemon v0.0.0-20180403113744-aa76b0035d12
