@@ -3,6 +3,7 @@ package internal
 import (
 	"bufio"
 	"fmt"
+
 	"github.com/ilius/crock32"
 	"github.com/jpillora/backoff"
 	"github.com/mitchellh/go-homedir"
@@ -53,13 +54,13 @@ func CurrentTime() int64 {
 	return time.Now().UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))
 }
 
-// IsPeer checks if the string s ends in a valid b32-encoded peer address or b58-encoded ID
-func IsPeer(s string) bool {
-	sa := strings.Split(s, ".")
-	le := len(sa) - 1
-	id := ToPeerID(sa[le])
-	return id != ""
-}
+// // IsPeer checks if the string s ends in a valid b32-encoded peer address or b58-encoded ID
+// func IsPeer(s string) bool {
+// 	sa := strings.Split(s, ".")
+// 	le := len(sa) - 1
+// 	id := ToPeerID(sa[le])
+// 	return id != ""
+// }
 
 // ToPeerID returns b58-encoded ID. it converts to b58 if b32-encoded.
 func ToPeerID(s string) string {
@@ -114,26 +115,21 @@ func ParseInt(s string, v int) int {
 }
 
 // TLD returns last part of a domain name
-func TLD(name string) string {
-	sa := strings.Split(name, ".")
+func TLD(domain string) string {
+	sa := strings.Split(domain, ".")
 	s := sa[len(sa)-1]
 
 	return s
 }
 
-// Alias returns the second last part of a domain name ending in .a
-// or error if not an alias
-func Alias(name string) (string, error) {
-	if name != "a" && !strings.HasSuffix(name, ".a") {
-		return "", fmt.Errorf("Not an alias: %v", name)
+// PeerTLD splits and returns peer id after strippig off m3
+func PeerTLD(domain string) string {
+	sa := strings.Split(domain, ".")
+	s := sa[len(sa)-1]
+	if s == "m3" {
+		s = sa[len(sa)-2]
 	}
-	sa := strings.Split(name, ".")
-	if len(sa) == 1 {
-		return "", nil
-	}
-	s := sa[0 : len(sa)-1]
-
-	return strings.Join(s, "."), nil
+	return s
 }
 
 var localHostIpv4RE = regexp.MustCompile(`127\.0\.0\.\d+`)
@@ -145,14 +141,6 @@ func IsLocalHost(host string) bool {
 		host == "0:0:0:0:0:0:0:1" ||
 		localHostIpv4RE.MatchString(host) ||
 		host == "localhost"
-}
-
-var localHomeRE = regexp.MustCompile(`.*\.?home`)
-
-// IsHome checks whether host is explicitly local home node
-func IsHome(host string) bool {
-	return host == "home" ||
-		localHomeRE.MatchString(host)
 }
 
 // GetDefaultBase returns $DHNT_BASE or $HOME/dhnt if not found
@@ -204,14 +192,14 @@ func GetDefaultPort() int {
 	return 18080
 }
 
-// GetDaemonPort returns $M3_PORT or 18080 if not found
+// GetDaemonPort returns $M3D_PORT
 func GetDaemonPort() int {
 	if p := os.Getenv("M3D_PORT"); p != "" {
 		if port, err := strconv.Atoi(p); err == nil {
 			return port
 		}
 	}
-	return 18082
+	return FreePort()
 }
 
 func ToTimestamp(d time.Time) int64 {

@@ -15,39 +15,6 @@ func TestBackoffDuration(t *testing.T) {
 	bo(rc)
 }
 
-func TestIsPeer(t *testing.T) {
-	b := IsPeer("localhost")
-	if b {
-		t.Fail()
-	}
-
-	b = IsPeer("home")
-	if b {
-		t.Fail()
-	}
-
-	b = IsPeer("example.com")
-	if b {
-		t.Fail()
-	}
-
-	//peer
-	b = IsPeer("92114bmb5wjn6hfz0qb2jdr1qc2a5j3hqcr7efsfe2gj09yjmj5eg8")
-	if !b {
-		t.Fail()
-	}
-
-	b = IsPeer("QmXG428k4Aa6Fchp7buub2pK4Fa2nbhcTfznL7oVSGWRRZ")
-	if !b {
-		t.Fail()
-	}
-
-	b = IsPeer("QmTFdcQY12fjxv6kELzQA4zXBxiva8xcunrmTYZto8DFUk")
-	if !b {
-		t.Fail()
-	}
-}
-
 func TestToPeerAddr(t *testing.T) {
 	s := ToPeerAddr("localhost")
 	if s != "" {
@@ -110,21 +77,19 @@ func TestTLD(t *testing.T) {
 	}
 }
 
-func TestAlias(t *testing.T) {
-	_, err := Alias("example.com")
-	if err == nil {
+func TestPeerTLD(t *testing.T) {
+	tld := PeerTLD("peer")
+	if tld != "peer" {
 		t.Fail()
 	}
-	a, _ := Alias("my.friend.a")
-	if a != "my.friend" {
+
+	tld = PeerTLD("peer.m3")
+	if tld != "peer" {
 		t.Fail()
 	}
-	a, err = Alias("a")
-	if a != "" || err != nil {
-		t.Fail()
-	}
-	a, err = Alias(".a")
-	if a != "" || err != nil {
+
+	tld = PeerTLD("name.peer.m3")
+	if tld != "peer" {
 		t.Fail()
 	}
 }
@@ -157,39 +122,6 @@ func TestIsLocalHost(t *testing.T) {
 
 	s = "127.0.0.1"
 	b = IsLocalHost(s)
-	if !b {
-		t.Fail()
-	}
-}
-
-func TestIsHOme(t *testing.T) {
-	s := "example.com"
-	b := IsHome(s)
-	if b {
-		t.Fail()
-	}
-
-	s = "localhost"
-	b = IsHome(s)
-	if b {
-		t.Fail()
-	}
-
-	s = "127.0.0.1"
-	b = IsHome(s)
-	if b {
-		t.Fail()
-	}
-
-	//
-	s = "home"
-	b = IsHome(s)
-	if !b {
-		t.Fail()
-	}
-
-	s = "any.home"
-	b = IsHome(s)
 	if !b {
 		t.Fail()
 	}
