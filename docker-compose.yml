@@ -24,8 +24,9 @@ services:
       # - "2379:2379"
       # - "2380:2380"
       # ipfs
+      - "4001:4001"
       # https://github.com/ipfs-shipyard/ipfs-webui/issues/836
-      - "5001:5001"
+      - "127.0.0.1:5001:5001"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - dhnt:/home/dhnt
@@ -33,6 +34,7 @@ services:
     environment: 
       - log_level=debug
       - log_file=/var/m3.log
+      - IPFS_PATH=/home/dhnt/ipfs
     entrypoint:
       - '/dhnt/bin/m3'
       - 'run'
