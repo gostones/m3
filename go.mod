@@ -13,7 +13,6 @@ require (
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/michaelmacinnis/adapted v0.0.0-20171216080906-993520cda764 // indirect
 	github.com/michaelmacinnis/oh v0.0.0-20180701231441-735487d5ef2a
-	github.com/mitchellh/go-homedir v1.0.0
 	github.com/moul/http2curl v1.0.0 // indirect
 	github.com/multiformats/go-multihash v0.0.1
 	github.com/parnurzeal/gorequest v0.2.15

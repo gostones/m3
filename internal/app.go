@@ -22,13 +22,13 @@ func LoadAppDesc(name string) (*AppDesc, error) {
 		return desc, nil
 	}
 
-	base := GetDefaultBase()
-	if base != "" {
-		desc, err = loadJSON(fmt.Sprintf("%v/etc/%v.json", base, name))
-		if err == nil {
-			return desc, nil
-		}
-	}
+	// base := GetDefaultBase()
+	// if base != "" {
+	// 	desc, err = loadJSON(fmt.Sprintf("%v/etc/%v.json", base, name))
+	// 	if err == nil {
+	// 		return desc, nil
+	// 	}
+	// }
 
 	return nil, fmt.Errorf("configuration not found for %v", name)
 }

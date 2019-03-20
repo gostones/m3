@@ -46,7 +46,7 @@ func logLevel() (level logrus.Level) {
 func logFile() io.Writer {
 	f := os.Getenv("log_file")
 	if f == "" {
-		f = "logrus.log"
+		return os.Stdout
 	}
 	ensureDir(f)
 	w, err := os.OpenFile(f, os.O_CREATE|os.O_WRONLY, 0666)

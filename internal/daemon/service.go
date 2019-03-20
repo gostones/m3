@@ -97,27 +97,8 @@ func (service *Service) Manage() (string, error) {
 	default:
 		return usage, nil
 	}
-	// if received any kind of command, do it
-	// if len(os.Args) > 1 {
-	// 	command := os.Args[1]
-	// 	switch command {
-	// 	case "install":
-	// 		return service.Install(os.Args[2:]...)
-	// 	case "uninstall":
-	// 		return service.Remove()
-	// 	case "start":
-	// 		return service.Start()
-	// 	case "stop":
-	// 		return service.Stop()
-	// 	case "status":
-	// 		return service.Status()
-	// 	default:
-	// 		return usage, nil
-	// 	}
-	// }
 
 	logger.Printf("Manage set up args: %v len: %v", os.Args, len(os.Args))
-	// internal.DumpEnv()
 
 	//
 	bp := runCmd.String("base", "", "dhnt base")
@@ -127,7 +108,11 @@ func (service *Service) Manage() (string, error) {
 	}
 	base := *bp
 	logger.Println("dhnt base:", base)
-
+	//
+	if err := os.Chdir(base); err != nil {
+		logger.Println(err)
+		os.Exit(1)
+	}
 	//
 	signal.Ignore(syscall.SIGHUP)
 
@@ -138,17 +123,7 @@ func (service *Service) Manage() (string, error) {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
 
-	// // Set up etcd
-	// es := internal.NewEtcd(base)
-	// defer es.Stop()
-	// es.Start()
-
-	// // Set up pm
-	// port := internal.GetDaemonPort()
-	// s := pm.NewServer(base, "", port)
-
-	// defer s.Stop()
-	// s.Start()
+	//
 	script := filepath.Join(base, "etc/init.sh")
 	done := make(chan error, 1)
 	go func() {

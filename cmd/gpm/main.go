@@ -13,7 +13,7 @@ func main() {
 	logger.Info("gpm starting ...")
 
 	base := flag.String("base", "", "dhnt base")
-	port := flag.Int("port", internal.GetDaemonPort(), "gpm port")
+	port := flag.Int("port", internal.FreePort(), "gpm port")
 	flag.Parse()
 	if *base == "" {
 		flag.PrintDefaults()

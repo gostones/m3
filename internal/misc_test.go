@@ -127,13 +127,13 @@ func TestIsLocalHost(t *testing.T) {
 	}
 }
 
-func TestGetBaseFromPath(t *testing.T) {
-	base := getBaseFromPath("/users/user/dhnt/go/bin/exe")
-	if base != "/users/user/dhnt" {
-		t.Fail()
-	}
-	base = getBaseFromPath("/users/user/tmp")
-	if base != "" {
-		t.Fail()
-	}
-}
+// func TestGetBaseFromPath(t *testing.T) {
+// 	base := getBaseFromPath("/users/user/dhnt/go/bin/exe")
+// 	if base != "/users/user/dhnt" {
+// 		t.Fail()
+// 	}
+// 	base = getBaseFromPath("/users/user/tmp")
+// 	if base != "" {
+// 		t.Fail()
+// 	}
+// }

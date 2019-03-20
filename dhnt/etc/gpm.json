@@ -6,11 +6,6 @@
 		"autoRestart": true
 	},
 	{
-		"name": "ipfs",
-		"command": "gsh ${DHNT_BASE}/etc/ipfs-rc.sh",
-		"autoRestart": true
-	},
-	{
 		"name": "gogs",
 		"command": "gsh ${DHNT_BASE}/etc/gogs-rc.sh",
 		"autoRestart": true,
@@ -41,16 +36,6 @@
 		"command": "traefik -c ${DHNT_BASE}/etc/traefik/traefik.toml --file.directory=${DHNT_BASE}/etc/traefik/config",
 		"autoRestart": true,
 		"workDir": "${DHNT_BASE}"
-	},
-	{
-		"name": "mirr",
-		"command": "mirr --port 18080 --route ${DHNT_BASE}/etc/route.conf",
-		"autoRestart": true
-	},
-	{
-		"name": "gost",
-		"command": "gost -L http://:8080  -L https://:8443 -L socks5://:1080 -F http://127.0.0.1:18080",
-		"autoRestart": true
 	},
 	{
 		"name": "chisel",

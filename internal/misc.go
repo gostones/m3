@@ -6,11 +6,12 @@ import (
 
 	"github.com/ilius/crock32"
 	"github.com/jpillora/backoff"
-	"github.com/mitchellh/go-homedir"
+
+	// "github.com/mitchellh/go-homedir"
 	"github.com/multiformats/go-multihash"
 
 	"net"
-	"os"
+	// "os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
@@ -143,64 +144,64 @@ func IsLocalHost(host string) bool {
 		host == "localhost"
 }
 
-// GetDefaultBase returns $DHNT_BASE or $HOME/dhnt if not found
-func GetDefaultBase() string {
-	return getBase()
-}
+// // GetDefaultBase returns $DHNT_BASE or $HOME/dhnt if not found
+// func GetDefaultBase() string {
+// 	return getBase()
+// }
 
-func getBase() string {
-	base := os.Getenv("DHNT_BASE")
-	if base != "" {
-		return base
-	}
-	home, err := homedir.Dir()
-	if err != nil {
-		base = fmt.Sprintf("%v/dhnt", home)
-	}
+// func getBase() string {
+// 	base := os.Getenv("DHNT_BASE")
+// 	if base != "" {
+// 		return base
+// 	}
+// 	home, err := homedir.Dir()
+// 	if err != nil {
+// 		base = fmt.Sprintf("%v/dhnt", home)
+// 	}
 
-	// dhnt/bin/m3
-	exe, err := os.Executable()
-	if err != nil {
-		return ""
-	}
-	return getBaseFromPath(exe)
-}
+// 	// dhnt/bin/m3
+// 	exe, err := os.Executable()
+// 	if err != nil {
+// 		return ""
+// 	}
+// 	return getBaseFromPath(exe)
+// }
 
-func getBaseFromPath(dir string) string {
-	dir = filepath.Dir(dir)
-	for {
-		d, f := filepath.Split(dir)
-		logger.Println("dir: ", d, " file: ", f)
-		if f == "dhnt" {
-			return filepath.Join(d, f)
-		}
-		if d == "" || d == "/" {
-			break
-		}
-		dir = filepath.Dir(d) // strip trailing path separator
-	}
-	return ""
-}
+// func getBaseFromPath(dir string) string {
+// 	dir = filepath.Dir(dir)
+// 	for {
+// 		d, f := filepath.Split(dir)
+// 		logger.Println("dir: ", d, " file: ", f)
+// 		if f == "dhnt" {
+// 			return filepath.Join(d, f)
+// 		}
+// 		if d == "" || d == "/" {
+// 			break
+// 		}
+// 		dir = filepath.Dir(d) // strip trailing path separator
+// 	}
+// 	return ""
+// }
 
-// GetDefaultPort returns $M3_PORT or 18080 if not found
-func GetDefaultPort() int {
-	if p := os.Getenv("M3_PORT"); p != "" {
-		if port, err := strconv.Atoi(p); err == nil {
-			return port
-		}
-	}
-	return 18080
-}
+// // GetDefaultPort returns $M3_PORT or 18080 if not found
+// func GetDefaultPort() int {
+// 	if p := os.Getenv("M3_PORT"); p != "" {
+// 		if port, err := strconv.Atoi(p); err == nil {
+// 			return port
+// 		}
+// 	}
+// 	return 18080
+// }
 
-// GetDaemonPort returns $M3D_PORT
-func GetDaemonPort() int {
-	if p := os.Getenv("M3D_PORT"); p != "" {
-		if port, err := strconv.Atoi(p); err == nil {
-			return port
-		}
-	}
-	return FreePort()
-}
+// // GetDaemonPort returns $M3D_PORT
+// func GetDaemonPort() int {
+// 	if p := os.Getenv("M3D_PORT"); p != "" {
+// 		if port, err := strconv.Atoi(p); err == nil {
+// 			return port
+// 		}
+// 	}
+// 	return FreePort()
+// }
 
 func ToTimestamp(d time.Time) int64 {
 	return d.UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))

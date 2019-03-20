@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+
 	"github.com/dhnt/m3/internal"
 )
 
@@ -9,7 +10,7 @@ var logger = internal.Logger()
 
 func main() {
 	//
-	var port = flag.Int("port", internal.GetDefaultPort(), "Bind port")
+	var port = flag.Int("port", 18080, "Bind port")
 	var route = flag.String("route", "route.conf", "Route configuration")
 
 	// var debug = flag.Bool("debug", false, "Enable debug mode")
