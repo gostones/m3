@@ -6,12 +6,9 @@ import (
 
 	"github.com/ilius/crock32"
 	"github.com/jpillora/backoff"
-
-	// "github.com/mitchellh/go-homedir"
 	"github.com/multiformats/go-multihash"
 
 	"net"
-	// "os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
@@ -54,14 +51,6 @@ func FreePort() int {
 func CurrentTime() int64 {
 	return time.Now().UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))
 }
-
-// // IsPeer checks if the string s ends in a valid b32-encoded peer address or b58-encoded ID
-// func IsPeer(s string) bool {
-// 	sa := strings.Split(s, ".")
-// 	le := len(sa) - 1
-// 	id := ToPeerID(sa[le])
-// 	return id != ""
-// }
 
 // ToPeerID returns b58-encoded ID. it converts to b58 if b32-encoded.
 func ToPeerID(s string) string {
@@ -143,65 +132,6 @@ func IsLocalHost(host string) bool {
 		localHostIpv4RE.MatchString(host) ||
 		host == "localhost"
 }
-
-// // GetDefaultBase returns $DHNT_BASE or $HOME/dhnt if not found
-// func GetDefaultBase() string {
-// 	return getBase()
-// }
-
-// func getBase() string {
-// 	base := os.Getenv("DHNT_BASE")
-// 	if base != "" {
-// 		return base
-// 	}
-// 	home, err := homedir.Dir()
-// 	if err != nil {
-// 		base = fmt.Sprintf("%v/dhnt", home)
-// 	}
-
-// 	// dhnt/bin/m3
-// 	exe, err := os.Executable()
-// 	if err != nil {
-// 		return ""
-// 	}
-// 	return getBaseFromPath(exe)
-// }
-
-// func getBaseFromPath(dir string) string {
-// 	dir = filepath.Dir(dir)
-// 	for {
-// 		d, f := filepath.Split(dir)
-// 		logger.Println("dir: ", d, " file: ", f)
-// 		if f == "dhnt" {
-// 			return filepath.Join(d, f)
-// 		}
-// 		if d == "" || d == "/" {
-// 			break
-// 		}
-// 		dir = filepath.Dir(d) // strip trailing path separator
-// 	}
-// 	return ""
-// }
-
-// // GetDefaultPort returns $M3_PORT or 18080 if not found
-// func GetDefaultPort() int {
-// 	if p := os.Getenv("M3_PORT"); p != "" {
-// 		if port, err := strconv.Atoi(p); err == nil {
-// 			return port
-// 		}
-// 	}
-// 	return 18080
-// }
-
-// // GetDaemonPort returns $M3D_PORT
-// func GetDaemonPort() int {
-// 	if p := os.Getenv("M3D_PORT"); p != "" {
-// 		if port, err := strconv.Atoi(p); err == nil {
-// 			return port
-// 		}
-// 	}
-// 	return FreePort()
-// }
 
 func ToTimestamp(d time.Time) int64 {
 	return d.UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))
