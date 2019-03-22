@@ -78,6 +78,13 @@ kubectl config set-context m3 --cluster=m3-k8s --namespace=kube-system
 kubectl config use-context m3
 
 921nydsvbdv4g65qrp25sbzz6dhkj29gwr2j2t9dtm8mkb5pwb9qyz
+
+ipfs issues:
+
+# ipfs
+# - "4001:4001"
+# https://github.com/ipfs-shipyard/ipfs-webui/issues/836
+# - "127.0.0.1:5001:5001"
 -->
 
 

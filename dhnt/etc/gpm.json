@@ -38,6 +38,16 @@
 		"workDir": "${DHNT_BASE}"
 	},
 	{
+		"name": "mirr",
+		"command": "mirr --port 18080 --route ${DHNT_BASE}/etc/route.conf",
+		"autoRestart": true
+	},
+	{
+		"name": "gost",
+		"command": "gost -L http://:8080  -L https://:8443 -L socks5://:1080 -F http://127.0.0.1:18080",
+		"autoRestart": true
+	},
+	{
 		"name": "chisel",
 		"command": "chisel server --port 38080",
 		"autoRestart": true
