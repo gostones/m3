@@ -2,7 +2,7 @@
 set -x
 ##
 # export GOOS=darwin
-export GOOS=linux
+# export GOOS=linux
 
 export GOARCH=amd64
 export CGO_ENABLED=0

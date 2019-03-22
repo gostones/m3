@@ -6,30 +6,28 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: asperitus/m3:latest
+    image: dhnt/m3:latest
     restart: always
     container_name: m3os
     hostname: m3os
     ports:
-      # - "80:80"
-      # - "443:443"
+      - "80:80"
+      - "443:443"
       - "1080:1080"
-      # - "8080:8080"
-      # - "8443:8443"
       - "18080:18080"
-      # - "28080:28080"
-      # - "38080:38080"
+      # frps
       # - "7000:7000"
       # etcd
       # - "2379:2379"
       # - "2380:2380"
-      # ipfs
-      # https://github.com/ipfs-shipyard/ipfs-webui/issues/836
-      - "5001:5001"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - dhnt:/home/dhnt
       # - ./dhnt/etc:/dhnt/etc
+    environment: 
+      - log_level=debug
+      # - log_file=/var/m3.log
+      - IPFS_PATH=/home/dhnt/ipfs
     entrypoint:
       - '/dhnt/bin/m3'
       - 'run'
@@ -39,6 +37,19 @@ services:
       - traefik.enable=false
     networks:
       web:
+    depends_on: 
+      - ipfs
+
+  ipfs:
+    image: asperitus/ipfs:latest
+    container_name: ipfs
+    environment:
+      - HOST_USER=$USER
+    volumes:
+      - $HOME:/host
+    restart: always
+    labels:
+      - traefik.enable=false
 
   dui:
     image: asperitus/docker-compose-ui:latest

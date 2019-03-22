@@ -6,11 +6,6 @@
 		"autoRestart": true
 	},
 	{
-		"name": "ipfs",
-		"command": "gsh ${DHNT_BASE}/etc/ipfs-rc.sh",
-		"autoRestart": true
-	},
-	{
 		"name": "gogs",
 		"command": "gsh ${DHNT_BASE}/etc/gogs-rc.sh",
 		"autoRestart": true,

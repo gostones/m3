@@ -46,7 +46,7 @@ RUN adduser ${DHNT_USER} -D \
 
 ##
 VOLUME /dhnt/etc /home/dhnt
-EXPOSE 18080 8080 1080
+# EXPOSE 18080 8080 1080 443 80
 WORKDIR /
 
 COPY --from=builder /dist /dhnt

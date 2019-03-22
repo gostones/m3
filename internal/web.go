@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/gostones/lib"
 	"github.com/parnurzeal/gorequest"
-	"log"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -64,7 +63,7 @@ func pingProxy(proxy string) bool {
 			Head(testSite[idx]).
 			End()
 
-		log.Printf("Proxy: %v response: %v err %v\n", proxy, resp, errs)
+		logger.Printf("Proxy: %v response: %v err %v\n", proxy, resp, errs)
 		if len(errs) > 0 {
 			return errs[0]
 		}

@@ -21,8 +21,7 @@ const (
 // dependencies that are NOT required by the service, but might be used
 var dependencies = []string{}
 
-var stdlog = internal.Stdlog
-var errlog = internal.Errlog
+var logger = internal.Logger()
 
 // Service has embedded daemon
 type Service struct {
@@ -31,14 +30,14 @@ type Service struct {
 
 // Install the service into the system
 func (service *Service) Install(args ...string) (string, error) {
-	stdlog.Printf("calling super Install os.Args: %v len: %v args: %v", os.Args, len(os.Args), args)
+	logger.Printf("calling super Install os.Args: %v len: %v args: %v", os.Args, len(os.Args), args)
 
 	return service.Daemon.Install(args...)
 }
 
 // Remove uninstalls the service and all corresponding files from the system
 func (service *Service) Remove() (string, error) {
-	stdlog.Printf("calling super Remove os.Args: %v len: %v", os.Args, len(os.Args))
+	logger.Printf("calling super Remove os.Args: %v len: %v", os.Args, len(os.Args))
 	_, err := service.Daemon.Status()
 	if err != nil {
 		service.Daemon.Stop()
@@ -48,25 +47,25 @@ func (service *Service) Remove() (string, error) {
 
 // Start the service
 func (service *Service) Start() (string, error) {
-	stdlog.Printf("calling super Start os.Args: %v len: %v", os.Args, len(os.Args))
+	logger.Printf("calling super Start os.Args: %v len: %v", os.Args, len(os.Args))
 	return service.Daemon.Start()
 }
 
 // // Stop the service
 // func (service *Service) Stop() (string, error) {
-// 	stdlog.Printf("calling super Stop os.Args: %v len: %v", os.Args, len(os.Args))
+// 	logger.Printf("calling super Stop os.Args: %v len: %v", os.Args, len(os.Args))
 // 	return service.Daemon.Stop()
 // }
 
 // // Status - check the service status
 // func (service *Service) Status() (string, error) {
-// 	stdlog.Printf("calling super status os.Args: %v len: %v", os.Args, len(os.Args))
+// 	logger.Printf("calling super status os.Args: %v len: %v", os.Args, len(os.Args))
 // 	return service.Daemon.Status()
 // }
 
 // Manage by daemon commands or run the daemon
 func (service *Service) Manage() (string, error) {
-	stdlog.Printf("Manage args: %v len: %v", os.Args, len(os.Args))
+	logger.Printf("Manage args: %v len: %v", os.Args, len(os.Args))
 
 	usage := "Usage: m3 install --base <dhnt_base>| uninstall | start | stop | status"
 	if len(os.Args) < 2 {
@@ -98,27 +97,8 @@ func (service *Service) Manage() (string, error) {
 	default:
 		return usage, nil
 	}
-	// if received any kind of command, do it
-	// if len(os.Args) > 1 {
-	// 	command := os.Args[1]
-	// 	switch command {
-	// 	case "install":
-	// 		return service.Install(os.Args[2:]...)
-	// 	case "uninstall":
-	// 		return service.Remove()
-	// 	case "start":
-	// 		return service.Start()
-	// 	case "stop":
-	// 		return service.Stop()
-	// 	case "status":
-	// 		return service.Status()
-	// 	default:
-	// 		return usage, nil
-	// 	}
-	// }
 
-	stdlog.Printf("Manage set up args: %v len: %v", os.Args, len(os.Args))
-	// internal.DumpEnv()
+	logger.Printf("Manage set up args: %v len: %v", os.Args, len(os.Args))
 
 	//
 	bp := runCmd.String("base", "", "dhnt base")
@@ -127,8 +107,12 @@ func (service *Service) Manage() (string, error) {
 		return usage, nil
 	}
 	base := *bp
-	stdlog.Println("dhnt base:", base)
-
+	logger.Println("dhnt base:", base)
+	//
+	if err := os.Chdir(base); err != nil {
+		logger.Println(err)
+		os.Exit(1)
+	}
 	//
 	signal.Ignore(syscall.SIGHUP)
 
@@ -139,17 +123,7 @@ func (service *Service) Manage() (string, error) {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
 
-	// // Set up etcd
-	// es := internal.NewEtcd(base)
-	// defer es.Stop()
-	// es.Start()
-
-	// // Set up pm
-	// port := internal.GetDaemonPort()
-	// s := pm.NewServer(base, "", port)
-
-	// defer s.Stop()
-	// s.Start()
+	//
 	script := filepath.Join(base, "etc/init.sh")
 	done := make(chan error, 1)
 	go func() {
@@ -160,8 +134,8 @@ func (service *Service) Manage() (string, error) {
 	case err := <-done:
 		return fmt.Sprintf("script exited: %v", script), err
 	case killSignal := <-interrupt:
-		stdlog.Println("Got signal:", killSignal)
-		// stdlog.Println("Stoping listening on ", s.Addr())
+		logger.Println("Got signal:", killSignal)
+		// logger.Println("Stoping listening on ", s.Addr())
 		// s.Stop()
 		// es.Stop()
 
@@ -174,23 +148,23 @@ func (service *Service) Manage() (string, error) {
 
 // Run daemon service
 func Run() {
-	stdlog.Printf("Run args: %v len: %v", os.Args, len(os.Args))
+	logger.Printf("Run args: %v len: %v", os.Args, len(os.Args))
 
 	srv, err := daemon.New(name, description, dependencies...)
 	if err != nil {
-		errlog.Println("Error: ", err)
+		logger.Println("Error: ", err)
 		os.Exit(1)
 	}
 	service := &Service{
 		Daemon: srv,
 	}
 
-	stdlog.Printf("Calling Manage service: %v", service)
+	logger.Printf("Calling Manage service: %v", service)
 
 	status, err := service.Manage()
 	if err != nil {
-		errlog.Println(status, "\nError: ", err)
+		logger.Println(status, "\nError: ", err)
 		os.Exit(1)
 	}
-	fmt.Println(status)
+	logger.Println(status)
 }

@@ -3,7 +3,6 @@ package internal
 import (
 	"fmt"
 	"github.com/elazarl/goproxy"
-	"log"
 	"net/http"
 )
 
@@ -13,6 +12,6 @@ func LocalProxy(port int) {
 	proxy := goproxy.NewProxyHttpServer()
 	//proxy.ConnectDial = nil
 	proxy.Verbose = true
-	log.Printf("local proxy listening on: %v\n", hostport)
-	log.Fatal(http.ListenAndServe(hostport, proxy))
+	logger.Printf("local proxy listening on: %v\n", hostport)
+	logger.Fatal(http.ListenAndServe(hostport, proxy))
 }

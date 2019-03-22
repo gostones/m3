@@ -3,16 +3,19 @@ package internal
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gostones/lib"
-	"github.com/parnurzeal/gorequest"
-	"gopkg.in/resty.v1"
-	"log"
 	"math/rand"
 	"net/url"
 	"time"
+
+	"github.com/gostones/lib"
+	"github.com/parnurzeal/gorequest"
+	"gopkg.in/resty.v1"
 )
 
 var client = resty.New()
+
+// var apiBase = "http://localhost:5001/api/v0"
+var apiBase = "http://host.docker.internal:5001/api/v0"
 
 const (
 	protocolWWW = "/x/www/1.0"
@@ -42,10 +45,10 @@ func P2PListen(appPort int) error {
 		}).
 		SetHeader("Accept", "application/json").
 		SetAuthToken("").
-		Get("http://localhost:5001/api/v0/p2p/listen")
+		Get(apiBase + "/p2p/listen")
 
-	log.Printf("Status: %v\n", resp.Status())
-	log.Println(resp)
+	logger.Printf("Status: %v\n", resp.Status())
+	logger.Println(resp)
 
 	return err
 }
@@ -55,7 +58,7 @@ func p2pForward(port int, serverID string) error {
 	listen := fmt.Sprintf("/ip4/127.0.0.1/tcp/%v", port)
 	target := fmt.Sprintf("/ipfs/%v", serverID)
 
-	log.Printf("p2pForward %v %v\n", listen, target)
+	logger.Printf("p2pForward %v %v\n", listen, target)
 
 	resp, err := client.R().
 		SetMultiValueQueryParams(url.Values{
@@ -63,9 +66,9 @@ func p2pForward(port int, serverID string) error {
 		}).
 		SetHeader("Accept", "application/json").
 		SetAuthToken("").
-		Get("http://localhost:5001/api/v0/p2p/forward")
+		Get(apiBase + "/p2p/forward")
 
-	log.Printf("p2pForward  %v %v response: %v err: %v\n", listen, target, resp, err)
+	logger.Printf("p2pForward  %v %v response: %v err: %v\n", listen, target, resp, err)
 
 	return err
 }
@@ -82,9 +85,9 @@ func p2pForwardClose(port int, serverID string) error {
 		}).
 		SetHeader("Accept", "application/json").
 		SetAuthToken("").
-		Get("http://localhost:5001/api/v0/p2p/close")
+		Get(apiBase + "/p2p/close")
 
-	log.Printf("close forward  %v %v response: %v err: %v\n", listen, target, resp, err)
+	logger.Printf("close forward  %v %v response: %v err: %v\n", listen, target, resp, err)
 
 	return err
 }
@@ -96,9 +99,9 @@ func P2PCloseAll() error {
 		}).
 		SetHeader("Accept", "application/json").
 		SetAuthToken("").
-		Get("http://localhost:5001/api/v0/p2p/close")
+		Get(apiBase + "/p2p/close")
 
-	log.Printf("close all response: %v err: %v\n", resp, err)
+	logger.Printf("close all response: %v err: %v\n", resp, err)
 
 	return err
 }
@@ -124,9 +127,9 @@ func p2pPeers() ([]Peer, error) {
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
 		SetAuthToken("").
-		Get("http://localhost:5001/api/v0/swarm/peers?verbose=true&streams=true&latency=true")
+		Get(apiBase + "/swarm/peers?verbose=true&streams=true&latency=true")
 
-	log.Printf("Status: %v\n", resp.Status())
+	logger.Printf("Status: %v\n", resp.Status())
 
 	p := Peers{}
 
@@ -150,9 +153,9 @@ func p2pID() (Node, error) {
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
 		SetAuthToken("").
-		Get("http://localhost:5001/api/v0/id")
+		Get(apiBase + "/id")
 
-	log.Printf("Status: %v\n", resp.Status())
+	logger.Printf("Status: %v\n", resp.Status())
 
 	n := Node{}
 
@@ -176,7 +179,7 @@ func p2pIsLive(port int) bool {
 			Head(tests[idx]).
 			End()
 
-		log.Printf("proxy: %v response: %v err %v\n", proxy, resp, errs)
+		logger.Printf("proxy: %v response: %v err %v\n", proxy, resp, errs)
 		if len(errs) > 0 {
 			return errs[0]
 		}
@@ -203,7 +206,7 @@ func p2pIsProxy(port int) bool {
 			Head(tests[idx]).
 			End()
 
-		log.Printf("Proxy: %v response: %v err %v\n", proxy, resp, errs)
+		logger.Printf("Proxy: %v response: %v err %v\n", proxy, resp, errs)
 		if len(errs) > 0 {
 			return errs[0]
 		}

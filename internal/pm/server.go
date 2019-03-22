@@ -11,7 +11,7 @@ import (
 	"syscall"
 )
 
-var logger = internal.Stdlog
+var logger = internal.Logger()
 
 type Request struct {
 }
