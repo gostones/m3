@@ -17,6 +17,15 @@ var client = resty.New()
 // var apiBase = "http://localhost:5001/api/v0"
 var apiBase = "http://host.docker.internal:5001/api/v0"
 
+// var ip4Addr = "/ip4/127.0.0.1"
+var ip4Addr = "/ip4/0.0.0.0"
+
+// var apiUrl = "http://127.0.0.1"
+var apiUrl = "http://host.docker.internal"
+
+//var apiHost = "127.0.0.1"
+var apiHost = "host.docker.internal"
+
 const (
 	protocolWWW = "/x/www/1.0"
 )
@@ -37,7 +46,7 @@ type Node struct {
 
 // ipfs p2p listen /x/www/1.0 /ip4/127.0.0.1/tcp/$APP_PORT
 func P2PListen(appPort int) error {
-	target := fmt.Sprintf("/ip4/127.0.0.1/tcp/%v", appPort)
+	target := fmt.Sprintf(ip4Addr+"/tcp/%v", appPort)
 
 	resp, err := client.R().
 		SetMultiValueQueryParams(url.Values{
@@ -55,7 +64,7 @@ func P2PListen(appPort int) error {
 
 // ipfs p2p forward /x/www/1.0 /ip4/127.0.0.1/tcp/$SOME_PORT /ipfs/$SERVER_ID
 func p2pForward(port int, serverID string) error {
-	listen := fmt.Sprintf("/ip4/127.0.0.1/tcp/%v", port)
+	listen := fmt.Sprintf(ip4Addr+"/tcp/%v", port)
 	target := fmt.Sprintf("/ipfs/%v", serverID)
 
 	logger.Printf("p2pForward %v %v\n", listen, target)
@@ -74,7 +83,7 @@ func p2pForward(port int, serverID string) error {
 }
 
 func p2pForwardClose(port int, serverID string) error {
-	listen := fmt.Sprintf("/ip4/127.0.0.1/tcp/%v", port)
+	listen := fmt.Sprintf(ip4Addr+"/tcp/%v", port)
 	target := fmt.Sprintf("/ipfs/%v", serverID)
 
 	resp, err := client.R().
@@ -169,7 +178,7 @@ func p2pIsLive(port int) bool {
 	tests := []string{
 		"http://home/",
 	}
-	proxy := fmt.Sprintf("http://127.0.0.1:%v", port)
+	proxy := fmt.Sprintf(apiUrl+":%v", port)
 	request := gorequest.New().Proxy(proxy)
 
 	//
@@ -196,7 +205,7 @@ func p2pIsProxy(port int) bool {
 		"https://aws.amazon.com/",
 		"https://azure.microsoft.com/",
 	}
-	proxy := fmt.Sprintf("http://127.0.0.1:%v", port)
+	proxy := fmt.Sprintf(apiUrl+":%v", port)
 	request := gorequest.New().Proxy(proxy)
 
 	//
