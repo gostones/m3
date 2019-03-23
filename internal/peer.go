@@ -52,7 +52,7 @@ func (r *Neighborhood) GetPeers() []string {
 	addresses := make([]string, 0, len(r.Peers))
 	for _, v := range r.Peers {
 		if v.Rank > 0 {
-			addr := fmt.Sprintf("127.0.0.1:%v", v.Port)
+			addr := fmt.Sprintf(apiHost+":%v", v.Port)
 			addresses = append(addresses, addr)
 		}
 	}
@@ -91,12 +91,12 @@ func (r *Neighborhood) GetPeerTarget(id string) string {
 
 	p := r.getPeer(id)
 	if p != nil && p.Port > 0 && p.Rank > 0 {
-		addr := fmt.Sprintf("127.0.0.1:%v", p.Port)
+		addr := fmt.Sprintf(apiHost+":%v", p.Port)
 		return addr
 	}
 	//add it
 	p = r.addPeer(id)
-	addr := fmt.Sprintf("127.0.0.1:%v", p.Port)
+	addr := fmt.Sprintf(apiHost+":%v", p.Port)
 
 	return addr
 }
