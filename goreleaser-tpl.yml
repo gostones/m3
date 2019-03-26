@@ -1,4 +1,5 @@
 # Make sure to check the documentation at http://goreleaser.com
+project_name: ${APP_NAME}
 dist: dist/${APP_NAME}
 
 before:
