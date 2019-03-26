@@ -19,6 +19,7 @@ dhnt-host/bin
 on_exit_*.txt
 
 build
+dist
 
 *.log
 ####
