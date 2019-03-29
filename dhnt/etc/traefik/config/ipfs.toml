@@ -15,7 +15,7 @@
             [backends.ipfs.loadbalancer.stickiness]
         [backends.ipfs.servers] 
             [backends.ipfs.servers.server1]
-            # url = "http://127.0.0.1:5001"
-            url = "http://host.docker.internal:5001"
+            url = "http://127.0.0.1:5001"
+            # url = "http://host.docker.internal:5001"
             weight = 1
 ##

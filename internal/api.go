@@ -14,17 +14,17 @@ import (
 
 var client = resty.New()
 
-// var apiBase = "http://localhost:5001/api/v0"
-var apiBase = "http://host.docker.internal:5001/api/v0"
+// localhost
+var apiBase = "http://localhost:5001/api/v0"
+var ip4Addr = "/ip4/127.0.0.1"
+var apiUrl = "http://127.0.0.1"
+var apiHost = "127.0.0.1"
 
-// var ip4Addr = "/ip4/127.0.0.1"
-var ip4Addr = "/ip4/0.0.0.0"
-
-// var apiUrl = "http://127.0.0.1"
-var apiUrl = "http://host.docker.internal"
-
-//var apiHost = "127.0.0.1"
-var apiHost = "host.docker.internal"
+// docker
+// var apiBase = "http://host.docker.internal:5001/api/v0"
+// var ip4Addr = "/ip4/0.0.0.0"
+// var apiUrl = "http://host.docker.internal"
+// var apiHost = "host.docker.internal"
 
 const (
 	protocolWWW = "/x/www/1.0"
